@@ -8,6 +8,9 @@ import Sidebar from '../Components/Sidebar'
 import Input from '../Components/Input'
 import { MdPlaylistAdd } from "react-icons/md";
 import useInput from "../Hooks/useInput"
+import { FaUserAlt, FaLock } from 'react-icons/fa';
+import { MdTitle } from 'react-icons/md';
+import img from '../Style/Img/img.png';
 
 function Home() {
 
@@ -27,7 +30,44 @@ function Home() {
     const [user, onChangeUserHandler, setUser] = useInput();
 
 
+    const onSonSubmituAddValue = (e) => {
+        e.preventDefault()
+    }
 
+
+    // 이미지 
+
+    const [loaded, setLoaded] = useState(false);
+
+    let imageRef;
+
+    const onChangeUploadHandler = (e) => {
+        // console.log("사진 업로드 버튼 클릭");
+        e.preventDefault();
+
+        const fileReader = new FileReader();
+        if (e.target.files[0]) {
+            setLoaded(true);
+            fileReader.readAsDataURL(e.target.files[0]);
+        }
+        fileReader.onload = () => {
+            setImageFile({
+                viewUrl: fileReader.result
+            });
+            // console.log(fileReader.result)
+            setLoaded(true);
+        };
+        // console.log(loaded);
+    };
+
+
+
+    const onClickDeleteHandler = () => {
+        // console.log("사진 삭제 버튼 클릭");
+        setImageFile({
+            viewUrl: ""
+        });
+    };
 
 
 
@@ -47,19 +87,43 @@ function Home() {
                 </Btn>
                 <Btn sideBtn>dd</Btn>
 
-
+                {/* Modal  */}
                 <ModalOutArea isOpen={modalOpen}>
                     <ModalInArea isOpen={modalOpen}>
 
+                        <ModalInFrom onSubmit={onSonSubmituAddValue}>
 
 
-                        <Btn
-                            sma
-                            type="button"
-                            onClick={closeModal}
-                            name={'modal'}>
-                            close
-                        </Btn>
+
+
+        {/* 이미지 */}
+        <ModalInWarpImgBox>
+
+        {
+            
+        }
+
+        </ModalInWarpImgBox>
+
+        {/* 인풋창 */}
+        <ModalInWarpInputBox>
+            
+            인풋
+
+        </ModalInWarpInputBox>
+                      
+
+                            <Btn 
+                                lg
+                                type="button"
+                                onClick={closeModal}
+                                name={'modal'}>
+                                close
+                            </Btn>
+                         
+                        </ModalInFrom>
+                
+
 
 
                     </ModalInArea>
@@ -100,10 +164,110 @@ const ModalInArea = styled.div`
     transform: translate(-50%, -50%);
     border-radius: 20px;
     background-color: ${(props) => props.color};
-    width: 31.25rem;
-    height: 40.625rem;
+    width: 68.75rem;
+    height: 46.875rem;
     background-color: #edf2ff;
     color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ModalInFrom = styled.form`
+    width: 98%;
+    height: 98%;
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+`;
+
+const ModalInWarpImgBox = styled.div`
+    border: 1px solid red;
+    width: 49%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+`;
+
+// const ModalInImgBox = styled.img`
+//     width: 25rem;
+//     height: 25rem;
+// `;
+
+
+
+// const ModalInNoImg = styled.img`
+//     width: 31.25rem;
+//     height: 34.375rem;
+// `
+// const ModalInImgBtnGround = styled.div`
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     margin: .625rem 0;
+//     gap: 20px;
+// `
+
+
+
+
+
+// modal Input Form 
+const ModalInWarpInputBox = styled.div`
+    border: 1px solid red;
+    width: 49%;
+    height: 90%;
+    
 `;
 
 
+
+
+// const LoginEachInputBox = styled.div`
+//     position: relative;
+//     width: 21.875rem;
+//     height: 6.875rem;
+//     border-radius: 1.25rem;
+//     border: 2px solid black;  
+//     display: flex;
+//     justify-content: center;
+//     flex-direction: column;
+//     align-items: center;
+//     gap: .625rem 0;
+
+    
+//     > p {  
+//         text-align: left;
+//         padding-top: .3125rem;
+//         color: #000;
+//     };
+//   `;
+
+// const LoginEachInputBoxInputArea = styled.div`
+//   position: relative;
+//   width: 90%;
+//   height: 40%;
+//   > input {
+//       position: absolute;
+//       width: 100%;
+//       height: 100%;
+//       padding-left: 2.5rem;
+//       border: none;
+//       outline: none;
+//       border-bottom : 2px solid black;
+//   }
+//   > div {
+//       position: absolute;
+//       top: 50%;
+//       left: 5%;
+//       transform: translateY(-50%);
+//       color: #000;
+//       font-size: 1.2rem;
+      
+//   }
+//   `

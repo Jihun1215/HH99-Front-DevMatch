@@ -12,7 +12,8 @@ function Header() {
                 <ul>
 
                     <NavLink
-                        to="/"> <li>Home</li>
+                        to="/">
+                        <li>Home</li>
                     </NavLink>
                     <NavLink
                         to="/mypage">
