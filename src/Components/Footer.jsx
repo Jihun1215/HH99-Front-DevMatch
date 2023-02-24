@@ -11,7 +11,7 @@ import styled from 'styled-components';
 export default function Footer() {
     return (
         <FooterArea>
-            <p>© HH99 Project  by: Harry 2023 | All rights reserved.</p>
+            <p>© HH99 Mini Project | All rights reserved.</p>
         </FooterArea>
     )
 }
