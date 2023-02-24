@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { FaCloudSunRain } from "react-icons/fa";
 
 function Header() {
     return (

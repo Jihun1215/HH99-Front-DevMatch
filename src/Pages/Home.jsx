@@ -10,7 +10,6 @@ import { MdPlaylistAdd } from "react-icons/md";
 import useInput from "../Hooks/useInput"
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { MdTitle } from 'react-icons/md';
-import img from '../Style/Img/img.png';
 
 function Home() {
 
@@ -213,31 +212,6 @@ const ModalInFrom = styled.form`
     justify-content: center;
     gap: 1.25rem;
 `;
-// Form안에 이미지
-// const ModalInWarpImgBox = styled.div`
-//     width: 49%;
-//     height: 90%;
-//     display: flex;
-//     flex-direction: column;
-//     align-content: center;
-//     justify-content: center;
-// `;
-
-
-
-
-
-// const ModalInImgBtnGround = styled.div`
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     margin: .625rem 0;
-//     gap: 20px;
-// `
-
-
-
-
 
 // modal Input Form 
 const ModalInWarpInputBox = styled.div`
@@ -246,55 +220,6 @@ const ModalInWarpInputBox = styled.div`
     height: 90%;
     
 `;
-
-
-
-
-// const LoginEachInputBox = styled.div`
-//     position: relative;
-//     width: 21.875rem;
-//     height: 6.875rem;
-//     border-radius: 1.25rem;
-//     border: 2px solid black;  
-//     display: flex;
-//     justify-content: center;
-//     flex-direction: column;
-//     align-items: center;
-//     gap: .625rem 0;
-
-
-//     > p {  
-//         text-align: left;
-//         padding-top: .3125rem;
-//         color: #000;
-//     };
-//   `;
-
-// const LoginEachInputBoxInputArea = styled.div`
-//   position: relative;
-//   width: 90%;
-//   height: 40%;
-//   > input {
-//       position: absolute;
-//       width: 100%;
-//       height: 100%;
-//       padding-left: 2.5rem;
-//       border: none;
-//       outline: none;
-//       border-bottom : 2px solid black;
-//   }
-//   > div {
-//       position: absolute;
-//       top: 50%;
-//       left: 5%;
-//       transform: translateY(-50%);
-//       color: #000;
-//       font-size: 1.2rem;
-
-//   }
-//   `
-
-
 
 // Form IMG BOX
 const ModalInImgBox = styled.div`
@@ -339,12 +264,6 @@ const ModalImgInput = styled.input`
     display: none;
 `;
 
-
-
-
-
-
-
 const ModalInButGround = styled.div`
     display: flex;
     justify-content: center;
@@ -352,8 +271,6 @@ const ModalInButGround = styled.div`
     padding: 15px 20px;
     flex-direction: column;
 `;
-
-
 
 const SCustomButtonWrapper = styled.div`
     display: flex;
@@ -364,19 +281,49 @@ const SCustomButtonWrapper = styled.div`
 
 `;
 
-// const SCustomButton = styled.div`
-//     text-align: center;
-//     width: 150px;
-//     padding: 10px 15px;
-//     border-radius: 7px;
-//     cursor: pointer;
-//     margin: 0 0 20px 0;
-//     background-color: ${({ btnValue }) =>
-//         btnValue === "primary" ? "rgb(50, 111, 233)" : "rgb(238, 134, 131)"};
-//     color: #fff;
-// `;
+const LoginEachInputBox = styled.div`
+    position: relative;
+    width: 21.875rem;
+    height: 6.875rem;
+    border-radius: 1.25rem;
+    border: 2px solid black;  
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: .625rem 0;
 
 
+    > p {  
+        text-align: left;
+        padding-top: .3125rem;
+        color: #000;
+    };
+  `;
+
+const LoginEachInputBoxInputArea = styled.div`
+  position: relative;
+  width: 90%;
+  height: 40%;
+  > input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      padding-left: 2.5rem;
+      border: none;
+      outline: none;
+      border-bottom : 2px solid black;
+  }
+  > div {
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      transform: translateY(-50%);
+      color: #000;
+      font-size: 1.2rem;
+
+  }
+  `
 
 
 
