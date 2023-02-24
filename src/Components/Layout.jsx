@@ -25,6 +25,5 @@ const LayourArea = styled.div`
     width: 81.25rem;
     height: 52rem;
     background: #EDF2FF;
-    border: 1px solid red;
     border-radius: 1.25rem;
 `
