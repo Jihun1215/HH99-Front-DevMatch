@@ -99,7 +99,6 @@ const StBox3 = styled.div`
     font-size: 25px;
     align-items: center;
     justify-content: center;
-    /* border: 1px solid black; */
     margin-top: 5px;
 `;
 
