@@ -1,8 +1,10 @@
 import React from 'react'
+import styled from 'styled-components'
+import Layout from '../Components/Layout'
 
 function Login() {
   return (
-    <div>Login</div>
+    <Layout>Login</Layout>
   )
 }
 

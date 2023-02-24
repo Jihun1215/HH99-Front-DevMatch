@@ -1,8 +1,10 @@
 import React from 'react'
+import styled from 'styled-components'
+import Layout from '../Components/Layout'
 
 function Mypage() {
     return (
-        <div>Mypage</div>
+        <Layout>Mypage</Layout>
     )
 }
 

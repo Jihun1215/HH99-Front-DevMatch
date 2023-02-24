@@ -1,8 +1,10 @@
 import React from 'react'
+import Layout from '../Components/Layout'
+import styled from 'styled-components'
 
 function notFound() {
     return (
-        <div>notFound</div>
+        <Layout>notFound</Layout>
     )
 }
 
