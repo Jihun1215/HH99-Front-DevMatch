@@ -65,7 +65,7 @@ const DefailtButton = styled.button`
         font-family: 800;
         background: white;
         color: #000;
-        border: 1px solid #000;
+        border: none;
     `};
 
 
