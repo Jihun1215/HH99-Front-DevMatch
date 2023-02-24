@@ -19,7 +19,6 @@ const DefailtButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.25rem;
   ${(props) =>
         props.sm &&
         css`   

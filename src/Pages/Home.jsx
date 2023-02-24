@@ -5,6 +5,7 @@ import Header from '../Components/Header'
 import Footer from '../Components/Footer'
 import Btn from '../Components/Button'
 import Sidebar from '../Components/Sidebar'
+import Input from '../Components/Input'
 
 
 
@@ -14,12 +15,11 @@ function Home() {
 
             <Header />
             <Sidebar>
-                {/* <Btn sideBtn>버튼</Btn> */}
+               
             </Sidebar>
-            {/* <Btn>ddd</Btn>
-            <Btn sm>ddd</Btn>
-            <Btn me>ddd</Btn>
-            <Btn lg>ddd</Btn> */}
+           
+
+          
 
             <Footer />
 
