@@ -36,13 +36,12 @@ function Home() {
 
 
     // 이미지 
-
     const [loaded, setLoaded] = useState(false);
 
     let imageRef;
 
     const onChangeUploadHandler = (e) => {
-        // console.log("사진 업로드 버튼 클릭");
+        console.log("사진 업로드 버튼 클릭");
         e.preventDefault();
 
         const fileReader = new FileReader();
@@ -70,7 +69,6 @@ function Home() {
     };
 
 
-
     return (
         <Layout>
 
@@ -95,34 +93,69 @@ function Home() {
 
 
 
+                            {/* 이미지 */}
 
-        {/* 이미지 */}
-        <ModalInWarpImgBox>
+                            <ModalInImgBox>
 
-        {
-            
-        }
 
-        </ModalInWarpImgBox>
+                                <ModalInImgArear>
+                                    {imageFile.imageFile !== "" ? (
+                                        <IMGSIZE src={imageFile.viewUrl} />
+                                    ) : (
+                                        <NoImgSIZE>Loading...</NoImgSIZE>
+                                    )}
+                                    <ModalImgInput
+                                        type="file"
+                                        accept="image/*"
+                                        ref={(refer) => (imageRef = refer)}
+                                        onChange={onChangeUploadHandler}
+                                    />
+                                </ModalInImgArear>
 
-        {/* 인풋창 */}
-        <ModalInWarpInputBox>
-            
-            인풋
+                                <ModalInButGround>
 
-        </ModalInWarpInputBox>
-                      
+                                    <SCustomButtonWrapper>
 
-                            <Btn 
+                                        <Btn
+                                            style={{ background: "rgb(50, 111, 233)" }}
+                                            lg
+                                            onClick={() => imageRef.click()}
+                                        >
+                                            사진 업로드
+                                        </Btn>
+                                        <Btn
+                                            style={{ background: "#ee8683" }}
+                                            lg
+                                            onClick={onClickDeleteHandler}
+                                        >
+                                            사진 삭제
+                                        </Btn>
+                                    </SCustomButtonWrapper>
+
+                                </ModalInButGround>
+
+
+                            </ModalInImgBox>
+
+                            {/* 인풋창 */}
+
+                            <ModalInWarpInputBox>
+
+                                인풋
+
+                            </ModalInWarpInputBox>
+
+
+                            <Btn
                                 lg
                                 type="button"
                                 onClick={closeModal}
                                 name={'modal'}>
                                 close
                             </Btn>
-                         
+
                         </ModalInFrom>
-                
+
 
 
 
@@ -130,11 +163,9 @@ function Home() {
                 </ModalOutArea>
 
 
+
+
             </Sidebar>
-
-
-
-
             <Footer />
 
         </Layout>
@@ -172,39 +203,30 @@ const ModalInArea = styled.div`
     align-items: center;
     justify-content: center;
 `;
-
+// 전체Form 
 const ModalInFrom = styled.form`
     width: 98%;
     height: 98%;
-    border: 1px solid black;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 1.25rem;
 `;
-
-const ModalInWarpImgBox = styled.div`
-    border: 1px solid red;
-    width: 49%;
-    height: 90%;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-`;
-
-// const ModalInImgBox = styled.img`
-//     width: 25rem;
-//     height: 25rem;
+// Form안에 이미지
+// const ModalInWarpImgBox = styled.div`
+//     width: 49%;
+//     height: 90%;
+//     display: flex;
+//     flex-direction: column;
+//     align-content: center;
+//     justify-content: center;
 // `;
 
 
 
-// const ModalInNoImg = styled.img`
-//     width: 31.25rem;
-//     height: 34.375rem;
-// `
+
+
 // const ModalInImgBtnGround = styled.div`
 //     display: flex;
 //     justify-content: center;
@@ -240,7 +262,7 @@ const ModalInWarpInputBox = styled.div`
 //     align-items: center;
 //     gap: .625rem 0;
 
-    
+
 //     > p {  
 //         text-align: left;
 //         padding-top: .3125rem;
@@ -268,6 +290,94 @@ const ModalInWarpInputBox = styled.div`
 //       transform: translateY(-50%);
 //       color: #000;
 //       font-size: 1.2rem;
-      
+
 //   }
 //   `
+
+
+
+// Form IMG BOX
+const ModalInImgBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 49%;
+    height: 90%;
+`;
+
+// 이미지 영역 
+const ModalInImgArear = styled.div`
+    width: 100%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #1e1e1e;
+`;
+
+// IMG
+const IMGSIZE = styled.img`
+    width: 31.25rem;
+    height: 29.0625rem;
+    margin: 0 auto;
+`;
+
+// IMG 없을 떄 
+const NoImgSIZE = styled.div`
+    width: 31.25rem;
+    height: 28.5rem;
+    background: #5c7cfa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    opacity:0.5;
+`;
+
+const ModalImgInput = styled.input`
+    display: none;
+`;
+
+
+
+
+
+
+
+const ModalInButGround = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    flex-direction: column;
+`;
+
+
+
+const SCustomButtonWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 0 1.875rem;
+
+`;
+
+// const SCustomButton = styled.div`
+//     text-align: center;
+//     width: 150px;
+//     padding: 10px 15px;
+//     border-radius: 7px;
+//     cursor: pointer;
+//     margin: 0 0 20px 0;
+//     background-color: ${({ btnValue }) =>
+//         btnValue === "primary" ? "rgb(50, 111, 233)" : "rgb(238, 134, 131)"};
+//     color: #fff;
+// `;
+
+
+
+
+
+

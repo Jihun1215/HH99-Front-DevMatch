@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import { FaCloudSunRain } from "react-icons/fa";
 
 function Header() {
@@ -8,21 +7,12 @@ function Header() {
         <HeaderSize>
             <HeaderNavbar>
                 {/* 이미지 들어갈 자리입니다 */}
-                <Link to="/"><div>Logo</div></Link>
-                <ul>
+                <div>Logo</div>
 
-                    <NavLink
-                        to="/">
-                        <li>Home</li>
-                    </NavLink>
-                    <NavLink
-                        to="/mypage">
-                        <li>Mypage</li>
-                    </NavLink>
-                    <NavLink
-                        to="/login">
-                        <li>LogIn</li>
-                    </NavLink>
+                <ul>
+                    <li>Home</li>
+                    <li>Mypage</li>
+                    <li>LogIn</li>
 
                 </ul>
             </HeaderNavbar>
@@ -77,11 +67,3 @@ const HeaderNavbar = styled.div`
     }
 `
 
-const NavLink = styled(Link)`
-      text-decoration: none;
-       color: #000;
-      text-transform: uppercase;
-      font-weight: 700;
-      border-bottom: 1px solid black;
-      box-shadow:rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px
-`
