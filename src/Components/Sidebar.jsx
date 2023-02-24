@@ -22,8 +22,8 @@ const SideLayout = styled.div`
 
 const SideBar = styled.div`
     position: fixed;
-    left: 20rem;
-    top: 20rem;
+    left: 10rem;
+    top: 15rem;
     background: white;
     width: 4.6875rem;
     height: 10.9375rem;

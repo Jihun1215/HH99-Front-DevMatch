@@ -14,7 +14,7 @@ const HeaderSize = styled.div`
     height: 5.625rem;
     border-bottom-left-radius: 1.25rem;
     border-bottom-right-radius: 1.25rem;
-    border: 1px solid red;
+    border: 1px solid black;
     margin: 0 auto;
     background: #EDF2FF;
 `
