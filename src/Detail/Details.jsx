@@ -1,9 +1,18 @@
+import axios from 'axios';
 import React from 'react';
 import styled from 'styled-components';
 import Btn from '../Components/Button';
 import Input from '../Components/Input';
+import useInput from '../Hooks/useInput';
 
 function Details() {
+    const getDetailList = async () => {
+        const response = await axios.get('');
+        return response;
+    };
+
+    const [comment, onCommentHandler, setComment] = useInput('');
+
     return (
         <>
             <StDetailContaitner>
@@ -14,7 +23,7 @@ function Details() {
                     </StBox>
                     <StBox>
                         <StBox4>
-                            <h3>모집 직군</h3>
+                            <h3>PART</h3>
                         </StBox4>
                         <StBox4>
                             <h3>FE : 0</h3>
@@ -25,7 +34,7 @@ function Details() {
                     </StBox>
                     <StBox>
                         <StBox4>
-                            <h3>필요 스택</h3>
+                            <h3>STACK</h3>
                         </StBox4>
                         <StBox5>
                             <h4>JavaScript, Java, React, Spring</h4>
@@ -40,10 +49,14 @@ function Details() {
                 <StBox3>0</StBox3>
                 <Btn me>LIKE❤️</Btn>
                 <StDetailBox>즐겁게 개발하실분들 댓글로 신청해주세요!</StDetailBox>
-                <StBox4>
-                    <h3>COMMENT</h3>
-                </StBox4>
-                <Input me />
+                <StBox6>
+                    <StBox4>
+                        <h3>COMMENT</h3>
+                    </StBox4>
+
+                    <Input me type="text" value={comment} onchange={onCommentHandler} />
+                    <Btn me> add</Btn>
+                </StBox6>
             </StDetailContaitner>
         </>
     );
@@ -89,7 +102,6 @@ const StBox2 = styled.div`
     flex-direction: row;
     justify-content: space-between;
     margin-top: 5px;
-    /* border: 1px solid black; */
 `;
 
 const StBox3 = styled.div`
@@ -117,6 +129,7 @@ const StBox4 = styled.div`
     border-radius: 10px;
     display: flex;
     justify-content: center;
+    /* border: 1px solid black; */
     align-items: center;
 `;
 
@@ -124,6 +137,15 @@ const StBox5 = styled.div`
     width: 20rem;
     height: 3.75rem;
     border-radius: 10px;
+`;
+
+const StBox6 = styled.div`
+    width: 36.875rem;
+    height: 3.75rem;
     display: flex;
     align-items: center;
+    /* border: 1px solid black; */
+    gap: 1.25rem;
+    margin: auto;
+    justify-content: space-between;
 `;
