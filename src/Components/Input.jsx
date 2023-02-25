@@ -54,8 +54,5 @@ const DefailtInput = styled.input`
     cursor: pointer;
     transition: 0.2s ease;
   }
-  &:active {
-    filter: brightness(70%);
-  }
 `;
 

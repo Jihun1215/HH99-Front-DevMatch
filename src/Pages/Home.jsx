@@ -22,13 +22,13 @@ function Home() {
 
     // UseInput 훅 초기화를 위해 set를 같이 가져가옴 
     const [title, onChangeTitleHandler, setTitle] = useInput();
+    const [number, onChangeNumberHandler, setNumber] = useInput();
     const [body, onChangeBodyHandler, setBody] = useInput();
-    const [user, onChangeUserHandler, setUser] = useInput();
 
 
-    const onSonSubmituAddValue = (e) => {
-        e.preventDefault()
-    }
+
+
+
 
 
     // 이미지 로직 
@@ -87,6 +87,31 @@ function Home() {
     const handleSelect = (e) => {
         setSelected(e.target.value);
     };
+
+    // {
+    //     "title" : "helloWorld",
+    //     "content" : "too tired",
+    //     ”image” : “image.png”,
+    //     ”stack” : {
+    //                     “java”, “react.js”
+    //                    }
+    //     ”backendMember” : 3,
+    //     ”frontendMember” : 3
+    //     }
+    const AddData = {
+        title: title,
+        // content: body,
+        img: imageFile.viewUrl,
+        strack: Selected,
+        // number
+        backendMember: null,
+        frontendMember: null
+    }
+
+    // Form안에 버튼을 눌러 정보를 서버로 보냄 
+    const onSonSubmituAddValue = (e) => {
+        e.preventDefault()
+    }
 
 
 
@@ -185,17 +210,41 @@ function Home() {
                                             ))}
                                         </select>
 
-
                                         <div><FaCodeBranch /></div>
 
                                     </LoginEachInputBoxselect>
                                 </LoginEachInputBox>
                                 {/* 모집인원  */}
+                                <LoginEachInputBox>
+                                    <p>Title</p>
+                                    <LoginEachInputBoxInputArea>
 
-                                                
+                                        <Input
+                                            type="number"
+                                            value={number}
+                                            onChange={onChangeNumberHandler}
+                                        />
+
+                                        <div><MdTitle /></div>
+                                    </LoginEachInputBoxInputArea>
+                                </LoginEachInputBox>
+
 
                                 {/* 상세내용  */}
 
+                                <LoginEachInputBox>
+                                    <p>상세내용</p>
+                                    <LoginEachInputBoxInputArea>
+
+                                        <Input
+                                            type="text"
+                                            value={number}
+                                            onChange={onChangeNumberHandler}
+                                        />
+
+                                        <div><MdTitle /></div>
+                                    </LoginEachInputBoxInputArea>
+                                </LoginEachInputBox>
 
 
 
@@ -332,8 +381,6 @@ const SCustomButtonWrapper = styled.div`
     align-items: center;
     flex-direction: row;
     gap: 0 1.875rem;
-    
-
 `;
 
 
@@ -363,7 +410,6 @@ const LoginEachInputBox = styled.div`
     flex-direction: column;
     align-items: center;
     gap: .625rem 0;
-
 
     > p {  
         text-align: left;
