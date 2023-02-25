@@ -1,11 +1,11 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Btn from '../Components/Button';
 import Input from '../Components/Input';
 import useInput from '../Hooks/useInput';
 import { useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 function Details() {
     const getDetailList = async () => {
@@ -13,14 +13,26 @@ function Details() {
         return response.data;
     };
 
-    const addComment = async () => {
-        await axios.post('http://localhost:4000/comment');
+    const addComment = async (newCommnet) => {
+        await axios.post('http://localhost:4000/comment', newCommnet);
     };
 
+    const editComment = async (editCommnet) => {
+        await axios.patch('http://localhost:4000/comment', editCommnet);
+    };
     const { isLoading, isError, data } = useQuery('comment', getDetailList);
 
+    const queryclient = useQueryClient();
     const mutation = useMutation(addComment, {
-        onSuccess: () => {},
+        onSuccess: () => {
+            queryclient.invalidateQueries('comment');
+        },
+    });
+
+    const mutation2 = useMutation(editComment, {
+        onSuccess: () => {
+            queryclient.invalidateQueries('comment');
+        },
     });
 
     const [iniComment, setInitComment] = useState({ title: '' });
@@ -38,22 +50,24 @@ function Details() {
 
     const onAddCommentBtnhandler = () => {
         mutation.mutate({
-            comment,
+            comment: comment,
         });
         setEditCmt(comment);
         setComment('');
     };
-    const onShowInputHandler = () => {
-        if (showInput === true) {
-            setInitComment({
-                title: editCmt,
-            });
-            setShowInput(!showInput);
-            setShowCancel(!showCancel);
-        } else {
-            setShowInput(!showInput);
-            setShowCancel(!showCancel);
-        }
+    const onShowInputHandler = (id) => {
+        data.find((item) => {
+            if (item.id === id) {
+                setEditCmt(item.comment);
+                setShowInput((prevState) => (prevState === id ? true : id));
+                setShowCancel((prevState) => (prevState === id ? false : id));
+                if (item.comment !== editCmt) {
+                    mutation2.mutate({
+                        comment: editCmt,
+                    });
+                }
+            }
+        });
     };
 
     const cancelButtonHandler = () => {
@@ -98,25 +112,26 @@ function Details() {
                 </Btn>
                 <StDetailBox>즐겁게 개발하실분들 댓글로 신청해주세요!</StDetailBox>
 
+                <StCommentLayout>
+                    <StMiniLayout>
+                        <h3>COMMENT</h3>
+                    </StMiniLayout>
+                    <Input me type="text" value={comment} onChange={onCommentHandler} />
+                    <Btn me onClick={onAddCommentBtnhandler}>
+                        {' '}
+                        add
+                    </Btn>
+                </StCommentLayout>
                 {data?.map((item) => {
+                    console.log(item.comment);
                     return (
-                        <>
-                            <StCommentLayout>
-                                <StMiniLayout>
-                                    <h3>COMMENT</h3>
-                                </StMiniLayout>
-                                <Input me type="text" value={comment} onChange={onCommentHandler} />
-                                <Btn me onClick={onAddCommentBtnhandler}>
-                                    {' '}
-                                    add
-                                </Btn>
-                            </StCommentLayout>
+                        <div key={item.id}>
                             <StCommentBox>
                                 <StMiniLayout>
                                     <h3>{item.nickname}</h3>
                                 </StMiniLayout>
                                 <StCommentListBox>
-                                    {showInput ? (
+                                    {showInput === item.id ? (
                                         <Input
                                             me
                                             type="text"
@@ -128,19 +143,24 @@ function Details() {
                                     )}
                                 </StCommentListBox>
                                 <StMiniLayout style={{ gap: '5px' }}>
-                                    <Btn sm onClick={onShowInputHandler}>
+                                    <Btn
+                                        sm
+                                        onClick={() => {
+                                            onShowInputHandler(item.id);
+                                        }}
+                                    >
                                         수정
                                     </Btn>
-                                    {showCancel ? (
-                                        <Btn sm>삭제</Btn>
-                                    ) : (
+                                    {showCancel === item.id ? (
                                         <Btn sm onClick={cancelButtonHandler}>
                                             취소
                                         </Btn>
+                                    ) : (
+                                        <Btn sm>삭제</Btn>
                                     )}
                                 </StMiniLayout>
                             </StCommentBox>
-                        </>
+                        </div>
                     );
                 })}
             </StDetailContaitner>
