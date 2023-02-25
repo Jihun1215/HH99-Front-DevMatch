@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Sidebar from '../Components/Sidebar';
 import { ModalOutArea, ModalInArea } from '../Style/Modal'
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 
 
 function Details() {
@@ -130,18 +131,18 @@ function Details() {
                     name={'modal'}
                     onClick={openModal}
                     sideBtn>
-                    수정
+                    <AiFillEdit />
                 </Btn>
                 <Btn
                     sideBtn>
-                    삭제
+                    <AiFillDelete />
                 </Btn>
 
                 <ModalOutArea isOpen={modalOpen}>
                     <ModalInArea isOpen={modalOpen}>
 
 
-                            
+
 
 
                         <Btn
