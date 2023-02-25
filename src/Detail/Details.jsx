@@ -4,14 +4,46 @@ import styled from 'styled-components';
 import Btn from '../Components/Button';
 import Input from '../Components/Input';
 import useInput from '../Hooks/useInput';
+import { useState } from 'react';
 
 function Details() {
-    const getDetailList = async () => {
-        const response = await axios.get('');
-        return response;
-    };
+    // const getDetailList = async () => {
+    //     const response = await axios.get('');
+    //     return response;
+    // };
+
+    const [iniComment, setInitComment] = useState({ title: '' });
 
     const [comment, onCommentHandler, setComment] = useInput('');
+
+    const [editCmt, onEditCmt, setEditCmt] = useInput('');
+    const [showInput, setShowInput] = useState(false);
+    const [showCmt, setShowCmt] = useState(true);
+    const [showCancel, setShowCancel] = useState(true);
+    const [likeCount, setLikeCount] = useState(0);
+
+    const likeCountButtonHandler = () => {
+        setLikeCount(likeCount + 1);
+    };
+
+    const onAddCommentBtnhandler = () => {
+        setInitComment({
+            title: comment,
+        });
+        setEditCmt(comment);
+    };
+    const onShowInputHandler = () => {
+        if (showInput === true) {
+            //editCmt put으로 수정내용 날려주기
+            setShowInput(!showInput);
+            setShowCmt(!showCmt);
+            setShowCancel(!showCancel);
+        } else {
+            setShowInput(!showInput);
+            setShowCmt(!showCmt);
+            setShowCancel(!showCancel);
+        }
+    };
 
     return (
         <>
@@ -22,41 +54,59 @@ function Details() {
                         <h3>중고거래 플랫폼 개발해요!</h3>
                     </StRecruitList>
                     <StRecruitList>
-                        <StBox4>
+                        <StMiniLayout>
                             <h3>PART</h3>
-                        </StBox4>
-                        <StBox4>
+                        </StMiniLayout>
+                        <StMiniLayout>
                             <h3>FE : 0</h3>
-                        </StBox4>
-                        <StBox4>
+                        </StMiniLayout>
+                        <StMiniLayout>
                             <h3>BE : 0</h3>
-                        </StBox4>
+                        </StMiniLayout>
                     </StRecruitList>
                     <StRecruitList>
-                        <StBox4>
+                        <StMiniLayout>
                             <h3>STACK</h3>
-                        </StBox4>
-                        <StBox5>
+                        </StMiniLayout>
+                        <StStackLayout>
                             <h4>JavaScript, Java, React, Spring</h4>
-                        </StBox5>
+                        </StStackLayout>
                     </StRecruitList>
                 </div>
-                <StBox2>
-                    <div>
-                        <h3>Detail</h3>
-                    </div>
-                </StBox2>
-                <StBox3>0</StBox3>
-                <Btn me>LIKE❤️</Btn>
+                <StDetailLayout>
+                    <h3>Detail</h3>
+                </StDetailLayout>
+                <StLikeNumber>{likeCount}</StLikeNumber>
+                <Btn me onClikck={likeCountButtonHandler}>
+                    LIKE❤️
+                </Btn>
                 <StDetailBox>즐겁게 개발하실분들 댓글로 신청해주세요!</StDetailBox>
-                <StBox6>
-                    <StBox4>
+                <StCommentLayout>
+                    <StMiniLayout>
                         <h3>COMMENT</h3>
-                    </StBox4>
+                    </StMiniLayout>
 
-                    <Input me type="text" value={comment} onchange={onCommentHandler} />
-                    <Btn me> add</Btn>
-                </StBox6>
+                    <Input me type="text" value={comment} onChange={onCommentHandler} />
+                    <Btn me onClick={onAddCommentBtnhandler}>
+                        {' '}
+                        add
+                    </Btn>
+                </StCommentLayout>
+                <StCommentBox>
+                    <StMiniLayout>
+                        <h3>nickname</h3>
+                    </StMiniLayout>
+                    <StCommentListBox>
+                        {showCmt && <h4>{iniComment.title} </h4>}
+                        {showInput && <Input me type="text" value={editCmt} onChange={onEditCmt} />}
+                    </StCommentListBox>
+                    <StMiniLayout style={{ gap: '5px' }}>
+                        <Btn sm onClick={onShowInputHandler}>
+                            수정
+                        </Btn>
+                        {showCancel ? <Btn sm>삭제</Btn> : <Btn sm>취소</Btn>}
+                    </StMiniLayout>
+                </StCommentBox>
             </StDetailContaitner>
         </>
     );
@@ -77,6 +127,7 @@ const StDetailContaitner = styled.div`
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 `;
 
+//상세페이지 이미지 박스
 const StImageBox = styled.div`
     width: 15.625rem;
     height: 12.5rem;
@@ -85,6 +136,7 @@ const StImageBox = styled.div`
     margin-right: 20px;
 `;
 
+// 상세페이지 모집요강 리스트
 const StRecruitList = styled.div`
     width: 30rem;
     min-height: 3.75rem;
@@ -96,7 +148,9 @@ const StRecruitList = styled.div`
     align-items: center;
     justify-content: center;
 `;
-const StBox2 = styled.div`
+
+// 상세내용 DetailLayout
+const StDetailLayout = styled.div`
     width: 37.5rem;
     height: 1.875rem;
     display: flex;
@@ -105,7 +159,8 @@ const StBox2 = styled.div`
     margin-top: 5px;
 `;
 
-const StBox3 = styled.div`
+//좋아요 넘버 박스
+const StLikeNumber = styled.div`
     width: 3.125rem;
     height: 1.875rem;
     display: flex;
@@ -115,6 +170,7 @@ const StBox3 = styled.div`
     margin-top: 5px;
 `;
 
+//상세내용 박스
 const StDetailBox = styled.div`
     width: 47.5rem;
     min-height: 12.5rem;
@@ -124,16 +180,19 @@ const StDetailBox = styled.div`
     margin-bottom: 20px;
 `;
 
-const StBox4 = styled.div`
+//miniLayout
+const StMiniLayout = styled.div`
     width: 10rem;
-    height: 60px;
+    height: 3.75rem;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    /* border: 1px solid black; */
 `;
 
-const StBox5 = styled.div`
+//stack Layout
+const StStackLayout = styled.div`
     width: 20rem;
     height: 3.75rem;
     border-radius: 10px;
@@ -141,13 +200,34 @@ const StBox5 = styled.div`
     align-items: center;
 `;
 
-const StBox6 = styled.div`
+//comment layout
+const StCommentLayout = styled.div`
     width: 36.875rem;
     height: 3.75rem;
     display: flex;
     align-items: center;
-    /* border: 1px solid black; */
     gap: 1.25rem;
     margin: auto;
     justify-content: space-between;
+`;
+
+//댓글 박스
+const StCommentBox = styled.div`
+    width: 47.5rem;
+    min-height: 3.75rem;
+    /* border: 1px solid black; */
+    margin: 0.625rem auto;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const StCommentListBox = styled.div`
+    width: 26.875rem;
+    height: 3.75rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
 `;
