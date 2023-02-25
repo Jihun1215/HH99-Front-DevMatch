@@ -43,6 +43,7 @@ function Login() {
 
   return (
     <LoginContainer Imgurl={test}>
+      <Header />
       {/* <img src={LoginBg} /> */}
       <LoginModalContainer>
 

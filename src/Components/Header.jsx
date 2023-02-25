@@ -1,15 +1,24 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+
+
+
 function Header() {
+
+    const navigate = useNavigate()
+    const GoToHome = () => { navigate('/') }
+    const MoveToSignup = () => { navigate('/signup') }
+
     return (
         <HeaderSize>
             <HeaderNavbar>
                 {/* 이미지 들어갈 자리입니다 */}
-                <div>Logo</div>
+                <div onClick={GoToHome}>Logo</div>
                 <ul>
                     <li>Home</li>
                     <li>Mypage</li>
-                    <li>LogIn</li>
+                    <li onClick={MoveToSignup}>LogIn</li>
                 </ul>
             </HeaderNavbar>
         </HeaderSize >
@@ -21,11 +30,11 @@ const HeaderSize = styled.div`
     height: 3.8125rem;
     border-bottom-left-radius: 1.25rem;
     border-bottom-right-radius: 1.25rem;
-    box-shadow: rgba(50,50,93,0.23 ) 0 30px 30px -20px;
+    box-shadow: rgba(0, 0, 0, 0.15) 3.95px 3.95px 8.6px;
     margin: 0 auto;
     color: #000;
     font-family: 800;
-    background: #EDF2FF;
+    background: transparent;
 `;
 const HeaderNavbar = styled.div`
     width: 85%;

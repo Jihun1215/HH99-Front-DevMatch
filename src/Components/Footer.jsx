@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export default function Footer() {
     return (
         <FooterArea>
-            <p>© HH99 Mini Project | All rights reserved.</p>
+            <p>© HH99 Mini | Project DevMatch | font by 한국저작권위원회   | All rights reserved</p>
         </FooterArea>
     );
 }
