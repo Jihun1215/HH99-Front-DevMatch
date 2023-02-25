@@ -9,7 +9,9 @@ import Btn from '../Components/Button'
 import Input from '../Components/Input'
 import useInput from '../Hooks/useInput'
 import { useNavigate } from 'react-router-dom'
-import LoginBg from '../Style/Img/LoginBg.jpeg'
+// import LoginBg from '../Style/Img/LoginBg.jpeg'
+import test from '../Style/Img/log.jpg'
+
 
 
 
@@ -21,7 +23,7 @@ function Login() {
   const [thisId, onChangeThisIdHandler, setThisId] = useInput();
   const [thisPw, onChangeThisPwHandler, setThisPw] = useInput();
 
-  
+
 
   const onSumibtLogin = (e) => {
     e.preventDefault()
@@ -40,7 +42,7 @@ function Login() {
   // }, []);
 
   return (
-    <LoginContainer Imgurl={LoginBg}>
+    <LoginContainer Imgurl={test}>
       {/* <img src={LoginBg} /> */}
       <LoginModalContainer>
 

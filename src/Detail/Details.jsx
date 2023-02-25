@@ -131,7 +131,7 @@ function Details() {
                     name={'modal'}
                     onClick={openModal}
                     sideBtn>
-                    <AiFillEdit />
+                    <AiFillEdit/>
                 </Btn>
                 <Btn
                     sideBtn>

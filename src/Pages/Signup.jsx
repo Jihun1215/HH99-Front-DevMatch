@@ -8,7 +8,9 @@ import { FaLock, FaUser, FaEnvelope, FaCircle } from 'react-icons/fa';
 import Btn from '../Components/Button'
 import { useNavigate } from 'react-router-dom'
 import Input from '../Components/Input'
-import LoginBg from '../Style/Img/LoginBg.jpeg'
+// import LoginBg from '../Style/Img/LoginBg.jpeg'
+import test from '../Style/Img/log.jpg'
+
 
 
 
@@ -97,7 +99,7 @@ function Login() {
   }
 
   return (
-    <LoginContainer Imgurl={LoginBg}>
+    <LoginContainer Imgurl={test}>
       <LoginModalContainer>
 
         <LoginModal onSubmit={onSumibtLogin}>
