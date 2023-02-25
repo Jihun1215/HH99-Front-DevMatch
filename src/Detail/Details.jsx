@@ -1,16 +1,27 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Btn from '../Components/Button';
 import Input from '../Components/Input';
 import useInput from '../Hooks/useInput';
 import { useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
 
 function Details() {
-    // const getDetailList = async () => {
-    //     const response = await axios.get('');
-    //     return response;
-    // };
+    const getDetailList = async () => {
+        const response = await axios.get('http://localhost:4000/comment');
+        return response.data;
+    };
+
+    const addComment = async () => {
+        await axios.post('http://localhost:4000/comment');
+    };
+
+    const { isLoading, isError, data } = useQuery('comment', getDetailList);
+
+    const mutation = useMutation(addComment, {
+        onSuccess: () => {},
+    });
 
     const [iniComment, setInitComment] = useState({ title: '' });
 
@@ -18,7 +29,6 @@ function Details() {
 
     const [editCmt, onEditCmt, setEditCmt] = useInput('');
     const [showInput, setShowInput] = useState(false);
-    const [showCmt, setShowCmt] = useState(true);
     const [showCancel, setShowCancel] = useState(true);
     const [likeCount, setLikeCount] = useState(0);
 
@@ -27,22 +37,28 @@ function Details() {
     };
 
     const onAddCommentBtnhandler = () => {
-        setInitComment({
-            title: comment,
+        mutation.mutate({
+            comment,
         });
         setEditCmt(comment);
+        setComment('');
     };
     const onShowInputHandler = () => {
         if (showInput === true) {
-            //editCmt put으로 수정내용 날려주기
+            setInitComment({
+                title: editCmt,
+            });
             setShowInput(!showInput);
-            setShowCmt(!showCmt);
             setShowCancel(!showCancel);
         } else {
             setShowInput(!showInput);
-            setShowCmt(!showCmt);
             setShowCancel(!showCancel);
         }
+    };
+
+    const cancelButtonHandler = () => {
+        setShowInput(!showInput);
+        setShowCancel(!showCancel);
     };
 
     return (
@@ -77,36 +93,56 @@ function Details() {
                     <h3>Detail</h3>
                 </StDetailLayout>
                 <StLikeNumber>{likeCount}</StLikeNumber>
-                <Btn me onClikck={likeCountButtonHandler}>
+                <Btn me onClick={likeCountButtonHandler}>
                     LIKE❤️
                 </Btn>
                 <StDetailBox>즐겁게 개발하실분들 댓글로 신청해주세요!</StDetailBox>
-                <StCommentLayout>
-                    <StMiniLayout>
-                        <h3>COMMENT</h3>
-                    </StMiniLayout>
 
-                    <Input me type="text" value={comment} onChange={onCommentHandler} />
-                    <Btn me onClick={onAddCommentBtnhandler}>
-                        {' '}
-                        add
-                    </Btn>
-                </StCommentLayout>
-                <StCommentBox>
-                    <StMiniLayout>
-                        <h3>nickname</h3>
-                    </StMiniLayout>
-                    <StCommentListBox>
-                        {showCmt && <h4>{iniComment.title} </h4>}
-                        {showInput && <Input me type="text" value={editCmt} onChange={onEditCmt} />}
-                    </StCommentListBox>
-                    <StMiniLayout style={{ gap: '5px' }}>
-                        <Btn sm onClick={onShowInputHandler}>
-                            수정
-                        </Btn>
-                        {showCancel ? <Btn sm>삭제</Btn> : <Btn sm>취소</Btn>}
-                    </StMiniLayout>
-                </StCommentBox>
+                {data?.map((item) => {
+                    return (
+                        <>
+                            <StCommentLayout>
+                                <StMiniLayout>
+                                    <h3>COMMENT</h3>
+                                </StMiniLayout>
+                                <Input me type="text" value={comment} onChange={onCommentHandler} />
+                                <Btn me onClick={onAddCommentBtnhandler}>
+                                    {' '}
+                                    add
+                                </Btn>
+                            </StCommentLayout>
+                            <StCommentBox>
+                                <StMiniLayout>
+                                    <h3>{item.nickname}</h3>
+                                </StMiniLayout>
+                                <StCommentListBox>
+                                    {showInput ? (
+                                        <Input
+                                            me
+                                            type="text"
+                                            value={editCmt}
+                                            onChange={onEditCmt}
+                                        />
+                                    ) : (
+                                        <h4>{item.comment} </h4>
+                                    )}
+                                </StCommentListBox>
+                                <StMiniLayout style={{ gap: '5px' }}>
+                                    <Btn sm onClick={onShowInputHandler}>
+                                        수정
+                                    </Btn>
+                                    {showCancel ? (
+                                        <Btn sm>삭제</Btn>
+                                    ) : (
+                                        <Btn sm onClick={cancelButtonHandler}>
+                                            취소
+                                        </Btn>
+                                    )}
+                                </StMiniLayout>
+                            </StCommentBox>
+                        </>
+                    );
+                })}
             </StDetailContaitner>
         </>
     );
@@ -224,6 +260,7 @@ const StCommentBox = styled.div`
     justify-content: space-between;
 `;
 
+//댓글 리스트 박스
 const StCommentListBox = styled.div`
     width: 26.875rem;
     height: 3.75rem;
