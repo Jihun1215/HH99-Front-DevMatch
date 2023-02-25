@@ -8,18 +8,31 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 function Details() {
+    //댓글 작성시 닉네임 받아야함
+
+    //댓글 조회
     const getDetailList = async () => {
         const response = await axios.get('http://localhost:4000/comment');
         return response.data;
     };
 
+    //댓글 추가
     const addComment = async (newCommnet) => {
         await axios.post('http://localhost:4000/comment', newCommnet);
     };
 
-    const editComment = async (editCommnet) => {
-        await axios.patch('http://localhost:4000/comment', editCommnet);
+    // 댓글 수정
+    const editComment = async (id) => {
+        await axios.put(`http://localhost:4000/comment/${id}`, {
+            comment: editCmt,
+        });
     };
+
+    // 댓글 삭제
+    const deleteComment = async (id) => {
+        await axios.delete(`http://localhost:4000/comment/${id}`);
+    };
+
     const { isLoading, isError, data } = useQuery('comment', getDetailList);
 
     const queryclient = useQueryClient();
@@ -35,44 +48,72 @@ function Details() {
         },
     });
 
-    const [iniComment, setInitComment] = useState({ title: '' });
+    const mutation3 = useMutation(deleteComment, {
+        onSuccess: () => {
+            queryclient.invalidateQueries('comment');
+        },
+    });
 
     const [comment, onCommentHandler, setComment] = useInput('');
 
     const [editCmt, onEditCmt, setEditCmt] = useInput('');
     const [showInput, setShowInput] = useState(false);
-    const [showCancel, setShowCancel] = useState(true);
+    const [showCancel, setShowCancel] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
+    const [showEdit, setShowEdit] = useState(false);
 
     const likeCountButtonHandler = () => {
         setLikeCount(likeCount + 1);
     };
 
-    const onAddCommentBtnhandler = () => {
-        mutation.mutate({
-            comment: comment,
-        });
-        setEditCmt(comment);
-        setComment('');
+    const onAddCommentBtnhandler = (e) => {
+        if (comment === '') {
+            alert('빈칸입니다.');
+            return false;
+        } else {
+            mutation.mutate({
+                comment: comment,
+            });
+            setEditCmt(comment);
+            setComment('');
+        }
     };
+
     const onShowInputHandler = (id) => {
         data.find((item) => {
             if (item.id === id) {
                 setEditCmt(item.comment);
                 setShowInput((prevState) => (prevState === id ? true : id));
                 setShowCancel((prevState) => (prevState === id ? false : id));
-                if (item.comment !== editCmt) {
-                    mutation2.mutate({
-                        comment: editCmt,
-                    });
-                }
+                setShowEdit((prevState) => (prevState === id ? false : id));
             }
+            return;
         });
+    };
+
+    const editButtonHandler = (id) => {
+        if (editCmt === '') {
+            alert('빈칸입니다.');
+            return false;
+        } else {
+            mutation2.mutate(id);
+            setShowInput(!showInput);
+            setShowCancel(!showCancel);
+            setShowEdit(!showEdit);
+        }
     };
 
     const cancelButtonHandler = () => {
         setShowInput(!showInput);
         setShowCancel(!showCancel);
+        setShowEdit(!showEdit);
+    };
+
+    const deleteButtonHandler = (id) => {
+        mutation3.mutate(id);
+        setShowInput(!showInput);
+        setShowCancel(!showCancel);
+        setShowEdit(!showEdit);
     };
 
     return (
@@ -116,7 +157,14 @@ function Details() {
                     <StMiniLayout>
                         <h3>COMMENT</h3>
                     </StMiniLayout>
-                    <Input me type="text" value={comment} onChange={onCommentHandler} />
+                    <Input
+                        me
+                        type="text"
+                        placeholder="코멘트를 남겨주세요"
+                        style={{ border: 'none' }}
+                        value={comment}
+                        onChange={onCommentHandler}
+                    />
                     <Btn me onClick={onAddCommentBtnhandler}>
                         {' '}
                         add
@@ -137,26 +185,47 @@ function Details() {
                                             type="text"
                                             value={editCmt}
                                             onChange={onEditCmt}
+                                            placeholder="수정 내용을 입력해주세요"
+                                            style={{ color: '#F38BA0', border: 'none' }}
                                         />
                                     ) : (
                                         <h4>{item.comment} </h4>
                                     )}
                                 </StCommentListBox>
                                 <StMiniLayout style={{ gap: '5px' }}>
-                                    <Btn
-                                        sm
-                                        onClick={() => {
-                                            onShowInputHandler(item.id);
-                                        }}
-                                    >
-                                        수정
-                                    </Btn>
+                                    {showEdit === item.id ? (
+                                        <Btn sm onClick={() => editButtonHandler(item.id)}>
+                                            수정하기{' '}
+                                        </Btn>
+                                    ) : (
+                                        <Btn
+                                            sm
+                                            onClick={() => {
+                                                onShowInputHandler(item.id);
+                                            }}
+                                        >
+                                            수정
+                                        </Btn>
+                                    )}
+
                                     {showCancel === item.id ? (
-                                        <Btn sm onClick={cancelButtonHandler}>
+                                        <Btn
+                                            sm
+                                            onClick={cancelButtonHandler}
+                                            style={{ backgroundColor: '#F38BA0' }}
+                                        >
                                             취소
                                         </Btn>
                                     ) : (
-                                        <Btn sm>삭제</Btn>
+                                        <Btn
+                                            sm
+                                            style={{ backgroundColor: '#F38BA0' }}
+                                            onClick={() => {
+                                                deleteButtonHandler(item.id);
+                                            }}
+                                        >
+                                            삭제
+                                        </Btn>
                                     )}
                                 </StMiniLayout>
                             </StCommentBox>
