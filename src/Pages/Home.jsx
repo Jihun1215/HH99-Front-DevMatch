@@ -10,6 +10,7 @@ import { MdPlaylistAdd } from "react-icons/md";
 import useInput from "../Hooks/useInput"
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { MdTitle } from 'react-icons/md';
+import imageCompression from 'browser-image-compression';
 
 function Home() {
 
@@ -17,11 +18,7 @@ function Home() {
     const openModal = (e) => (e.target.name === 'modal' ? setModalOpen('block') : console.log('Error'));
     const closeModal = (e) => (e.target.name === 'modal' ? setModalOpen('none') : console.log('Error'));
 
-    // 이미지 state 
-    const [imageFile, setImageFile] = useState({
-        imageFile: "",
-        viewUrl: "",
-    });
+
 
     // UseInput 훅 초기화를 위해 set를 같이 가져가옴 
     const [title, onChangeTitleHandler, setTitle] = useInput();
@@ -34,30 +31,48 @@ function Home() {
     }
 
 
-    // 이미지 
+    // 이미지 로직 
+
+    // 이미지 state 
+    const [imageFile, setImageFile] = useState({
+        imageFile: "",
+        viewUrl: "",
+    });
+
     const [loaded, setLoaded] = useState(false);
 
     let imageRef;
 
-    const onChangeUploadHandler = (e) => {
+    const onChangeUploadHandler = async (e) => {
         console.log("사진 업로드 버튼 클릭");
         e.preventDefault();
 
-        const fileReader = new FileReader();
-        if (e.target.files[0]) {
-            setLoaded(true);
-            fileReader.readAsDataURL(e.target.files[0]);
-        }
-        fileReader.onload = () => {
-            setImageFile({
-                viewUrl: fileReader.result
-            });
-            // console.log(fileReader.result)
-            setLoaded(true);
+        const imageFile = e.target.files?.[0];
+        console.log('Before Compression: ', imageFile.size);
+
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
         };
-        // console.log(loaded);
+        try {
+            const compressedFile = await imageCompression(imageFile, options);
+            console.log('After Compression: ', compressedFile.size);
+            const fileReader = new FileReader();
+            console.log(compressedFile);
+            fileReader.readAsDataURL(compressedFile);
+
+            fileReader.onload = () => {
+                setImageFile({
+                    viewUrl: String(fileReader.result),
+                });
+            };
+        } catch (error) {
+            console.log(error);
+        }
     };
 
+    // console.log(imageFile.viewUrl)
 
 
     const onClickDeleteHandler = () => {
@@ -140,7 +155,9 @@ function Home() {
 
                             <ModalInWarpInputBox>
 
-                                인풋
+                                <LoginEachInputBox>
+
+                                </LoginEachInputBox>
 
                             </ModalInWarpInputBox>
 
