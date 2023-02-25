@@ -18,10 +18,10 @@ function Details() {
             <StDetailContaitner>
                 <StImageBox>이미지</StImageBox>
                 <div>
-                    <StBox>
+                    <StRecruitList>
                         <h3>중고거래 플랫폼 개발해요!</h3>
-                    </StBox>
-                    <StBox>
+                    </StRecruitList>
+                    <StRecruitList>
                         <StBox4>
                             <h3>PART</h3>
                         </StBox4>
@@ -31,15 +31,15 @@ function Details() {
                         <StBox4>
                             <h3>BE : 0</h3>
                         </StBox4>
-                    </StBox>
-                    <StBox>
+                    </StRecruitList>
+                    <StRecruitList>
                         <StBox4>
                             <h3>STACK</h3>
                         </StBox4>
                         <StBox5>
                             <h4>JavaScript, Java, React, Spring</h4>
                         </StBox5>
-                    </StBox>
+                    </StRecruitList>
                 </div>
                 <StBox2>
                     <div>
@@ -64,6 +64,7 @@ function Details() {
 
 export default Details;
 
+//상세페이지 전체 컨테이너
 const StDetailContaitner = styled.div`
     width: 50rem;
     margin: 30px auto;
@@ -84,7 +85,7 @@ const StImageBox = styled.div`
     margin-right: 20px;
 `;
 
-const StBox = styled.div`
+const StRecruitList = styled.div`
     width: 30rem;
     min-height: 3.75rem;
     margin-bottom: 7px;
@@ -129,7 +130,6 @@ const StBox4 = styled.div`
     border-radius: 10px;
     display: flex;
     justify-content: center;
-    /* border: 1px solid black; */
     align-items: center;
 `;
 
@@ -137,6 +137,8 @@ const StBox5 = styled.div`
     width: 20rem;
     height: 3.75rem;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
 `;
 
 const StBox6 = styled.div`
