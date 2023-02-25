@@ -18,12 +18,14 @@ function Header() {
 export default Header
 const HeaderSize = styled.div`
     width: 50rem;
-    height: 5.625rem;
+    height: 3.8125rem;
     border-bottom-left-radius: 1.25rem;
     border-bottom-right-radius: 1.25rem;
     box-shadow: rgba(50,50,93,0.23 ) 0 30px 30px -20px;
     margin: 0 auto;
-    /* background: #EDF2FF; */
+    color: #000;
+    font-family: 800;
+    background: #EDF2FF;
 `;
 const HeaderNavbar = styled.div`
     width: 85%;
@@ -33,6 +35,7 @@ const HeaderNavbar = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 1.25rem;
     > div {
         width: 7.5rem;
         cursor: pointer;
