@@ -100,6 +100,7 @@ function Login() {
 
   return (
     <LoginContainer Imgurl={test}>
+      <Header />
       <LoginModalContainer>
 
         <LoginModal onSubmit={onSumibtLogin}>

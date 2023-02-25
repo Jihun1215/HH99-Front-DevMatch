@@ -135,7 +135,7 @@ const LoginModal = styled.form`
   height: 31.25rem;
   display: flex;
   align-items: center;
-   border: 2px solid rgba(255,255,255,0.5);
+  border: 2px solid rgba(255,255,255,0.5);
   border-radius: 20px;
     /* backdrop-filter: blur(10px); */
   display: flex;

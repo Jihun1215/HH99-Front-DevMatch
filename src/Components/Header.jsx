@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import MainLogo from '../Style/Img/MainLogo.png'
 
 
 
@@ -8,17 +9,19 @@ function Header() {
 
     const navigate = useNavigate()
     const GoToHome = () => { navigate('/') }
-    const MoveToSignup = () => { navigate('/signup') }
+    const MoveToLoginup = () => { navigate('/login') }
 
     return (
-        <HeaderSize>
+        <HeaderSize >
             <HeaderNavbar>
                 {/* 이미지 들어갈 자리입니다 */}
-                <div onClick={GoToHome}>Logo</div>
+                <HeaderMainLogo onClick={GoToHome}>
+                    <img src={MainLogo} />
+                </HeaderMainLogo>
                 <ul>
                     <li>Home</li>
                     <li>Mypage</li>
-                    <li onClick={MoveToSignup}>LogIn</li>
+                    <li onClick={MoveToLoginup}>LogIn</li>
                 </ul>
             </HeaderNavbar>
         </HeaderSize >
@@ -35,6 +38,7 @@ const HeaderSize = styled.div`
     color: #000;
     font-family: 800;
     background: transparent;
+   
 `;
 const HeaderNavbar = styled.div`
     width: 85%;
@@ -45,6 +49,7 @@ const HeaderNavbar = styled.div`
     align-items: center;
     justify-content: space-between;
     font-size: 1.25rem;
+    
     > div {
         width: 7.5rem;
         cursor: pointer;
@@ -66,5 +71,20 @@ const HeaderNavbar = styled.div`
         text-decoration: none;
         color: #000;
         text-transform: uppercase;
+    }
+`;
+
+const HeaderMainLogo = styled.div`
+    width: 100px;
+    height: 50px;
+    background: url(${(props) => props.Logo});
+    background-position: center;
+    background-size: cover; 
+    position: relative;
+    > img {
+        width: 200px;
+        position: absolute;
+        top: -45px;
+        z-index: 5;
     }
 `
