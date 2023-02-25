@@ -174,7 +174,7 @@ const LoginModalInputBox = styled.div`
     outline: none;
     font-size: 1em;
     padding:0 35px 0 5px;
-    color: #fff;
+    color: #000;
     padding-left: 1.25rem;
   };
   > input:focus ~ label{

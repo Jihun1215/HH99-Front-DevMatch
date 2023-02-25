@@ -2,6 +2,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import MainLogo from '../Style/Img/MainLogo.png'
+import MainLogo2 from '../Style/Img/MainLogo2.png'
+
 
 
 
