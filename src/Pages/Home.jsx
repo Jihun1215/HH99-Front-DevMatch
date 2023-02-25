@@ -8,8 +8,8 @@ import Sidebar from '../Components/Sidebar'
 import Input from '../Components/Input'
 import { MdPlaylistAdd } from "react-icons/md";
 import useInput from "../Hooks/useInput"
-import { FaUserAlt, FaLock } from 'react-icons/fa';
-import { MdTitle } from 'react-icons/md';
+import { FaCodeBranch } from 'react-icons/fa';
+import { MdTitle, MdPersonAdd } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
 
 function Home() {
@@ -72,9 +72,7 @@ function Home() {
         }
     };
 
-    // console.log(imageFile.viewUrl)
-
-
+    // 사진 삭제
     const onClickDeleteHandler = () => {
         // console.log("사진 삭제 버튼 클릭");
         setImageFile({
@@ -82,14 +80,20 @@ function Home() {
         });
     };
 
+    // SelectBox 옵션 
+    const selectList = ["React", "Spring", "Java", "JS"];
+    const [Selected, setSelected] = useState("");
+
+    const handleSelect = (e) => {
+        setSelected(e.target.value);
+    };
+
+
 
     return (
         <Layout>
-
             <Header />
             <Sidebar>
-
-
                 <Btn
                     name={'modal'}
                     onClick={openModal}
@@ -105,12 +109,8 @@ function Home() {
 
                         <ModalInFrom onSubmit={onSonSubmituAddValue}>
 
-
-
                             {/* 이미지 */}
-
                             <ModalInImgBox>
-
 
                                 <ModalInImgArear>
                                     {imageFile.imageFile !== "" ? (
@@ -148,16 +148,59 @@ function Home() {
 
                                 </ModalInButGround>
 
-
                             </ModalInImgBox>
+
+
 
                             {/* 인풋창 */}
 
                             <ModalInWarpInputBox>
 
+                                {/* Title */}
                                 <LoginEachInputBox>
+                                    <p>Title</p>
+                                    <LoginEachInputBoxInputArea>
 
+                                        <Input
+                                            type="text"
+                                            value={title}
+                                            onChange={onChangeTitleHandler}
+                                        />
+
+                                        <div><MdTitle /></div>
+                                    </LoginEachInputBoxInputArea>
                                 </LoginEachInputBox>
+
+                                {/* 백프론트 선택  */}
+
+                                <LoginEachInputBox>
+                                    <p>모집인원정보</p>
+                                    <LoginEachInputBoxselect>
+
+                                        <select onChange={handleSelect} value={Selected}>
+                                            {selectList.map((item) => (
+                                                <option value={item} key={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </select>
+
+
+                                        <div><FaCodeBranch /></div>
+
+                                    </LoginEachInputBoxselect>
+                                </LoginEachInputBox>
+                                {/* 모집인원  */}
+
+                                                
+
+                                {/* 상세내용  */}
+
+
+
+
+
+
 
                             </ModalInWarpInputBox>
 
@@ -230,13 +273,7 @@ const ModalInFrom = styled.form`
     gap: 1.25rem;
 `;
 
-// modal Input Form 
-const ModalInWarpInputBox = styled.div`
-    border: 1px solid red;
-    width: 49%;
-    height: 90%;
-    
-`;
+
 
 // Form IMG BOX
 const ModalInImgBox = styled.div`
@@ -295,8 +332,25 @@ const SCustomButtonWrapper = styled.div`
     align-items: center;
     flex-direction: row;
     gap: 0 1.875rem;
+    
 
 `;
+
+
+// modal Input Form 
+const ModalInWarpInputBox = styled.div`
+    border: 1px solid red;
+    width: 49%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px 0;
+`;
+
+
+
 
 const LoginEachInputBox = styled.div`
     position: relative;
@@ -338,9 +392,33 @@ const LoginEachInputBoxInputArea = styled.div`
       transform: translateY(-50%);
       color: #000;
       font-size: 1.2rem;
+  };
+  `;
 
-  }
-  `
+const LoginEachInputBoxselect = styled.div`
+position: relative;
+width: 90%;
+height: 40%;
+> select {
+    margin-left: 3.125rem;
+    position: absolute;
+    width: 70%;
+    height: 70%;
+   text-align: center;
+    border: none;
+    outline: none;
+    border : 2px solid black;
+    
+}
+> div {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    color: #000;
+    font-size: 1.2rem;
+};
+`;
 
 
 

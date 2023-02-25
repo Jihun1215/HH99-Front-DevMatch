@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 export default function Input(props) {
-    //{...props}는 props 가져와 css작업 {props.children} 안에 글자 표시
-    return <DefailtInput {...props}>{props.children}</DefailtInput>;
+  //{...props}는 props 가져와 css작업 {props.children} 안에 글자 표시
+  return <DefailtInput {...props}>{props.children}</DefailtInput>;
 }
 
 
@@ -16,29 +16,35 @@ const DefailtInput = styled.input`
     padding-left: 1.25rem;
 
   ${(props) =>
-        props.sm &&
-        css`   
+    props.sm &&
+    css`   
         width: 15.625rem
         height: 3.125rem
     `};
     
     ${(props) =>
-        props.me &&
-        css`
+    props.me &&
+    css`
       
      width: 21.875rem;
      height: 3.125rem;
     `};
     ${(props) =>
-        props.lg &&
-        css`
+    props.lg &&
+    css`
      width: 31.25rem;
      height: 15.625rem;
      
     `};
     ${(props) =>
-        props.loginput &&
-        css`   
+    props.loginput &&
+    css`   
+        width: 25rem;
+        height: 3.75rem;
+    `};
+    ${(props) =>
+    props.addform &&
+    css`   
         width: 25rem;
         height: 3.75rem;
     `};
