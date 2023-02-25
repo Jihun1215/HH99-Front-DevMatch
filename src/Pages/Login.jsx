@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Layout from '../Components/Layout'
 import Header from '../Components/Header'
@@ -9,6 +9,7 @@ import Btn from '../Components/Button'
 import Input from '../Components/Input'
 import useInput from '../Hooks/useInput'
 import { useNavigate } from 'react-router-dom'
+import LoginBg from '../Style/Img/LoginBg.jpeg'
 
 
 
@@ -24,10 +25,21 @@ function Login() {
     e.preventDefault()
     // 서버로 아이디 비밀번호 보내고 체크 후 성공이나 실패를 보여준다 
     alert(thisId, thisPw)
+    setThisId('');
+    setThisPw('');
+
   }
+  // // 스크롤 방지
+  // useEffect(() => {
+  //   document.body.style.overflow = 'hidden';
+  //   return () => {
+  //     document.body.style.overflow = 'unset';
+  //   };
+  // }, []);
 
   return (
-    <LoginContainer>
+    <LoginContainer Imgurl={LoginBg}>
+      {/* <img src={LoginBg} /> */}
       <LoginModalContainer>
 
         <LoginModal onSubmit={onSumibtLogin}>
@@ -65,7 +77,7 @@ function Login() {
 
           <LoginmodalGoToSignup>
 
-            <p> DevMatch 회원 아닐시  <LoginmodalGoToSignupSpan onClick={MoveToSignup}>가입하기</LoginmodalGoToSignupSpan> </p>
+            <p> DevMatch아이디만들사람 <LoginmodalGoToSignupSpan onClick={MoveToSignup}>가입하기</LoginmodalGoToSignupSpan> </p>
 
           </LoginmodalGoToSignup>
 
@@ -87,10 +99,16 @@ const LoginContainer = styled.div`
   height: 100%;
   min-height: 100vh;
   width: 100%;
-  background: url("https://raw.githubusercontent.com/Hashtechieofficial/Form-/main/background6.jpg") no-repeat; 
+  overflow: none;
+  background: url(${(props) => props.Imgurl});
   background-position: center;
-  background-size: cover;
-
+  background-size: cover; 
+  /* > img {
+    width: 100%;
+    height: 100%;
+  object-fit: cover;
+  } */
+  
 `;
 
 const LoginModalContainer = styled.div`

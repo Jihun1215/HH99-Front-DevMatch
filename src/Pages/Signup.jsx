@@ -4,10 +4,11 @@ import Layout from '../Components/Layout'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
 // import LoginBg from '../Style/Img/LoginBg.jpeg'
-import { FaLock, FaUser, FaEnvelope } from 'react-icons/fa';
+import { FaLock, FaUser, FaEnvelope, FaCircle } from 'react-icons/fa';
 import Btn from '../Components/Button'
 import { useNavigate } from 'react-router-dom'
 import Input from '../Components/Input'
+import LoginBg from '../Style/Img/LoginBg.jpeg'
 
 
 
@@ -16,15 +17,16 @@ function Login() {
   const navigate = useNavigate();
   const MoveToLogin = () => { navigate('/login') }
 
-  const [ninkName, setNickName] = useState();
-  const [username, setUserName] = useState();
-  const [passWord, setPassWord] = useState();
+  const [ninkName, setNickName] = useState('');
+  const [username, setUserName] = useState('');
+  const [passWord, setPassWord] = useState('');
 
   // 오류 메세지
   const [nameMessage, setNameMessage] = useState('');
   const [idMessage, setIdMessage] = useState('');
   const [pwMessage, setPwMessage] = useState('');
 
+  // 유효성검사 
   const [isninkName, setIsNinkName] = useState(false);
   const [isuserName, setIsUserName] = useState(false);
   const [ispassWord, setIsPassWord] = useState(false);
@@ -32,14 +34,15 @@ function Login() {
 
   // 닉네임 정규식 체크 
   const onChangeNinkName = (e) => {
-    setNickName(e.tatget.value);
+    setNickName(e.target.value);
+
     const NinkNameReExp = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,6}$/;
     if (!NinkNameReExp.test(e.target.value)) {
-      setIsNinkName('영문이나 한글로 2 ~ 6자로 입력해주세요');
-      isninkName(false);
+      setNameMessage('영문이나 한글로 2 ~ 6자로 입력해주세요');
+      setIsNinkName(false);
     } else {
-      setIsNinkName('사용 가능한 닉네임입니다');
-      isninkName(true);
+      setNameMessage('사용 가능한 닉네임입니다');
+      setIsNinkName(true);
     }
   }
 
@@ -48,33 +51,60 @@ function Login() {
 
 
   // 아이디 정규식 체크 
-  const onChangeUserNameHandler = () => {
-
+  const onChangeUserNameHandler = (e) => {
+    setUserName(e.target.value);
+    const IdReExp = /^(?=.*[a-z0-9])[a-z0-9]{5,11}$/;
+    if (!IdReExp.test(e.target.value)) {
+      setIdMessage('영문이나 숫자로 6 ~ 10자로 입력해주세요');
+      setIsUserName(false);
+    } else {
+      setIdMessage('사용 가능한 아이디 입니다.');
+      setIsUserName(true);
+    }
   }
   // 비밀번호 정규식 체크 
-  const onChangePassWordHandler = () => {
-
+  const onChangePassWordHandler = (e) => {
+    setPassWord(e.target.value)
+    const PwReExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,12}$/;
+    if (!PwReExp.test(e.target.value)) {
+      setPwMessage('영문과 숫자 조합으로 8 ~ 12자로 입력해주세요')
+      setIsPassWord(false);
+    } else {
+      setPwMessage('사용 가능한 비밀번호 입니다.');
+      setIsPassWord(true);
+    }
   }
 
 
   const onSumibtLogin = (e) => {
     e.preventDefault()
-    // 서버로 아이디 비밀번호 보내고 체크 후 성공이나 실패를 보여준다 
-    alert(ninkName, username, passWord)
+
+    if (isninkName === true && isuserName === true && ispassWord === true) {
+      // 서버로 아이디 비밀번호 보내고 체크 후 성공이나 실패를 보여준다 
+      alert(ninkName, username, passWord)
+
+    }
+
+    else {
+      alert('조건에 맞는 값을 입력해주세요!')
+    }
+
 
     setNickName('');
     setUserName('');
     setPassWord('');
+
   }
 
   return (
-    <LoginContainer>
+    <LoginContainer Imgurl={LoginBg}>
       <LoginModalContainer>
 
         <LoginModal onSubmit={onSumibtLogin}>
           <h2>회원가입</h2>
 
           <LoginModalInputBox>
+
             <Input
               type="text"
               value={ninkName}
@@ -82,7 +112,10 @@ function Login() {
               required />
             <label>NickName: </label>
             <div>  <FaUser /></div>
-            <p>오류</p>
+            <p>
+              {nameMessage}
+              {/* <FaCircle /> */}
+            </p>
 
           </LoginModalInputBox>
 
@@ -95,7 +128,7 @@ function Login() {
               required />
             <label>ID: </label>
             <div>  <FaEnvelope /></div>
-            <p>오류</p>
+            <p>{idMessage}</p>
 
           </LoginModalInputBox>
 
@@ -109,7 +142,7 @@ function Login() {
               required />
             <label>PassWord: </label>
             <div><FaLock /></div>
-            <p>오류</p>
+            <p>{pwMessage}</p>
 
           </LoginModalInputBox>
 
@@ -145,10 +178,16 @@ const LoginContainer = styled.div`
   height: 100%;
   min-height: 100vh;
   width: 100%;
-  background: url("https://raw.githubusercontent.com/Hashtechieofficial/Form-/main/background6.jpg") no-repeat; 
+  overflow: none;
+  background: url(${(props) => props.Imgurl});
   background-position: center;
-  background-size: cover;
-
+  background-size: cover; 
+  /* > img {
+    width: 100%;
+    height: 100%;
+  object-fit: cover;
+  } */
+  
 `;
 
 const LoginModalContainer = styled.div`
@@ -228,7 +267,9 @@ const LoginModalInputBox = styled.div`
     color: #45f3ff;
     position: absolute;
     top: 60px;
-    left: 50%;
+    width: 18.75rem;
+    text-align: center;
+    /* border: 1px solid red; */
   }
 `;
 const LoginModalButtontBox = styled.div`
