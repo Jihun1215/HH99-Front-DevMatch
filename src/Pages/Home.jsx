@@ -238,7 +238,7 @@ function Home() {
 
                                         <Input
                                             type="text"
-                                            value={number}
+                                            value={body}
                                             onChange={onChangeNumberHandler}
                                         />
 
