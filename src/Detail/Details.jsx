@@ -6,6 +6,9 @@ import Input from '../Components/Input';
 import useInput from '../Hooks/useInput';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import Sidebar from '../Components/Sidebar';
+import { ModalOutArea, ModalInArea } from '../Style/Modal'
+
 
 function Details() {
     //댓글 작성시 닉네임 받아야함
@@ -116,8 +119,41 @@ function Details() {
         setShowEdit(!showEdit);
     };
 
+    const [modalOpen, setModalOpen] = useState('none');
+    const openModal = (e) => (e.target.name === 'modal' ? setModalOpen('block') : console.log('Error'));
+    const closeModal = (e) => (e.target.name === 'modal' ? setModalOpen('none') : console.log('Error'));
+
     return (
         <>
+            <Sidebar>
+                <Btn
+                    name={'modal'}
+                    onClick={openModal}
+                    sideBtn>
+                    수정
+                </Btn>
+                <Btn
+                    sideBtn>
+                    삭제
+                </Btn>
+
+                <ModalOutArea isOpen={modalOpen}>
+                    <ModalInArea isOpen={modalOpen}>
+
+
+                            
+
+
+                        <Btn
+                            name={'modal'}
+                            onClick={closeModal}>close</Btn>
+
+                    </ModalInArea>
+                </ModalOutArea>
+
+
+            </Sidebar>
+
             <StDetailContaitner>
                 <StImageBox>이미지</StImageBox>
                 <div>
