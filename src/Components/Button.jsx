@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 export default function Btn(props) {
-    //{...props}는 props 가져와 css작업 {props.children} 안에 글자 표시
-    return <DefailtButton {...props}>{props.children}</DefailtButton>;
+  //{...props}는 props 가져와 css작업 {props.children} 안에 글자 표시
+  return <DefailtButton {...props}>{props.children}</DefailtButton>;
 }
 
 
@@ -20,16 +20,16 @@ const DefailtButton = styled.button`
   align-items: center;
   justify-content: center;
   ${(props) =>
-        props.sm &&
-        css`   
+    props.sm &&
+    css`   
 
         width: 4.6875rem;
         height: 1.875rem;
     `};
     
     ${(props) =>
-        props.me &&
-        css`
+    props.me &&
+    css`
       
      width: 6.25rem;
      height: 2.1875rem;
@@ -40,8 +40,8 @@ const DefailtButton = styled.button`
      border-radius: .625rem;
     `};
     ${(props) =>
-        props.lg &&
-        css`
+    props.lg &&
+    css`
       
      width: 9.375rem;
      height: 2.5rem;
@@ -52,8 +52,8 @@ const DefailtButton = styled.button`
      border-radius: .625rem;
     `};
     ${(props) =>
-        props.sideBtn &&
-        css`   
+    props.sideBtn &&
+    css`   
         border-radius: 100%;
         width: 3.5rem;
         height: 3rem;
@@ -65,6 +65,19 @@ const DefailtButton = styled.button`
         background: white;
         color: #000;
         border: none;
+    `};
+    ${(props) =>
+    props.loginbtn &&
+    css`   
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 12.5rem;
+        height: 3.125rem;
+        font-size: 1.5rem;
+        font-family: 800;
+        background: transparent;
+        border: 1px solid black
     `};
 
 

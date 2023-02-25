@@ -8,7 +8,7 @@ function Mypage() {
     return (
         <Layout>
             <Header />
-            Mypage
+             Mypage
 
             <Footer />
         </Layout>

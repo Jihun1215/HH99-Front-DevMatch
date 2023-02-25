@@ -4,26 +4,71 @@ import Layout from '../Components/Layout'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
 // import LoginBg from '../Style/Img/LoginBg.jpeg'
-import { FaLock, FaUser } from 'react-icons/fa';
+import { FaLock, FaEnvelope } from 'react-icons/fa';
+import Btn from '../Components/Button'
+import Input from '../Components/Input'
+import useInput from '../Hooks/useInput'
+import { useNavigate } from 'react-router-dom'
+
+
+
 function Login() {
+
+  const navigate = useNavigate();
+  const MoveToSignup = () => { navigate('/signup') }
+
+  const [thisId, onChangeThisIdHandler, setThisId] = useInput();
+  const [thisPw, onChangeThisPwHandler, setThisPw] = useInput();
+
+  const onSumibtLogin = (e) => {
+    e.preventDefault()
+    // 서버로 아이디 비밀번호 보내고 체크 후 성공이나 실패를 보여준다 
+    alert(thisId, thisPw)
+  }
+
   return (
     <LoginContainer>
       <LoginModalContainer>
 
-        <LoginModal>
-          <h2>LogIn</h2>
+        <LoginModal onSubmit={onSumibtLogin}>
+          <h2>로그인</h2>
 
-          <div>
-            <FaLock />
-            <FaUser />
-            아이콘
-            input
-            label
-          </div>
 
-          <div>버튼 들어갈 자리</div>
+          <LoginModalInputBox>
+            <Input
+              type="text"
+              value={thisId}
+              onChange={onChangeThisIdHandler}
+              required />
+            <label>ID: </label>
+            <div>  <FaEnvelope /></div>
+          </LoginModalInputBox>
 
-          회원가입하럭가기
+
+          <LoginModalInputBox>
+            <Input
+              type="password"
+              value={thisPw}
+              onChange={onChangeThisPwHandler}
+              required />
+            <label>PassWord: </label>
+            <div><FaLock /></div>
+          </LoginModalInputBox>
+
+
+
+          <LoginModalButtontBox>
+            <Btn loginbtn
+              type="submit">로그인</Btn>
+          </LoginModalButtontBox>
+
+
+          <LoginmodalGoToSignup>
+
+            <p> DevMatch 회원 아닐시  <LoginmodalGoToSignupSpan onClick={MoveToSignup}>가입하기</LoginmodalGoToSignupSpan> </p>
+
+          </LoginmodalGoToSignup>
+
 
         </LoginModal>
 
@@ -65,7 +110,14 @@ const LoginModal = styled.form`
   border-radius: 1.25rem;
   width: 34.375rem;
   height: 31.25rem;
-  border: 1px solid red;
+  display: flex;
+  align-items: center;
+   border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 20px;
+    /* backdrop-filter: blur(10px); */
+  display: flex;
+
+
   > h2  {
     font-size: 2rem;
     color: #fff;
@@ -74,6 +126,72 @@ const LoginModal = styled.form`
 `;
 
 const LoginModalInputBox = styled.div`
+  position: relative;
+  margin: 30px 0;
+  width: 19.375rem;
+  border-bottom: 2px solid #fff;
+ 
+  > label {
+    position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 1.1em;
+  pointer-events: none;
+  font-weight: 700;
+  transition: all 0.25s ease-in-out;
+  
+  }
+  > input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    padding:0 35px 0 5px;
+    color: #fff;
+    padding-left: 1.25rem;
+  };
+  > input:focus ~ label{
+    top: -5px;
+  };
+  > input:valid ~ label {
+    top: -5px;
+  }
+  > div {
+    position: absolute;
+    right: 8px;
+    color: #fff;
+    font-size: 1.2em;
+    top: 20px;
+  }
+`;
+const LoginModalButtontBox = styled.div`
+      width: 70%;
+      height: 20%;
+      
+      display: flex;
+      align-items: center;
+      justify-content: center;
+`
+const LoginmodalGoToSignup = styled.div`
+    width: 80%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    color: #fff;
+    font-weight: 500;
+   
+`;
+
+const LoginmodalGoToSignupSpan = styled.span`
+  border-radius: 1.25rem;
+  padding: 5px 16px;
+  background: #edf2ff;
+  color: #000;
   
 `
 
