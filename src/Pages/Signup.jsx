@@ -6,9 +6,6 @@ import Btn from '../Components/Button'
 import { useNavigate } from 'react-router-dom'
 import Input from '../Components/Input'
 import test from '../Style/Img/log.jpg'
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-// import { PostSiginup } from '../axios/Signup'
-import axios from 'axios';
 import Cookies from 'js-cookie';
 import { api } from '../axios/api';
 

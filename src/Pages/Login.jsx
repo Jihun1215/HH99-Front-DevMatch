@@ -12,9 +12,6 @@ import { api } from '../axios/api'
 import axios from 'axios';
 
 
-
-
-
 function Login() {
 
   const navigate = useNavigate();
