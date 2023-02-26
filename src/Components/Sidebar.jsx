@@ -34,5 +34,5 @@ const SideBar = styled.div`
     justify-content: center;
     flex-direction: column;
     gap :.625rem 0;
-    z-index: 10;
+    z-index: 1;
 `;

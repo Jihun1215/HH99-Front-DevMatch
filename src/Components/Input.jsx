@@ -37,12 +37,6 @@ const DefailtInput = styled.input`
      
     `};
     ${(props) =>
-    props.loginput &&
-    css`   
-        width: 25rem;
-        height: 3.75rem;
-    `};
-    ${(props) =>
     props.addform &&
     css`   
         width: 25rem;
