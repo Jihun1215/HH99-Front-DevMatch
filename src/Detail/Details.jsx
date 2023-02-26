@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Btn from '../Components/Button';
 import Input from '../Components/Input';
 import Sidebar from '../Components/Sidebar';
-import { ModalOutArea, ModalInArea } from '../Style/Modal'
+import { ModalOutArea, ModalInArea } from '../Style/ModalStyle'
 import useInput from '../Hooks/useInput';
 import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';

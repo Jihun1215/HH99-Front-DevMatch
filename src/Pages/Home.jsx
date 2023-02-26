@@ -11,10 +11,11 @@ import useInput from "../Hooks/useInput"
 import { FaCodeBranch } from 'react-icons/fa';
 import { MdTitle, MdPersonAdd } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
-import { ModalOutArea, ModalInArea } from '../Style/Modal'
+import { ModalOutArea, ModalInArea } from '../Style/ModalStyle'
 // import { GetList } from '../axios/api'
 import { useQuery } from 'react-query'
 import Cookies from 'js-cookie';
+import { ListArea } from '../Style/MainpageStyle'
 
 function Home() {
 
@@ -99,22 +100,6 @@ function Home() {
     //     return <div>에러!!</div>
     // }
 
-
-
-
-
-
-
-    // {
-    //     "title" : "helloWorld",
-    //     "content" : "too tired",
-    //     ”image” : “image.png”,
-    //     ”stack” : {
-    //                     “java”, “react.js”
-    //                    }
-    //     ”backendMember” : 3,
-    //     ”frontendMember” : 3
-    //     }
     const AddData = {
         title: title,
         // content: body,
@@ -132,7 +117,7 @@ function Home() {
 
 
     const getToken = Cookies.get('token')
-    console.log(getToken)
+    // console.log(getToken)
 
 
     return (
@@ -284,9 +269,6 @@ function Home() {
 
                         </ModalInFrom>
 
-
-
-
                     </ModalInArea>
                 </ModalOutArea>
 
@@ -296,14 +278,15 @@ function Home() {
             {
                 getToken === undefined ?
                     // 쿠키 없을떄 보여줄 것들 
-                    <div style={{
+                    <ListArea style={{
                         textAlign: 'center'
                     }}>
-                        리스트블러처리</div>
+                        리스트블러처리
+                        <div>ddd</div></ListArea>
                     // 쿠키가 있을때 보여줄 것들 
-                    : <div style={{
+                    : <ListArea style={{
                         textAlign: 'center'
-                    }}>리스트</div>
+                    }}>리스트</ListArea>
             }
             <Footer />
 
@@ -313,35 +296,6 @@ function Home() {
 
 export default Home
 
-
-// 모달 componet 
-// const ModalOutArea = styled.div`
-//     display: ${(props) => props.isOpen};
-//     position: fixed;
-//     top: 0;
-//     left: 0;
-//     bottom: 0;
-//     right: 0;
-//     background: rgba(0, 0, 0, 0.8);
-// `;
-
-// const ModalInArea = styled.div`
-//     display: ${(props) => props.isOpen};
-//     z-index: 5;
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     border-radius: 20px;
-//     background-color: ${(props) => props.color};
-//     width: 68.75rem;
-//     height: 46.875rem;
-//     background-color: #edf2ff;
-//     color: #fff;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-// `;
 
 // 전체Form 
 const ModalInFrom = styled.form`
@@ -353,8 +307,6 @@ const ModalInFrom = styled.form`
     justify-content: center;
     gap: 1.25rem;
 `;
-
-
 
 // Form IMG BOX
 const ModalInImgBox = styled.div`
@@ -427,9 +379,6 @@ const ModalInWarpInputBox = styled.div`
     justify-content: center;
     gap: 50px 0;
 `;
-
-
-
 
 const LoginEachInputBox = styled.div`
     position: relative;
