@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
@@ -9,8 +9,9 @@ import Input from '../Components/Input'
 import test from '../Style/Img/log.jpg'
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 // import { PostSiginup } from '../axios/Signup'
-import { apitest } from '../axios/api'
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import { api } from '../axios/api';
 
 
 
@@ -20,6 +21,17 @@ function Login() {
   const navigate = useNavigate();
   const MoveToLogin = () => { navigate('/login') }
 
+
+  // 쿠키가져오기
+  const getToken = Cookies.get('token')
+
+  // 토큰이 있을시 
+  useEffect(() => {
+    if (getToken) {
+      alert('로그인 유지중입니다.');
+      navigate('/');
+    }
+  }, [navigate, getToken]);
 
   // 리액트 쿼리 관련 코드 
   // const queryClinet = useQueryClient();
@@ -38,9 +50,9 @@ function Login() {
 
 
 
-  const [ninkName, setNickName] = useState('');
+  const [nickname, setNickName] = useState('');
   const [username, setUserName] = useState('');
-  const [passWord, setPassWord] = useState('');
+  const [password, setPassWord] = useState('');
 
   // 오류 메세지
   const [nameMessage, setNameMessage] = useState('');
@@ -48,7 +60,7 @@ function Login() {
   const [pwMessage, setPwMessage] = useState('');
 
   // 유효성검사 
-  const [isninkName, setIsNinkName] = useState(false);
+  const [isnickName, setIsNickName] = useState(false);
   const [isuserName, setIsUserName] = useState(false);
   const [ispassWord, setIsPassWord] = useState(false);
 
@@ -60,10 +72,10 @@ function Login() {
     const NinkNameReExp = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,6}$/;
     if (!NinkNameReExp.test(e.target.value)) {
       setNameMessage('영문이나 한글로 2 ~ 6자로 입력해주세요');
-      setIsNinkName(false);
+      setIsNickName(false);
     } else {
       setNameMessage('사용 가능한 닉네임입니다');
-      setIsNinkName(true);
+      setIsNickName(true);
     }
   }
 
@@ -93,33 +105,27 @@ function Login() {
   }
 
 
-
-  // 회원가입입력값을 서버로 보내기 위해 객체로 보냄 
-  const newSignupinto = {
-    ninkName: ninkName,
-    username: username,
-    passWord: passWord,
-  }
-
-
+  // 로그인 로직 구현을 해보자! 
   const onSumibtSignup = async (e) => {
     e.preventDefault()
 
-    if (isninkName === true && isuserName === true && ispassWord === true) {
+    if (isnickName === true && isuserName === true && ispassWord === true) {
 
-      // 서버로 아이디 비밀번호 보내고 체크 후 성공이나 실패를 보여준다 
       try {
-        // await api.post('api/user/signup', newSignupinto);
-        await apitest.post('/signup', newSignupinto)
+        await api.post('api/user/signup', {
+          nickname: nickname,
+          username: username,
+          password: password,
+        });
         alert('회원가입성공')
-
         setTimeout(() => {
           navigate("/login");
         }, 1500);
 
       }
       catch (error) {
-        alert(error)
+        //아이디중복시 statusCode 500
+        alert(error.response.data)
       }
     }
     setNickName('');
@@ -144,7 +150,7 @@ function Login() {
 
             <Input
               type="text"
-              value={ninkName}
+              value={nickname}
               onChange={onChangeNinkName}
               required />
             <label>NickName: </label>
@@ -174,7 +180,7 @@ function Login() {
           <LoginModalInputBox>
             <Input
               type="password"
-              value={passWord}
+              value={password}
               onChange={onChangePassWordHandler}
               required />
             <label>PassWord: </label>

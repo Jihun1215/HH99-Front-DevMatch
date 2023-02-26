@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import test from '../Style/Img/log.jpg'
 import Cookies from 'js-cookie';
 import { api } from '../axios/api'
+import axios from 'axios';
 
 
 
@@ -19,26 +20,44 @@ function Login() {
 
   const navigate = useNavigate();
   const MoveToSignup = () => { navigate('/signup') }
+
+  // 쿠키가져오기
   const getToken = Cookies.get('token')
+
+  // 토큰이 있을시 
+  useEffect(() => {
+    if (getToken) {
+      alert('로그인 유지중입니다.');
+      navigate('/');
+    }
+  }, [navigate, getToken]);
+
 
   const [thisId, onChangeThisIdHandler, setThisId] = useInput();
   const [thisPw, onChangeThisPwHandler, setThisPw] = useInput();
 
-  const Logininto = {
-    username: thisId,
-    password: thisPw
-  }
 
 
   const onSumibtLogin = async (e) => {
     e.preventDefault()
-    // try {
-    //   const response = await api.post('user/login', Logininto);
-    //   return response
-    //   console.log(response)
-    // } catch (error) {
-    //   alert(error)
-    // }
+    // 토큰만료시간 지정 
+    const expiryDate = new Date(Date.now() + 10 * 60 * 1000);
+    try {
+      const response = await api.post('api/user/login', { username: thisId, password: thisPw });
+      const { token } = response.data;
+      const Token = response.headers.authorization
+      console.log(Token)
+      // hearder에 저장
+      axios.defaults.headers.common['Authorization'] = `${Token}`;
+      console.log(Token)
+      // 쿠키 설정 
+      Cookies.set('token', Token, { expires: expiryDate });
+      navigate('/');
+      // test01 test0101
+    }
+    catch (error) {
+      alert(error.response.data.result)
+    }
 
 
     setThisId('');

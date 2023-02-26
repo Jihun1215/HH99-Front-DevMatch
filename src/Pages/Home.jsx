@@ -14,6 +14,7 @@ import imageCompression from 'browser-image-compression';
 import { ModalOutArea, ModalInArea } from '../Style/Modal'
 // import { GetList } from '../axios/api'
 import { useQuery } from 'react-query'
+import Cookies from 'js-cookie';
 
 function Home() {
 
@@ -129,6 +130,9 @@ function Home() {
         e.preventDefault()
     }
 
+
+    const getToken = Cookies.get('token')
+    console.log(getToken)
 
 
     return (
@@ -286,10 +290,21 @@ function Home() {
                     </ModalInArea>
                 </ModalOutArea>
 
-
-
-
             </Sidebar>
+
+            {/* 쿠키가 있으면 블러 처리 안하고 보여주고 있으면 블러 처리하고 리스트 보여주기 */}
+            {
+                getToken === undefined ?
+                    // 쿠키 없을떄 보여줄 것들 
+                    <div style={{
+                        textAlign: 'center'
+                    }}>
+                        리스트블러처리</div>
+                    // 쿠키가 있을때 보여줄 것들 
+                    : <div style={{
+                        textAlign: 'center'
+                    }}>리스트</div>
+            }
             <Footer />
 
         </Layout>
