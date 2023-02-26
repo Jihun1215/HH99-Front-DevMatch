@@ -1,12 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+import Header from './Header'
+import Footer from './Footer'
 
 function Layout({ children }) {
     return (
         <LayoutSize>
 
             <LayourArea>
+                <Header />
                 {children}
+                <Footer />
             </LayourArea>
 
         </LayoutSize>

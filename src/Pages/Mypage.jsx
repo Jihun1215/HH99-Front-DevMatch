@@ -7,10 +7,9 @@ import Footer from '../Components/Footer'
 function Mypage() {
     return (
         <Layout>
-            <Header />
-             Mypage
+            {/* <Header /> */}
+            Mypage
 
-            <Footer />
         </Layout>
     )
 }

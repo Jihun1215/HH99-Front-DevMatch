@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import Header from '../Components/Header'
 import Footer from '../Components/Footer'
 import { FaLock, FaUser, FaEnvelope } from 'react-icons/fa';
 import Btn from '../Components/Button'
@@ -140,7 +139,7 @@ function Login() {
 
   return (
     <LoginContainer Imgurl={test}>
-      <Header />
+
       <LoginModalContainer>
 
         <LoginModal onSubmit={onSumibtSignup}>

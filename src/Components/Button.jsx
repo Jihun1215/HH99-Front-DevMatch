@@ -19,6 +19,7 @@ const DefailtButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 100;
   ${(props) =>
     props.sm &&
     css`   
@@ -91,6 +92,21 @@ const DefailtButton = styled.button`
         font-family: 800;
         background: transparent;
         border: 1px solid black
+    `};
+    ${(props) =>
+    props.home &&
+    css`   
+        
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 12.5rem;
+        height: 3.125rem;
+        font-size: 1.5rem;
+        font-family: 800;
+        background: #edf2ff;
+        color: #000;
+        
     `};
 
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
-import { FaLock, FaEnvelope } from 'react-icons/fa';
+import { FaLock, FaEnvelope, FaHome } from 'react-icons/fa';
 import Btn from '../Components/Button'
 import Input from '../Components/Input'
 import useInput from '../Hooks/useInput'
@@ -19,7 +19,8 @@ import axios from 'axios';
 function Login() {
 
   const navigate = useNavigate();
-  const MoveToSignup = () => { navigate('/signup') }
+  const MoveToSignup = () => { navigate('/signup') };
+  const MoveToHome = () => { navigate('/') };
 
   // 쿠키가져오기
   const getToken = Cookies.get('token')
@@ -46,10 +47,10 @@ function Login() {
       const response = await api.post('api/user/login', { username: thisId, password: thisPw });
       const { token } = response.data;
       const Token = response.headers.authorization
-    
+
       // hearder에 저장
       axios.defaults.headers.common['Authorization'] = `${Token}`;
-     
+
       // 쿠키 설정 
       Cookies.set('token', Token, { expires: expiryDate });
       navigate('/');
@@ -74,58 +75,59 @@ function Login() {
   // }, []);
 
   return (
-    <LoginContainer Imgurl={test}>
-      <Header />
-      {/* <img src={LoginBg} /> */}
-      <LoginModalContainer>
+    <>
+      <LoginContainer Imgurl={test}>
+        {/* <img src={LoginBg} /> */}
+        <LoginModalContainer>
 
-        <LoginModal onSubmit={onSumibtLogin}>
-          <h2>로그인</h2>
-
-
-          <LoginModalInputBox>
-            <Input
-              type="text"
-              value={thisId}
-              onChange={onChangeThisIdHandler}
-              required />
-            <label>ID: </label>
-            <div>  <FaEnvelope /></div>
-          </LoginModalInputBox>
+          <LoginModal onSubmit={onSumibtLogin}>
+            <h2>로그인</h2>
 
 
-          <LoginModalInputBox>
-            <Input
-              type="password"
-              value={thisPw}
-              onChange={onChangeThisPwHandler}
-              required />
-            <label>PassWord: </label>
-            <div><FaLock /></div>
-          </LoginModalInputBox>
+            <LoginModalInputBox>
+              <Input
+                type="text"
+                value={thisId}
+                onChange={onChangeThisIdHandler}
+                required />
+              <label>ID: </label>
+              <div>  <FaEnvelope /></div>
+            </LoginModalInputBox>
+
+
+            <LoginModalInputBox>
+              <Input
+                type="password"
+                value={thisPw}
+                onChange={onChangeThisPwHandler}
+                required />
+              <label>PassWord: </label>
+              <div><FaLock /></div>
+            </LoginModalInputBox>
 
 
 
-          <LoginModalButtontBox>
-            <Btn loginbtn
-              type="submit">로그인</Btn>
-          </LoginModalButtontBox>
+            <LoginModalButtontBox>
+              <Btn loginbtn
+                type="submit">로그인</Btn>
+            </LoginModalButtontBox>
 
 
-          <LoginmodalGoToSignup>
+            <LoginmodalGoToSignup>
 
-            <p> DevMatch아이디만들사람 <LoginmodalGoToSignupSpan onClick={MoveToSignup}>가입하기</LoginmodalGoToSignupSpan> </p>
+              <p> DevMatch 아이디만들사람 <LoginmodalGoToSignupSpan onClick={MoveToSignup}>가입하기</LoginmodalGoToSignupSpan> </p>
 
-          </LoginmodalGoToSignup>
+            </LoginmodalGoToSignup>
 
+            <Btn home
+              onClick={MoveToHome}><FaHome /></Btn>
+          </LoginModal>
 
-        </LoginModal>
+        </LoginModalContainer>
 
-      </LoginModalContainer>
-
-      <Footer />
-    </LoginContainer>
-
+        <Footer />
+      </LoginContainer>
+    </>
   )
 }
 
@@ -160,8 +162,9 @@ const LoginModalContainer = styled.div`
 
 const LoginModal = styled.form`
   position: relative;
+  display: flex;
   flex-direction: column;
-  padding: 3rem;
+  padding: 2.5rem;
   border-radius: 1.25rem;
   width: 34.375rem;
   height: 31.25rem;
@@ -170,7 +173,7 @@ const LoginModal = styled.form`
   border: 2px solid rgba(255,255,255,0.5);
   border-radius: 20px;
     /* backdrop-filter: blur(10px); */
-  display: flex;
+ 
 
 
   > h2  {
@@ -249,5 +252,6 @@ const LoginmodalGoToSignupSpan = styled.span`
   background: #edf2ff;
   color: #000;
   margin-left: .625rem;
+  cursor: pointer;
   
 `

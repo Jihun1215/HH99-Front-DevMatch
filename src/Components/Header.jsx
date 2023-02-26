@@ -45,7 +45,7 @@ const HeaderSize = styled.div`
     margin: 0 auto;
     color: #000;
     font-family: 800;
-    background: transparent;
+    background: #EDF2FF;
    
 `;
 const HeaderNavbar = styled.div`

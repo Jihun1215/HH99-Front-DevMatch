@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import Layout from '../Components/Layout'
 import styled from 'styled-components'
-import Header from '../Components/Header'
-import Footer from '../Components/Footer'
 import Btn from '../Components/Button'
 import Sidebar from '../Components/Sidebar'
 import Input from '../Components/Input'
@@ -12,7 +10,6 @@ import { FaCodeBranch } from 'react-icons/fa';
 import { MdTitle, MdPersonAdd } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
 import { ModalOutArea, ModalInArea } from '../Style/ModalStyle'
-// import { GetList } from '../axios/api'
 import { useQuery } from 'react-query'
 import Cookies from 'js-cookie';
 import { ListArea } from '../Style/MainpageStyle'
@@ -145,10 +142,9 @@ function Home() {
     const getToken = Cookies.get('token')
     // console.log(getToken)
 
-
     return (
         <Layout>
-            <Header />
+            {/* <Header /> */}
             <Sidebar>
                 <Btn
                     name={'modal'}
@@ -342,9 +338,8 @@ function Home() {
                         textAlign: 'center'
                     }}>리스트</ListArea>
             }
-            <Footer />
 
-        </Layout>
+        </Layout >
     )
 }
 

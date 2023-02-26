@@ -18,7 +18,7 @@ export default Sidebar
 
 const SideLayout = styled.div`
     position: relative;
-`
+`;
 
 const SideBar = styled.div`
     position: fixed;
@@ -27,7 +27,7 @@ const SideBar = styled.div`
     background: white;
     width: 4.6875rem;
     height: 10.9375rem;
-    background: #5C7CFA;
+    background: #5C7CFA; 
     border-radius: 3.125rem;
     display: flex;
     align-items: center;
