@@ -1,13 +1,12 @@
-import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Btn from '../Components/Button';
 import Input from '../Components/Input';
-import useInput from '../Hooks/useInput';
-import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Sidebar from '../Components/Sidebar';
 import { ModalOutArea, ModalInArea } from '../Style/Modal'
+import useInput from '../Hooks/useInput';
+import axios from 'axios';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 
 
@@ -131,7 +130,7 @@ function Details() {
                     name={'modal'}
                     onClick={openModal}
                     sideBtn>
-                    <AiFillEdit/>
+                    <AiFillEdit />
                 </Btn>
                 <Btn
                     sideBtn>

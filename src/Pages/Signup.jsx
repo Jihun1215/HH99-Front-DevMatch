@@ -10,6 +10,9 @@ import { useNavigate } from 'react-router-dom'
 import Input from '../Components/Input'
 // import LoginBg from '../Style/Img/LoginBg.jpeg'
 import test from '../Style/Img/log.jpg'
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { PostSiginup } from '../axios/api'
+import axios from 'axios'
 
 
 
@@ -18,6 +21,24 @@ function Login() {
 
   const navigate = useNavigate();
   const MoveToLogin = () => { navigate('/login') }
+ 
+
+  // 리액트 쿼리 관련 코드 
+  const queryClinet = useQueryClient();
+  // 뮤테이션 변형, 변경할 수 잇는 리액트 쿼리에 방법 
+  // 인자안에 두가지가 들어간다 
+  // 1. todos.js에 있는 addTodo를 가지고오고 
+  // 2. 성공과 실패가 들어간다 
+  const mutaion = useMutation(PostSiginup, {
+    onSuccess: () => {
+      // Query Invalidation가 작동하기 위해 인자값으로 getTodos를 불러온것을 
+      // 무효화 시키고 다시 불러오겠다라는 뜻이다 . ! 즉 getTodos를 다시 실행하겠다 
+      queryClinet.invalidateQueries("PostSiginup");
+      console.log("성공")
+    }
+  })
+
+
 
   const [ninkName, setNickName] = useState('');
   const [username, setUserName] = useState('');
@@ -48,10 +69,6 @@ function Login() {
     }
   }
 
-
-
-
-
   // 아이디 정규식 체크 
   const onChangeUserNameHandler = (e) => {
     setUserName(e.target.value);
@@ -78,13 +95,22 @@ function Login() {
   }
 
 
-  const onSumibtLogin = (e) => {
+
+  // 회원가입입력값을 서버로 보내기 위해 객체로 보냄 
+  const newSignupinto = {
+    ninkName: ninkName,
+    username: username,
+    passWord: passWord,
+  }
+
+
+  const onSumibtLogin = async (e) => {
     e.preventDefault()
 
     if (isninkName === true && isuserName === true && ispassWord === true) {
       // 서버로 아이디 비밀번호 보내고 체크 후 성공이나 실패를 보여준다 
-      alert(ninkName, username, passWord)
-
+      // PostSiginup
+      mutaion.mutate(newSignupinto)
     }
 
     else {
@@ -159,7 +185,7 @@ function Login() {
 
           <LoginmodalGoToSignup>
 
-            <p> DevMatch 회원이신가 ?<LoginmodalGoToSignupSpan onClick={MoveToLogin}>로그인하러가기</LoginmodalGoToSignupSpan> </p>
+            <p> DevMatch 회원이신가 ? <LoginmodalGoToSignupSpan onClick={MoveToLogin}>로그인하러가기</LoginmodalGoToSignupSpan> </p>
 
           </LoginmodalGoToSignup>
 
@@ -278,7 +304,6 @@ const LoginModalInputBox = styled.div`
 const LoginModalButtontBox = styled.div`
       width: 70%;
       height: 20%;
-      
       display: flex;
       align-items: center;
       justify-content: center;
@@ -288,9 +313,11 @@ const LoginmodalGoToSignup = styled.div`
     height: 20%;
     display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: center;
     color: #fff;
     font-weight: 500;
+    
+    
    
 `;
 
@@ -299,6 +326,7 @@ const LoginmodalGoToSignupSpan = styled.span`
   padding: 5px 16px;
   background: #edf2ff;
   color: #000;
+  margin-left: .625rem;
   
 `
 

@@ -11,6 +11,10 @@ import useInput from '../Hooks/useInput'
 import { useNavigate } from 'react-router-dom'
 // import LoginBg from '../Style/Img/LoginBg.jpeg'
 import test from '../Style/Img/log.jpg'
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import Cookies from 'js-cookie';
+import { PostLogin } from '../axios/api'
+
 
 
 
@@ -19,16 +23,34 @@ function Login() {
 
   const navigate = useNavigate();
   const MoveToSignup = () => { navigate('/signup') }
+  const getToken = Cookies.get('token')
 
   const [thisId, onChangeThisIdHandler, setThisId] = useInput();
   const [thisPw, onChangeThisPwHandler, setThisPw] = useInput();
 
 
+  const queryClinet = useQueryClient();
+
+  const mutaion = useMutation(PostLogin, {
+    onSuccess: () => {
+      queryClinet.invalidateQueries("PostLogin");
+      console.log("성공")
+    }
+  })
+
+
+
+
+  const Logininto = {
+    username: thisId,
+    password: thisPw
+  }
+
 
   const onSumibtLogin = (e) => {
     e.preventDefault()
-    // 서버로 아이디 비밀번호 보내고 체크 후 성공이나 실패를 보여준다 
-    alert(thisId, thisPw)
+    mutaion.mutate(Logininto)
+    // alert(thisId, thisPw)
     setThisId('');
     setThisPw('');
 
@@ -191,20 +213,21 @@ const LoginModalInputBox = styled.div`
     top: 20px;
   }
 `;
+
 const LoginModalButtontBox = styled.div`
       width: 70%;
       height: 20%;
-      
       display: flex;
       align-items: center;
       justify-content: center;
+     
 `
 const LoginmodalGoToSignup = styled.div`
     width: 80%;
     height: 20%;
     display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: center;
     color: #fff;
     font-weight: 500;
    
@@ -215,30 +238,6 @@ const LoginmodalGoToSignupSpan = styled.span`
   padding: 5px 16px;
   background: #edf2ff;
   color: #000;
+  margin-left: .625rem;
   
 `
-
-
-// const LoginContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   background-image: url("https://raw.githubusercontent.com/Hashtechieofficial/Form-/main/background6.jpg");
-// `;
-
-// const LoginArea = styled.div`
-//   margin-top: 3.125rem;
-//   width: 31.25rem;
-//   height: 34.375rem;
-//   border: 1px solid red;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// `;
-
-// const LoginForm = styled.form`
-//    width: 90%;
-//    height: 95%;
-//    border: 1px solid black;
-// `
-
