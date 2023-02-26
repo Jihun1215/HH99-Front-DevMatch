@@ -48,7 +48,16 @@ const DefailtInput = styled.input`
         width: 25rem;
         height: 3.75rem;
     `};
+    ${(props) =>
+    props.addformbody &&
+    css`   
+        width: 25rem;
+        height: 9.375rem;
+    `};
 
+
+
+    
 
     &:hover {
     cursor: pointer;

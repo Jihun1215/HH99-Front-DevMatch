@@ -19,6 +19,7 @@ import { ListArea } from '../Style/MainpageStyle'
 
 function Home() {
 
+
     const [modalOpen, setModalOpen] = useState('none');
     const openModal = (e) => (e.target.name === 'modal' ? setModalOpen('block') : console.log('Error'));
     const closeModal = (e) => (e.target.name === 'modal' ? setModalOpen('none') : console.log('Error'));
@@ -27,8 +28,26 @@ function Home() {
 
     // UseInput 훅 초기화를 위해 set를 같이 가져가옴 
     const [title, onChangeTitleHandler, setTitle] = useInput();
-    const [number, onChangeNumberHandler, setNumber] = useInput();
     const [body, onChangeBodyHandler, setBody] = useInput();
+
+    // 프론트 백엔드인원수를 위한 로직
+    const min = 0;
+    const max = 3;
+
+
+    const [backend, setBackend] = useState(0);
+    const [frontend, setFrontend] = useState(0);
+
+    const BackendNumberHandlerChange = (e) => {
+        const back = Math.max(min, Math.min(max, Number(e.target.value)))
+        setBackend(back)
+    }
+
+    const FrontedNumberHandlerChange = (e) => {
+        const front = Math.max(min, Math.min(max, Number(e.target.value)))
+        setFrontend(front)
+    }
+
 
 
     // 이미지 로직 
@@ -90,6 +109,7 @@ function Home() {
 
 
 
+
     // React-Query로 데이터 받아오기 
     // const { isLoading, isError, data } = useQuery("list", GetList)
 
@@ -98,21 +118,27 @@ function Home() {
     // }
     // if (isError) {
     //     return <div>에러!!</div>
-    // }
+    // }ㅁ
 
     const AddData = {
         title: title,
         // content: body,
         img: imageFile.viewUrl,
         strack: Selected,
+        body: body,
         // number
-        backendMember: null,
-        frontendMember: null
+        backendMember: backend,
+        frontendMember: frontend
+
     }
 
     // Form안에 버튼을 눌러 정보를 서버로 보냄 
     const onSonSubmituAddValue = (e) => {
         e.preventDefault()
+        alert('Selected')
+        if (Selected !== '') {
+            console.log(AddData)
+        }
     }
 
 
@@ -187,25 +213,26 @@ function Home() {
                             <ModalInWarpInputBox>
 
                                 {/* Title */}
-                                <LoginEachInputBox>
+                                <ModalEachInputBox>
                                     <p>Title</p>
-                                    <LoginEachInputBoxInputArea>
+                                    <ModalEachInputBoxInputArea>
 
                                         <Input
                                             type="text"
                                             value={title}
                                             onChange={onChangeTitleHandler}
+                                            required
                                         />
 
                                         <div><MdTitle /></div>
-                                    </LoginEachInputBoxInputArea>
-                                </LoginEachInputBox>
+                                    </ModalEachInputBoxInputArea>
+                                </ModalEachInputBox>
 
                                 {/* 백프론트 선택  */}
 
-                                <LoginEachInputBox>
+                                <ModalEachInputBox>
                                     <p>모집인원정보</p>
-                                    <LoginEachInputBoxselect>
+                                    <ModalEachInputBoxselect>
 
                                         <select onChange={handleSelect} value={Selected}>
                                             {selectList.map((item) => (
@@ -217,12 +244,34 @@ function Home() {
 
                                         <div><FaCodeBranch /></div>
 
-                                    </LoginEachInputBoxselect>
-                                </LoginEachInputBox>
+                                    </ModalEachInputBoxselect>
+                                </ModalEachInputBox>
+
+
                                 {/* 모집인원  */}
-                                <LoginEachInputBox>
-                                    <p>Title</p>
-                                    <LoginEachInputBoxInputArea>
+                                <ModalEachInputBoxWarp>
+                                    <div>
+                                        <p style={{ color: "#000", textAlign: 'center' }}>Backend</p>
+                                        <Input
+                                            type="number"
+                                            value={backend}
+                                            onChange={BackendNumberHandlerChange}
+                                            required
+                                        />
+
+                                    </div>
+                                    <div>
+                                        <p style={{ color: "#000", textAlign: 'center' }}>Frontend</p>
+                                        <Input
+                                            type="number"
+                                            value={frontend}
+                                            onChange={FrontedNumberHandlerChange}
+                                            required />
+                                        <span>Front: {frontend}</span>
+                                    </div>
+
+
+                                    {/* <ModalEachInputBoxInputArea>
 
                                         <Input
                                             type="number"
@@ -231,25 +280,23 @@ function Home() {
                                         />
 
                                         <div><MdTitle /></div>
-                                    </LoginEachInputBoxInputArea>
-                                </LoginEachInputBox>
+                                    </ModalEachInputBoxInputArea> */}
+                                </ModalEachInputBoxWarp>
 
 
                                 {/* 상세내용  */}
 
-                                <LoginEachInputBox>
-                                    <p>상세내용</p>
-                                    <LoginEachInputBoxInputArea>
+                                <ModalEachInputBoxBodyArea>
+                                    <p style={{ color: "#000" }}>상세내용</p>
+                                    <textarea style={{ width: "350px", height: "150px", padding: "15px" }}
+                                        type="text"
+                                        value={body}
+                                        onChange={onChangeBodyHandler}
+                                        required
+                                    />
+                                    {/* <div><MdTitle /></div> */}
 
-                                        <Input
-                                            type="text"
-                                            value={body}
-                                            onChange={onChangeNumberHandler}
-                                        />
-
-                                        <div><MdTitle /></div>
-                                    </LoginEachInputBoxInputArea>
-                                </LoginEachInputBox>
+                                </ModalEachInputBoxBodyArea>
 
 
 
@@ -261,6 +308,13 @@ function Home() {
 
                             <Btn
                                 lg
+                                type="submit"
+                            >
+                                게시물 발행
+                            </Btn>
+
+                            <Btn
+                                lgred
                                 type="button"
                                 onClick={closeModal}
                                 name={'modal'}>
@@ -377,11 +431,10 @@ const ModalInWarpInputBox = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 50px 0;
+    gap: 30px 0;
 `;
 
-const LoginEachInputBox = styled.div`
-    position: relative;
+const ModalEachInputBox = styled.div`
     width: 21.875rem;
     height: 6.875rem;
     border-radius: 1.25rem;
@@ -399,7 +452,47 @@ const LoginEachInputBox = styled.div`
     };
   `;
 
-const LoginEachInputBoxInputArea = styled.div`
+const ModalEachInputBoxWarp = styled.div`
+    width: 28.125rem;
+    height: 6.875rem;
+    border-radius: 1.25rem;
+    border: 2px solid black;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    gap: .625rem 1.25rem;
+    > div {
+        margin: 0 auto;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-items: center;
+        gap: 10px 0;
+    };
+    > p {
+        text-align: center;
+        color: #000;
+    }
+`;
+
+const ModalEachInputBoxBodyArea = styled.div`
+    width: 28.125rem;
+    height: 12.5rem;
+    border-radius: 1.25rem;
+    border: 2px solid red;  
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: .625rem 0; 
+`;
+
+
+
+const ModalEachInputBoxInputArea = styled.div`
   position: relative;
   width: 90%;
   height: 40%;
@@ -422,7 +515,12 @@ const LoginEachInputBoxInputArea = styled.div`
   };
   `;
 
-const LoginEachInputBoxselect = styled.div`
+
+
+
+
+
+const ModalEachInputBoxselect = styled.div`
 position: relative;
 width: 90%;
 height: 40%;
@@ -431,7 +529,7 @@ height: 40%;
     position: absolute;
     width: 70%;
     height: 70%;
-   text-align: center;
+    text-align: center;
     border: none;
     outline: none;
     border : 2px solid black;
@@ -446,7 +544,5 @@ height: 40%;
     font-size: 1.2rem;
 };
 `;
-
-
 
 

@@ -13,7 +13,7 @@ function Header() {
     const navigate = useNavigate()
     const GoToHome = () => { navigate('/') }
     const MoveToLoginup = () => { navigate('/login') }
-
+    const getToken = Cookies.get('token')
     return (
         <HeaderSize >
             <HeaderNavbar>
@@ -25,7 +25,11 @@ function Header() {
                     <StyledLink to='/'>Home</StyledLink>
                     <StyledLink to='mypage' >Mypage</StyledLink>
                     <StyledLink to='login'>LogIn</StyledLink>
-                    <li >LogOut</li>
+
+                    {/* 토큰이 있으면 표시하기   */}
+                    {
+                        getToken === undefined ? null : <li>LogOut</li>
+                    }
                 </ul>
             </HeaderNavbar>
         </HeaderSize >
@@ -104,6 +108,7 @@ const StyledLink = styled(Link)`
     color: #000;
     text-align: center;
     text-decoration: none;
+    transition:  all 0.25 ease-in-out;
     &:hover {
     top: -5px;
     border-bottom: 1px solid #000;

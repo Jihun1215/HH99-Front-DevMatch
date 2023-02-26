@@ -17,7 +17,7 @@ export default Sidebar
 
 
 const SideLayout = styled.div`
-    position: absolute;
+    position: relative;
 `
 
 const SideBar = styled.div`

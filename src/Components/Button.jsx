@@ -30,7 +30,6 @@ const DefailtButton = styled.button`
     ${(props) =>
     props.me &&
     css`
-      
      width: 6.25rem;
      height: 2.1875rem;
      
@@ -51,6 +50,20 @@ const DefailtButton = styled.button`
      text-align: center;
      border-radius: .625rem;
     `};
+    ${(props) =>
+    props.lgred &&
+    css`
+      
+     width: 9.375rem;
+     height: 2.5rem;
+     
+     background-color: #ff6b6b;
+     color: white;
+     text-align: center;
+     border-radius: .625rem;
+    `};
+
+
     ${(props) =>
     props.sideBtn &&
     css`   

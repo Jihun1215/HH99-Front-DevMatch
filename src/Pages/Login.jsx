@@ -46,10 +46,10 @@ function Login() {
       const response = await api.post('api/user/login', { username: thisId, password: thisPw });
       const { token } = response.data;
       const Token = response.headers.authorization
-      console.log(Token)
+    
       // hearder에 저장
       axios.defaults.headers.common['Authorization'] = `${Token}`;
-      console.log(Token)
+     
       // 쿠키 설정 
       Cookies.set('token', Token, { expires: expiryDate });
       navigate('/');
