@@ -12,6 +12,8 @@ import { FaCodeBranch } from 'react-icons/fa';
 import { MdTitle, MdPersonAdd } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
 import { ModalOutArea, ModalInArea } from '../Style/Modal'
+// import { GetList } from '../axios/api'
+import { useQuery } from 'react-query'
 
 function Home() {
 
@@ -25,11 +27,6 @@ function Home() {
     const [title, onChangeTitleHandler, setTitle] = useInput();
     const [number, onChangeNumberHandler, setNumber] = useInput();
     const [body, onChangeBodyHandler, setBody] = useInput();
-
-
-
-
-
 
 
     // 이미지 로직 
@@ -88,6 +85,24 @@ function Home() {
     const handleSelect = (e) => {
         setSelected(e.target.value);
     };
+
+
+
+    // React-Query로 데이터 받아오기 
+    // const { isLoading, isError, data } = useQuery("list", GetList)
+
+    // if (isLoading) {
+    //     return <h1>로딩중입니다..!</h1>
+    // }
+    // if (isError) {
+    //     return <div>에러!!</div>
+    // }
+
+
+
+
+
+
 
     // {
     //     "title" : "helloWorld",

@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Layout from '../Components/Layout'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
-// import LoginBg from '../Style/Img/LoginBg.jpeg'
-import { FaLock, FaUser, FaEnvelope, FaCircle } from 'react-icons/fa';
+import { FaLock, FaUser, FaEnvelope } from 'react-icons/fa';
 import Btn from '../Components/Button'
 import { useNavigate } from 'react-router-dom'
 import Input from '../Components/Input'
-// import LoginBg from '../Style/Img/LoginBg.jpeg'
 import test from '../Style/Img/log.jpg'
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { PostSiginup } from '../axios/api'
-import axios from 'axios'
+// import { PostSiginup } from '../axios/Signup'
+import { apitest } from '../axios/api'
+import axios from 'axios';
 
 
 
@@ -21,22 +19,22 @@ function Login() {
 
   const navigate = useNavigate();
   const MoveToLogin = () => { navigate('/login') }
- 
+
 
   // 리액트 쿼리 관련 코드 
-  const queryClinet = useQueryClient();
-  // 뮤테이션 변형, 변경할 수 잇는 리액트 쿼리에 방법 
-  // 인자안에 두가지가 들어간다 
-  // 1. todos.js에 있는 addTodo를 가지고오고 
-  // 2. 성공과 실패가 들어간다 
-  const mutaion = useMutation(PostSiginup, {
-    onSuccess: () => {
-      // Query Invalidation가 작동하기 위해 인자값으로 getTodos를 불러온것을 
-      // 무효화 시키고 다시 불러오겠다라는 뜻이다 . ! 즉 getTodos를 다시 실행하겠다 
-      queryClinet.invalidateQueries("PostSiginup");
-      console.log("성공")
-    }
-  })
+  // const queryClinet = useQueryClient();
+  // // 뮤테이션 변형, 변경할 수 잇는 리액트 쿼리에 방법 
+  // // 인자안에 두가지가 들어간다 
+  // // 1. todos.js에 있는 addTodo를 가지고오고 
+  // // 2. 성공과 실패가 들어간다 
+  // const mutaion = useMutation(PostSiginup, {
+  //   onSuccess: () => {
+  //     // Query Invalidation가 작동하기 위해 인자값으로 getTodos를 불러온것을 
+  //     // 무효화 시키고 다시 불러오겠다라는 뜻이다 . ! 즉 getTodos를 다시 실행하겠다 
+  //     queryClinet.invalidateQueries("PostSiginup");
+  //     console.log("성공")
+  //   }
+  // })
 
 
 
@@ -104,32 +102,42 @@ function Login() {
   }
 
 
-  const onSumibtLogin = async (e) => {
+  const onSumibtSignup = async (e) => {
     e.preventDefault()
 
     if (isninkName === true && isuserName === true && ispassWord === true) {
+
       // 서버로 아이디 비밀번호 보내고 체크 후 성공이나 실패를 보여준다 
-      // PostSiginup
-      mutaion.mutate(newSignupinto)
+      try {
+        // await api.post('api/user/signup', newSignupinto);
+        await apitest.post('/signup', newSignupinto)
+        alert('회원가입성공')
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+
+      }
+      catch (error) {
+        alert(error)
+      }
     }
-
-    else {
-      alert('조건에 맞는 값을 입력해주세요!')
-    }
-
-
     setNickName('');
     setUserName('');
     setPassWord('');
-
   }
+
+
+
+
+
 
   return (
     <LoginContainer Imgurl={test}>
       <Header />
       <LoginModalContainer>
 
-        <LoginModal onSubmit={onSumibtLogin}>
+        <LoginModal onSubmit={onSumibtSignup}>
           <h2>회원가입</h2>
 
           <LoginModalInputBox>

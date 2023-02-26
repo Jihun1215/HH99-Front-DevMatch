@@ -1,19 +1,15 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import Layout from '../Components/Layout'
 import Header from '../Components/Header'
 import Footer from '../Components/Footer'
-// import LoginBg from '../Style/Img/LoginBg.jpeg'
 import { FaLock, FaEnvelope } from 'react-icons/fa';
 import Btn from '../Components/Button'
 import Input from '../Components/Input'
 import useInput from '../Hooks/useInput'
 import { useNavigate } from 'react-router-dom'
-// import LoginBg from '../Style/Img/LoginBg.jpeg'
 import test from '../Style/Img/log.jpg'
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Cookies from 'js-cookie';
-import { PostLogin } from '../axios/api'
+import { api } from '../axios/api'
 
 
 
@@ -28,33 +24,28 @@ function Login() {
   const [thisId, onChangeThisIdHandler, setThisId] = useInput();
   const [thisPw, onChangeThisPwHandler, setThisPw] = useInput();
 
-
-  const queryClinet = useQueryClient();
-
-  const mutaion = useMutation(PostLogin, {
-    onSuccess: () => {
-      queryClinet.invalidateQueries("PostLogin");
-      console.log("성공")
-    }
-  })
-
-
-
-
   const Logininto = {
     username: thisId,
     password: thisPw
   }
 
 
-  const onSumibtLogin = (e) => {
+  const onSumibtLogin = async (e) => {
     e.preventDefault()
-    mutaion.mutate(Logininto)
-    // alert(thisId, thisPw)
+    // try {
+    //   const response = await api.post('user/login', Logininto);
+    //   return response
+    //   console.log(response)
+    // } catch (error) {
+    //   alert(error)
+    // }
+
+
     setThisId('');
     setThisPw('');
 
   }
+
   // // 스크롤 방지
   // useEffect(() => {
   //   document.body.style.overflow = 'hidden';
