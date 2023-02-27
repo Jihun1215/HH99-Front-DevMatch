@@ -126,10 +126,18 @@ function Details() {
     };
 
     const deleteButtonHandler = (id) => {
-        mutation3.mutate(id);
-        setShowInput(!showInput);
-        setShowCancel(!showCancel);
-        setShowEdit(!showEdit);
+        data.find((item) => {
+            if (item.id === id) {
+                if (item.nickname === currentUser.nickname) {
+                    mutation3.mutate(id);
+                    setShowInput(!showInput);
+                    setShowCancel(!showCancel);
+                    setShowEdit(!showEdit);
+                } else {
+                    alert('작성자만 삭제 가능합니다');
+                }
+            }
+        });
     };
 
     const [modalOpen, setModalOpen] = useState('none');
