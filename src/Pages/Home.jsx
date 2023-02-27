@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../Components/Layout'
 import styled from 'styled-components'
 import Btn from '../Components/Button'
@@ -6,15 +6,17 @@ import Sidebar from '../Components/Sidebar'
 import Input from '../Components/Input'
 import { MdPlaylistAdd } from "react-icons/md";
 import useInput from "../Hooks/useInput"
-import { FaCodeBranch } from 'react-icons/fa';
-import { MdTitle, MdPersonAdd } from 'react-icons/md';
+import { MdTitle } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
 import { ModalOutArea, ModalInArea } from '../Style/ModalStyle'
 import { useQuery } from 'react-query'
 import Cookies from 'js-cookie';
 import { ListArea } from '../Style/MainpageStyle'
+import List from '../Components/List'
+import { api } from '../axios/api'
 
 function Home() {
+    const getToken = Cookies.get('token')
 
 
     const [modalOpen, setModalOpen] = useState('none');
@@ -29,7 +31,7 @@ function Home() {
 
     // 프론트 백엔드인원수를 위한 로직
     const min = 0;
-    const max = 3;
+    const max = 5;
 
 
     const [backend, setBackend] = useState(0);
@@ -60,11 +62,11 @@ function Home() {
     let imageRef;
 
     const onChangeUploadHandler = async (e) => {
-        console.log("사진 업로드 버튼 클릭");
+        // console.log("사진 업로드 버튼 클릭");
         e.preventDefault();
 
         const imageFile = e.target.files?.[0];
-        console.log('Before Compression: ', imageFile.size);
+        // console.log('Before Compression: ', imageFile.size);
 
         const options = {
             maxSizeMB: 1,
@@ -73,15 +75,16 @@ function Home() {
         };
         try {
             const compressedFile = await imageCompression(imageFile, options);
-            console.log('After Compression: ', compressedFile.size);
+            // console.log('After Compression: ', compressedFile.size);
             const fileReader = new FileReader();
-            console.log(compressedFile);
+            // console.log(compressedFile);
             fileReader.readAsDataURL(compressedFile);
 
             fileReader.onload = () => {
                 setImageFile({
                     viewUrl: String(fileReader.result),
                 });
+                setLoaded(true)
             };
         } catch (error) {
             console.log(error);
@@ -97,12 +100,18 @@ function Home() {
     };
 
     // SelectBox 옵션 
-    const selectList = ["React", "Spring", "Java", "JS"];
-    const [Selected, setSelected] = useState("");
+    const selectBackList = ["Node.js", "Spring", "Java",];
+    const selectFrontList = ["React.js", "Js", "Vue"]
 
-    const handleSelect = (e) => {
-        setSelected(e.target.value);
+    const [SelectedBack, setSelectedBack] = useState("Spring");
+    const [SelectedFront, setSelectedFront] = useState("React");
+
+    const selectBackHandler = (e) => {
+        setSelectedBack(e.target.value);
     };
+    const selectFrontHandler = (e) => {
+        setSelectedFront(e.target.value)
+    }
 
 
 
@@ -119,28 +128,31 @@ function Home() {
 
     const AddData = {
         title: title,
-        // content: body,
-        img: imageFile.viewUrl,
-        strack: Selected,
-        body: body,
-        // number
+        content: body,
+        image: imageFile.viewUrl,
+        frontEndStack: SelectedFront,
+        backEndStack: SelectedBack,
         backendMember: backend,
         frontendMember: frontend
-
     }
 
     // Form안에 버튼을 눌러 정보를 서버로 보냄 
-    const onSonSubmituAddValue = (e) => {
+    const onSonSubmituAddValue = async (e) => {
         e.preventDefault()
-        alert('Selected')
-        if (Selected !== '') {
-            console.log(AddData)
+
+        console.log(AddData)
+        try {
+            const response = await api.post('api/project', AddData);
+            console.log(response)
+        } catch (error) {
+            console.log(error)
         }
+
     }
 
 
-    const getToken = Cookies.get('token')
-    // console.log(getToken)
+
+
 
     return (
         <Layout>
@@ -208,44 +220,57 @@ function Home() {
 
                             <ModalInWarpInputBox>
 
-                                {/* Title */}
-                                <ModalEachInputBox>
+                                {/* ProjectTitle  */}
+                                <ModalTitleArea>
                                     <p>Title</p>
-                                    <ModalEachInputBoxInputArea>
-
+                                    <ModalinInputBoxArea>
                                         <Input
                                             type="text"
                                             value={title}
                                             onChange={onChangeTitleHandler}
                                             required
+                                            placeholder="프로젝트 제목을 적어주세요!"
                                         />
-
                                         <div><MdTitle /></div>
-                                    </ModalEachInputBoxInputArea>
-                                </ModalEachInputBox>
+                                    </ModalinInputBoxArea>
 
-                                {/* 백프론트 선택  */}
+                                </ModalTitleArea>
 
-                                <ModalEachInputBox>
-                                    <p>모집인원정보</p>
-                                    <ModalEachInputBoxselect>
+                                <ModaleSelectArea>
 
-                                        <select onChange={handleSelect} value={Selected}>
-                                            {selectList.map((item) => (
-                                                <option value={item} key={item}>
-                                                    {item}
-                                                </option>
-                                            ))}
-                                        </select>
+                                    <ModaleSelectWarp>
+                                        <div>
+                                            <p style={{ color: "#000", paddingBottom: "20px" }} >BackStack</p>
+                                            <select onChange={selectBackHandler} value={SelectedBack}
+                                                required style={{ width: "150px", height: "35px" }}>
+                                                {selectBackList.map((item) => (
+                                                    <option value={item} key={item}>
+                                                        {item}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </ModaleSelectWarp>
 
-                                        <div><FaCodeBranch /></div>
+                                    <ModaleSelectWarp>
+                                        <div>
+                                            <p style={{ color: "#000", paddingBottom: "20px" }}> FrontStack </p>
+                                            <select onChange={selectFrontHandler} value={SelectedFront}
+                                                required style={{ width: "150px", height: "35px" }}>
+                                                {selectFrontList.map((item) => (
+                                                    <option value={item} key={item}>
+                                                        {item}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </ModaleSelectWarp>
 
-                                    </ModalEachInputBoxselect>
-                                </ModalEachInputBox>
+                                </ModaleSelectArea>
 
 
-                                {/* 모집인원  */}
-                                <ModalEachInputBoxWarp>
+                                {/* 모집인원 */}
+                                <ModalEachNumberArea>
                                     <div>
                                         <p style={{ color: "#000", textAlign: 'center' }}>Backend</p>
                                         <Input
@@ -254,7 +279,6 @@ function Home() {
                                             onChange={BackendNumberHandlerChange}
                                             required
                                         />
-
                                     </div>
                                     <div>
                                         <p style={{ color: "#000", textAlign: 'center' }}>Frontend</p>
@@ -262,25 +286,11 @@ function Home() {
                                             type="number"
                                             value={frontend}
                                             onChange={FrontedNumberHandlerChange}
-                                            required />
-                                        <span>Front: {frontend}</span>
-                                    </div>
-
-
-                                    {/* <ModalEachInputBoxInputArea>
-
-                                        <Input
-                                            type="number"
-                                            value={number}
-                                            onChange={onChangeNumberHandler}
+                                            required
                                         />
+                                    </div>
+                                </ModalEachNumberArea>
 
-                                        <div><MdTitle /></div>
-                                    </ModalEachInputBoxInputArea> */}
-                                </ModalEachInputBoxWarp>
-
-
-                                {/* 상세내용  */}
 
                                 <ModalEachInputBoxBodyArea>
                                     <p style={{ color: "#000" }}>상세내용</p>
@@ -289,16 +299,15 @@ function Home() {
                                         value={body}
                                         onChange={onChangeBodyHandler}
                                         required
+                                        placeholder='프로젝트에 상세내용을 적어주세요'
                                     />
-                                    {/* <div><MdTitle /></div> */}
+
 
                                 </ModalEachInputBoxBodyArea>
 
-
-
-
-
-
+                                {/*   
+                               
+*/}
                             </ModalInWarpInputBox>
 
 
@@ -324,6 +333,11 @@ function Home() {
 
             </Sidebar>
 
+
+
+            {/* 리스트보여줄것들  */}
+
+
             {/* 쿠키가 있으면 블러 처리 안하고 보여주고 있으면 블러 처리하고 리스트 보여주기 */}
             {
                 getToken === undefined ?
@@ -332,7 +346,8 @@ function Home() {
                         textAlign: 'center'
                     }}>
                         리스트블러처리
-                        <div>ddd</div></ListArea>
+                        <div>dd</div>
+                        <List /></ListArea>
                     // 쿠키가 있을때 보여줄 것들 
                     : <ListArea style={{
                         textAlign: 'center'
@@ -419,7 +434,6 @@ const SCustomButtonWrapper = styled.div`
 
 // modal Input Form 
 const ModalInWarpInputBox = styled.div`
-    border: 1px solid red;
     width: 49%;
     height: 90%;
     display: flex;
@@ -429,55 +443,97 @@ const ModalInWarpInputBox = styled.div`
     gap: 30px 0;
 `;
 
-const ModalEachInputBox = styled.div`
-    width: 21.875rem;
+
+// 모달안 Title Area 
+const ModalTitleArea = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: .625rem 0;
+    width: 25rem;
     height: 6.875rem;
     border-radius: 1.25rem;
-    border: 2px solid black;  
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    gap: .625rem 0;
-
-    > p {  
+    border: 1px solid #000;
+    color: #000;
+    padding: 1.25rem;
+    > p {
         text-align: left;
-        padding-top: .3125rem;
-        color: #000;
-    };
-  `;
+    }
 
-const ModalEachInputBoxWarp = styled.div`
+`
+
+const ModalinInputBoxArea = styled.div`
+  position: relative;
+  width: 50%;
+  height: 40%;
+  > input {
+      position: absolute;
+      width: 15.625rem;
+      height: 3.125rem;
+      padding-left: 2.5rem;
+  }
+  > div {
+      position: absolute;
+      top: 100%;
+      left: 5%;
+      transform: translateY(-50%);
+      color: #000;
+      font-size: 1.2rem;
+  };
+`;
+
+const ModaleSelectArea = styled.div`
     width: 28.125rem;
     height: 6.875rem;
     border-radius: 1.25rem;
-    border: 2px solid black;  
+    border: 1px solid black;  
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: .625rem .625rem;
+
+`;
+
+const ModaleSelectWarp = styled.div`
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 45%;
+       height: 90%;
+       
+       > div {
+        display: flex;
+        flex-direction: column;
+       };
+`;
+
+const ModalEachNumberArea = styled.div`
+    width: 28.125rem;
+    height: 6.875rem;
+    border-radius: 1.25rem;
+    border: 1px solid black;  
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
+    flex-direction: row;
     gap: .625rem 1.25rem;
     > div {
-        margin: 0 auto;
-        width: 50%;
-        height: 100%;
+        width: 45%;
+        height: 90%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-items: center;
-        gap: 10px 0;
-    };
-    > p {
-        text-align: center;
-        color: #000;
+        justify-content: center;
     }
 `;
+
+
 
 const ModalEachInputBoxBodyArea = styled.div`
     width: 28.125rem;
     height: 12.5rem;
     border-radius: 1.25rem;
-    border: 2px solid red;  
+    border:1px solid black;  
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -485,59 +541,5 @@ const ModalEachInputBoxBodyArea = styled.div`
     gap: .625rem 0; 
 `;
 
-
-
-const ModalEachInputBoxInputArea = styled.div`
-  position: relative;
-  width: 90%;
-  height: 40%;
-  > input {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      padding-left: 2.5rem;
-      border: none;
-      outline: none;
-      border-bottom : 2px solid black;
-  }
-  > div {
-      position: absolute;
-      top: 50%;
-      left: 5%;
-      transform: translateY(-50%);
-      color: #000;
-      font-size: 1.2rem;
-  };
-  `;
-
-
-
-
-
-
-const ModalEachInputBoxselect = styled.div`
-position: relative;
-width: 90%;
-height: 40%;
-> select {
-    margin-left: 3.125rem;
-    position: absolute;
-    width: 70%;
-    height: 70%;
-    text-align: center;
-    border: none;
-    outline: none;
-    border : 2px solid black;
-    
-}
-> div {
-    position: absolute;
-    top: 50%;
-    left: 5%;
-    transform: translateY(-50%);
-    color: #000;
-    font-size: 1.2rem;
-};
-`;
 
 

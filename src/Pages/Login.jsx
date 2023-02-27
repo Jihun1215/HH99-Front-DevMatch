@@ -38,9 +38,29 @@ function Login() {
   const onSumibtLogin = async (e) => {
     e.preventDefault()
     // 토큰만료시간 지정 
-    const expiryDate = new Date(Date.now() + 10 * 60 * 1000);
+    const expiryDate = new Date(Date.now() + 60 * 60 * 1000);
     try {
       const response = await api.post('api/user/login', { username: thisId, password: thisPw });
+      // console.log(response)
+      console.log(response.data.result)
+
+      const { id, username, password, nickname, introduction, part } = response.data.result
+
+      const userInto = {
+        id,
+        username,
+        nickname,
+        introduction,
+        part,
+        introduction
+      }
+
+      console.log(id, username, password, nickname)
+      sessionStorage.setItem("userInfo", JSON.stringify(userInto));
+      console.log(localStorage.getItem("userInfo"))
+
+
+      // console.log(userinfo)
       const { token } = response.data;
       const Token = response.headers.authorization
 
@@ -50,10 +70,9 @@ function Login() {
       // 쿠키 설정 
       Cookies.set('token', Token, { expires: expiryDate });
       navigate('/');
-      // test01 test0101
     }
     catch (error) {
-      alert(error.response.data.result)
+       alert(error.response.data.result)
     }
 
 
