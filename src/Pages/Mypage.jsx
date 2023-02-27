@@ -1,16 +1,14 @@
-import React from 'react'
-import styled from 'styled-components'
-import Layout from '../Components/Layout'
-
+import React from 'react';
+import styled from 'styled-components';
+import Layout from '../Components/Layout';
 
 function Mypage() {
     return (
         <Layout>
             {/* <Header /> */}
             Mypage
-
         </Layout>
-    )
+    );
 }
 
-export default Mypage
+export default Mypage;
