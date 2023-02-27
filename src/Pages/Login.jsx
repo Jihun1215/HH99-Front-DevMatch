@@ -70,9 +70,10 @@ function Login() {
       // 쿠키 설정 
       Cookies.set('token', Token, { expires: expiryDate });
       navigate('/');
+
     }
     catch (error) {
-       alert(error.response.data.result)
+      alert(error.response.data.result)
     }
 
 

@@ -27,6 +27,7 @@ function Home() {
     // UseInput 훅 초기화를 위해 set를 같이 가져가옴
     const [title, onChangeTitleHandler, setTitle] = useInput();
     const [body, onChangeBodyHandler, setBody] = useInput();
+    const [formImagin, setFormformImagin] = useState(new FormData());
 
     // 프론트 백엔드인원수를 위한 로직
     const min = 0;
@@ -35,6 +36,7 @@ function Home() {
     const [backend, setBackend] = useState(0);
     const [frontend, setFrontend] = useState(0);
 
+    console.log(typeof backend);
     const BackendNumberHandlerChange = (e) => {
         const back = Math.max(min, Math.min(max, Number(e.target.value)));
         setBackend(back);
@@ -63,6 +65,9 @@ function Home() {
 
         const imageFile = e.target.files?.[0];
         // console.log('Before Compression: ', imageFile.size);
+        const formImg = new FormData();
+        formImg.append('image', imageFile);
+        setFormformImagin(formImg);
 
         const options = {
             maxSizeMB: 1,
@@ -117,12 +122,11 @@ function Home() {
     // }
     // if (isError) {
     //     return <div>에러!!</div>
-    // }ㅁ
+    // }
 
     const AddData = {
         title: title,
         content: body,
-        image: imageFile.viewUrl,
         frontEndStack: SelectedFront,
         backEndStack: SelectedBack,
         backendMember: backend,
