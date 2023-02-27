@@ -18,7 +18,7 @@ function Details() {
     const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/user/1`).then((response) => {
+        axios.get(`http://localhost:4000/user/2`).then((response) => {
             setCurrentUser(response.data);
         });
     }, []);
@@ -102,7 +102,7 @@ function Details() {
         } else {
             mutation.mutate({
                 comment: comment,
-                nickname: currentUser.nickname,
+                username: currentUser.username,
             });
             setEditCmt(comment);
             setComment('');
@@ -114,7 +114,7 @@ function Details() {
     const onShowInputHandler = (id) => {
         commentData.data.find((item) => {
             if (item.id === id) {
-                if (item.nickname === currentUser.nickname) {
+                if (item.username === currentUser.username) {
                     setEditCmt(item.comment);
                     setShowInput((prevState) => (prevState === id ? true : id));
                     setShowCancel((prevState) => (prevState === id ? false : id));
@@ -150,7 +150,7 @@ function Details() {
     const deleteButtonHandler = (id) => {
         commentData.data.find((item) => {
             if (item.id === id) {
-                if (item.nickname === currentUser.nickname) {
+                if (item.username === currentUser.username) {
                     mutation3.mutate(id);
                     setShowInput(!showInput);
                     setShowCancel(!showCancel);
@@ -187,7 +187,7 @@ function Details() {
                 </ModalOutArea>
             </Sidebar>
 
-            <StDetailContaitner>
+            <StContaitner>
                 <StImageBox>이미지</StImageBox>
                 <div>
                     <StRecruitList>
@@ -244,7 +244,7 @@ function Details() {
                         <div key={item.id}>
                             <StCommentBox>
                                 <StMiniLayout>
-                                    <h3>{item.nickname}</h3>
+                                    <h3>{item.username}</h3>
                                 </StMiniLayout>
                                 <StCommentListBox>
                                     {showInput === item.id ? (
@@ -300,7 +300,7 @@ function Details() {
                         </div>
                     );
                 })}
-            </StDetailContaitner>
+            </StContaitner>
         </>
     );
 }
@@ -308,7 +308,7 @@ function Details() {
 export default Details;
 
 //상세페이지 전체 컨테이너
-const StDetailContaitner = styled.div`
+export const StContaitner = styled.div`
     width: 50rem;
     margin: 30px auto;
     padding: 25px;
