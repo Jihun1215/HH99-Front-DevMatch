@@ -7,14 +7,10 @@ function List() {
     return (
         <ProjectList>
 
-
             {/* List 이미지 부분  */}
             <ProjectListImgBox>
 
             </ProjectListImgBox>
-
-
-
 
 
             {/* List Text 부분  */}

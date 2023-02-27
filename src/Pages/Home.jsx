@@ -1,60 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import Layout from '../Components/Layout'
-import styled from 'styled-components'
-import Btn from '../Components/Button'
-import Sidebar from '../Components/Sidebar'
-import Input from '../Components/Input'
-import { MdPlaylistAdd } from "react-icons/md";
-import useInput from "../Hooks/useInput"
+import React, { useEffect, useState } from 'react';
+import Layout from '../Components/Layout';
+import styled from 'styled-components';
+import Btn from '../Components/Button';
+import Sidebar from '../Components/Sidebar';
+import Input from '../Components/Input';
+import { MdPlaylistAdd } from 'react-icons/md';
+import useInput from '../Hooks/useInput';
 import { MdTitle } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
-import { ModalOutArea, ModalInArea } from '../Style/ModalStyle'
-import { useQuery } from 'react-query'
+import { ModalOutArea, ModalInArea } from '../Style/ModalStyle';
+import { useQuery } from 'react-query';
 import Cookies from 'js-cookie';
-import { ListArea } from '../Style/MainpageStyle'
-import List from '../Components/List'
-import { api } from '../axios/api'
+import { ListArea } from '../Style/MainpageStyle';
+import List from '../Components/List';
+import { api } from '../axios/api';
 
 function Home() {
-    const getToken = Cookies.get('token')
-
+    const getToken = Cookies.get('token');
 
     const [modalOpen, setModalOpen] = useState('none');
-    const openModal = (e) => (e.target.name === 'modal' ? setModalOpen('block') : console.log('Error'));
-    const closeModal = (e) => (e.target.name === 'modal' ? setModalOpen('none') : console.log('Error'));
+    const openModal = (e) =>
+        e.target.name === 'modal' ? setModalOpen('block') : console.log('Error');
+    const closeModal = (e) =>
+        e.target.name === 'modal' ? setModalOpen('none') : console.log('Error');
 
-
-
-    // UseInput 훅 초기화를 위해 set를 같이 가져가옴 
+    // UseInput 훅 초기화를 위해 set를 같이 가져가옴
     const [title, onChangeTitleHandler, setTitle] = useInput();
     const [body, onChangeBodyHandler, setBody] = useInput();
+    const [formImagin, setFormformImagin] = useState(new FormData());
 
     // 프론트 백엔드인원수를 위한 로직
     const min = 0;
     const max = 5;
 
-
     const [backend, setBackend] = useState(0);
     const [frontend, setFrontend] = useState(0);
 
+    console.log(typeof backend)
     const BackendNumberHandlerChange = (e) => {
-        const back = Math.max(min, Math.min(max, Number(e.target.value)))
-        setBackend(back)
-    }
+        const back = Math.max(min, Math.min(max, Number(e.target.value)));
+        setBackend(back);
+    };
 
     const FrontedNumberHandlerChange = (e) => {
-        const front = Math.max(min, Math.min(max, Number(e.target.value)))
-        setFrontend(front)
-    }
+        const front = Math.max(min, Math.min(max, Number(e.target.value)));
+        setFrontend(front);
+    };
 
+    // 이미지 로직
 
-
-    // 이미지 로직 
-
-    // 이미지 state 
+    // 이미지 state
     const [imageFile, setImageFile] = useState({
-        imageFile: "",
-        viewUrl: "",
+        imageFile: '',
+        viewUrl: '',
     });
 
     const [loaded, setLoaded] = useState(false);
@@ -67,6 +65,10 @@ function Home() {
 
         const imageFile = e.target.files?.[0];
         // console.log('Before Compression: ', imageFile.size);
+        const formImg = new FormData();
+        formImg.append("image", imageFile);
+        setFormformImagin(formImg);
+
 
         const options = {
             maxSizeMB: 1,
@@ -84,7 +86,7 @@ function Home() {
                 setImageFile({
                     viewUrl: String(fileReader.result),
                 });
-                setLoaded(true)
+                setLoaded(true);
             };
         } catch (error) {
             console.log(error);
@@ -95,28 +97,25 @@ function Home() {
     const onClickDeleteHandler = () => {
         // console.log("사진 삭제 버튼 클릭");
         setImageFile({
-            viewUrl: ""
+            viewUrl: '',
         });
     };
 
-    // SelectBox 옵션 
-    const selectBackList = ["Node.js", "Spring", "Java",];
-    const selectFrontList = ["React.js", "Js", "Vue"]
+    // SelectBox 옵션
+    const selectBackList = ['Node.js', 'Spring', 'Java'];
+    const selectFrontList = ['React.js', 'Js', 'Vue'];
 
-    const [SelectedBack, setSelectedBack] = useState("Spring");
-    const [SelectedFront, setSelectedFront] = useState("React");
+    const [SelectedBack, setSelectedBack] = useState('Spring');
+    const [SelectedFront, setSelectedFront] = useState('React');
 
     const selectBackHandler = (e) => {
         setSelectedBack(e.target.value);
     };
     const selectFrontHandler = (e) => {
-        setSelectedFront(e.target.value)
-    }
+        setSelectedFront(e.target.value);
+    };
 
-
-
-
-    // React-Query로 데이터 받아오기 
+    // React-Query로 데이터 받아오기
     // const { isLoading, isError, data } = useQuery("list", GetList)
 
     // if (isLoading) {
@@ -124,60 +123,61 @@ function Home() {
     // }
     // if (isError) {
     //     return <div>에러!!</div>
-    // }ㅁ
+    // }
 
     const AddData = {
         title: title,
         content: body,
-        image: imageFile.viewUrl,
         frontEndStack: SelectedFront,
         backEndStack: SelectedBack,
         backendMember: backend,
-        frontendMember: frontend
-    }
+        frontendMember: frontend,
+    };
 
-    // Form안에 버튼을 눌러 정보를 서버로 보냄 
+    // Form안에 버튼을 눌러 정보를 서버로 보냄
     const onSonSubmituAddValue = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        console.log(AddData)
-        try {
-            const response = await api.post('api/project', AddData);
-            console.log(response)
-        } catch (error) {
-            console.log(error)
+        // const Data = JSON.stringify(AddData)
+        const formDate = new FormData();
+
+        // formDate.append('jsonList', Data);
+        formDate.append('title', title);
+        formDate.append('content', body);
+        formDate.append('frontEndStack', SelectedFront);
+        formDate.append('backEndStack', SelectedBack);
+        formDate.append('backendMember', backend);
+        formDate.append('frontendMember', frontend);
+
+        for (const keyValue of formImagin) {
+            formDate.append(keyValue[0], keyValue[1]);
         }
 
-    }
+        try {
+            await api.post('api/project', formDate, { headers: { Authorization: getToken }, });
 
-
-
-
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <Layout>
             {/* <Header /> */}
             <Sidebar>
-                <Btn
-                    name={'modal'}
-                    onClick={openModal}
-                    sideBtn>
-                    <MdPlaylistAdd
-                        onClick={openModal} />
+                <Btn name={'modal'} onClick={openModal} sideBtn>
+                    <MdPlaylistAdd onClick={openModal} />
                 </Btn>
                 <Btn sideBtn>dd</Btn>
 
                 {/* Modal  */}
                 <ModalOutArea isOpen={modalOpen}>
                     <ModalInArea isOpen={modalOpen}>
-
                         <ModalInFrom onSubmit={onSonSubmituAddValue}>
-
                             {/* 이미지 */}
                             <ModalInImgBox>
-
                                 <ModalInImgArear>
-                                    {imageFile.imageFile !== "" ? (
+                                    {imageFile.imageFile !== '' ? (
                                         <IMGSIZE src={imageFile.viewUrl} />
                                     ) : (
                                         <NoImgSIZE>Loading...</NoImgSIZE>
@@ -191,35 +191,28 @@ function Home() {
                                 </ModalInImgArear>
 
                                 <ModalInButGround>
-
                                     <SCustomButtonWrapper>
-
                                         <Btn
-                                            style={{ background: "rgb(50, 111, 233)" }}
+                                            style={{ background: 'rgb(50, 111, 233)' }}
                                             lg
                                             onClick={() => imageRef.click()}
                                         >
                                             사진 업로드
                                         </Btn>
                                         <Btn
-                                            style={{ background: "#ee8683" }}
+                                            style={{ background: '#ee8683' }}
                                             lg
                                             onClick={onClickDeleteHandler}
                                         >
                                             사진 삭제
                                         </Btn>
                                     </SCustomButtonWrapper>
-
                                 </ModalInButGround>
-
                             </ModalInImgBox>
-
-
 
                             {/* 인풋창 */}
 
                             <ModalInWarpInputBox>
-
                                 {/* ProjectTitle  */}
                                 <ModalTitleArea>
                                     <p>Title</p>
@@ -231,18 +224,24 @@ function Home() {
                                             required
                                             placeholder="프로젝트 제목을 적어주세요!"
                                         />
-                                        <div><MdTitle /></div>
+                                        <div>
+                                            <MdTitle />
+                                        </div>
                                     </ModalinInputBoxArea>
-
                                 </ModalTitleArea>
 
                                 <ModaleSelectArea>
-
                                     <ModaleSelectWarp>
                                         <div>
-                                            <p style={{ color: "#000", paddingBottom: "20px" }} >BackStack</p>
-                                            <select onChange={selectBackHandler} value={SelectedBack}
-                                                required style={{ width: "150px", height: "35px" }}>
+                                            <p style={{ color: '#000', paddingBottom: '20px' }}>
+                                                BackStack
+                                            </p>
+                                            <select
+                                                onChange={selectBackHandler}
+                                                value={SelectedBack}
+                                                required
+                                                style={{ width: '150px', height: '35px' }}
+                                            >
                                                 {selectBackList.map((item) => (
                                                     <option value={item} key={item}>
                                                         {item}
@@ -254,9 +253,16 @@ function Home() {
 
                                     <ModaleSelectWarp>
                                         <div>
-                                            <p style={{ color: "#000", paddingBottom: "20px" }}> FrontStack </p>
-                                            <select onChange={selectFrontHandler} value={SelectedFront}
-                                                required style={{ width: "150px", height: "35px" }}>
+                                            <p style={{ color: '#000', paddingBottom: '20px' }}>
+                                                {' '}
+                                                FrontStack{' '}
+                                            </p>
+                                            <select
+                                                onChange={selectFrontHandler}
+                                                value={SelectedFront}
+                                                required
+                                                style={{ width: '150px', height: '35px' }}
+                                            >
                                                 {selectFrontList.map((item) => (
                                                     <option value={item} key={item}>
                                                         {item}
@@ -265,14 +271,14 @@ function Home() {
                                             </select>
                                         </div>
                                     </ModaleSelectWarp>
-
                                 </ModaleSelectArea>
-
 
                                 {/* 모집인원 */}
                                 <ModalEachNumberArea>
                                     <div>
-                                        <p style={{ color: "#000", textAlign: 'center' }}>Backend</p>
+                                        <p style={{ color: '#000', textAlign: 'center' }}>
+                                            Backend
+                                        </p>
                                         <Input
                                             type="number"
                                             value={backend}
@@ -281,7 +287,9 @@ function Home() {
                                         />
                                     </div>
                                     <div>
-                                        <p style={{ color: "#000", textAlign: 'center' }}>Frontend</p>
+                                        <p style={{ color: '#000', textAlign: 'center' }}>
+                                            Frontend
+                                        </p>
                                         <Input
                                             type="number"
                                             value={frontend}
@@ -291,18 +299,16 @@ function Home() {
                                     </div>
                                 </ModalEachNumberArea>
 
-
                                 <ModalEachInputBoxBodyArea>
-                                    <p style={{ color: "#000" }}>상세내용</p>
-                                    <textarea style={{ width: "350px", height: "150px", padding: "15px" }}
+                                    <p style={{ color: '#000' }}>상세내용</p>
+                                    <textarea
+                                        style={{ width: '350px', height: '150px', padding: '15px' }}
                                         type="text"
                                         value={body}
                                         onChange={onChangeBodyHandler}
                                         required
-                                        placeholder='프로젝트에 상세내용을 적어주세요'
+                                        placeholder="프로젝트에 상세내용을 적어주세요"
                                     />
-
-
                                 </ModalEachInputBoxBodyArea>
 
                                 {/*   
@@ -310,58 +316,49 @@ function Home() {
 */}
                             </ModalInWarpInputBox>
 
-
-                            <Btn
-                                lg
-                                type="submit"
-                            >
+                            <Btn lg type="submit">
                                 게시물 발행
                             </Btn>
 
-                            <Btn
-                                lgred
-                                type="button"
-                                onClick={closeModal}
-                                name={'modal'}>
+                            <Btn lgred type="button" onClick={closeModal} name={'modal'}>
                                 close
                             </Btn>
-
                         </ModalInFrom>
-
                     </ModalInArea>
                 </ModalOutArea>
-
             </Sidebar>
-
-
 
             {/* 리스트보여줄것들  */}
 
-
             {/* 쿠키가 있으면 블러 처리 안하고 보여주고 있으면 블러 처리하고 리스트 보여주기 */}
-            {
-                getToken === undefined ?
-                    // 쿠키 없을떄 보여줄 것들 
-                    <ListArea style={{
-                        textAlign: 'center'
-                    }}>
-                        리스트블러처리
-                        <div>dd</div>
-                        <List /></ListArea>
-                    // 쿠키가 있을때 보여줄 것들 
-                    : <ListArea style={{
-                        textAlign: 'center'
-                    }}>리스트</ListArea>
-            }
-
-        </Layout >
-    )
+            {getToken === undefined ? (
+                // 쿠키 없을떄 보여줄 것들
+                <ListArea
+                    style={{
+                        textAlign: 'center',
+                    }}
+                >
+                    리스트블러처리
+                    <div>dd</div>
+                    <List />
+                </ListArea>
+            ) : (
+                // 쿠키가 있을때 보여줄 것들
+                <ListArea
+                    style={{
+                        textAlign: 'center',
+                    }}
+                >
+                    리스트
+                </ListArea>
+            )}
+        </Layout>
+    );
 }
 
-export default Home
+export default Home;
 
-
-// 전체Form 
+// 전체Form
 const ModalInFrom = styled.form`
     width: 98%;
     height: 98%;
@@ -382,7 +379,7 @@ const ModalInImgBox = styled.div`
     height: 90%;
 `;
 
-// 이미지 영역 
+// 이미지 영역
 const ModalInImgArear = styled.div`
     width: 100%;
     height: 70%;
@@ -399,7 +396,7 @@ const IMGSIZE = styled.img`
     margin: 0 auto;
 `;
 
-// IMG 없을 떄 
+// IMG 없을 떄
 const NoImgSIZE = styled.div`
     width: 31.25rem;
     height: 28.5rem;
@@ -408,7 +405,7 @@ const NoImgSIZE = styled.div`
     align-items: center;
     justify-content: center;
     color: #000;
-    opacity:0.5;
+    opacity: 0.5;
 `;
 
 const ModalImgInput = styled.input`
@@ -431,8 +428,7 @@ const SCustomButtonWrapper = styled.div`
     gap: 0 1.875rem;
 `;
 
-
-// modal Input Form 
+// modal Input Form
 const ModalInWarpInputBox = styled.div`
     width: 49%;
     height: 90%;
@@ -443,12 +439,11 @@ const ModalInWarpInputBox = styled.div`
     gap: 30px 0;
 `;
 
-
-// 모달안 Title Area 
+// 모달안 Title Area
 const ModalTitleArea = styled.div`
     display: flex;
     flex-direction: column;
-    gap: .625rem 0;
+    gap: 0.625rem 0;
     width: 25rem;
     height: 6.875rem;
     border-radius: 1.25rem;
@@ -458,65 +453,62 @@ const ModalTitleArea = styled.div`
     > p {
         text-align: left;
     }
-
-`
+`;
 
 const ModalinInputBoxArea = styled.div`
-  position: relative;
-  width: 50%;
-  height: 40%;
-  > input {
-      position: absolute;
-      width: 15.625rem;
-      height: 3.125rem;
-      padding-left: 2.5rem;
-  }
-  > div {
-      position: absolute;
-      top: 100%;
-      left: 5%;
-      transform: translateY(-50%);
-      color: #000;
-      font-size: 1.2rem;
-  };
+    position: relative;
+    width: 50%;
+    height: 40%;
+    > input {
+        position: absolute;
+        width: 15.625rem;
+        height: 3.125rem;
+        padding-left: 2.5rem;
+    }
+    > div {
+        position: absolute;
+        top: 100%;
+        left: 5%;
+        transform: translateY(-50%);
+        color: #000;
+        font-size: 1.2rem;
+    }
 `;
 
 const ModaleSelectArea = styled.div`
     width: 28.125rem;
     height: 6.875rem;
     border-radius: 1.25rem;
-    border: 1px solid black;  
+    border: 1px solid black;
     display: flex;
     justify-content: center;
     flex-direction: row;
     align-items: center;
-    gap: .625rem .625rem;
-
+    gap: 0.625rem 0.625rem;
 `;
 
 const ModaleSelectWarp = styled.div`
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       width: 45%;
-       height: 90%;
-       
-       > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45%;
+    height: 90%;
+    > div {
         display: flex;
         flex-direction: column;
-       };
+    }
 `;
 
 const ModalEachNumberArea = styled.div`
     width: 28.125rem;
     height: 6.875rem;
     border-radius: 1.25rem;
-    border: 1px solid black;  
+    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    gap: .625rem 1.25rem;
+    gap: 0.625rem 1.25rem;
     > div {
         width: 45%;
         height: 90%;
@@ -527,19 +519,14 @@ const ModalEachNumberArea = styled.div`
     }
 `;
 
-
-
 const ModalEachInputBoxBodyArea = styled.div`
     width: 28.125rem;
     height: 12.5rem;
     border-radius: 1.25rem;
-    border:1px solid black;  
+    border: 1px solid black;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    gap: .625rem 0; 
+    gap: 0.625rem 0;
 `;
-
-
-
