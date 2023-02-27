@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useNavigate } from 'react';
 import Layout from '../Components/Layout';
 import styled from 'styled-components';
 import Btn from '../Components/Button';
@@ -13,7 +13,11 @@ import { useQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import { ListArea } from '../Style/MainpageStyle';
 import List from '../Components/List';
-import { api } from '../axios/api';
+import { PostProject } from '../axios/api';
+import { useMutation } from "react-query";
+import { type } from '@testing-library/user-event/dist/type';
+
+
 
 function Home() {
     const getToken = Cookies.get('token');
@@ -33,10 +37,28 @@ function Home() {
     const min = 0;
     const max = 5;
 
-    const [backend, setBackend] = useState(0);
-    const [frontend, setFrontend] = useState(0);
+    // const navigate = useNavigate();
 
-    console.log(typeof backend);
+
+    const ProjectPost = useMutation(PostProject, {
+        onSuccess: () => {
+            console.log('성공')
+        }
+    })
+
+
+
+    // const PostProject = useMutation(PostProject, {
+    //     onSuccess: () => {
+    //         console.log('d')
+    //         // navigate("/");
+    //     },
+    // });
+
+
+    const [backend, setBackend] = useState(1);
+    const [frontend, setFrontend] = useState(1);
+
     const BackendNumberHandlerChange = (e) => {
         const back = Math.max(min, Math.min(max, Number(e.target.value)));
         setBackend(back);
@@ -54,7 +76,7 @@ function Home() {
         imageFile: '',
         viewUrl: '',
     });
-
+    // console.log(imageFile)
     const [loaded, setLoaded] = useState(false);
 
     let imageRef;
@@ -63,11 +85,24 @@ function Home() {
         // console.log("사진 업로드 버튼 클릭");
         e.preventDefault();
 
-        const imageFile = e.target.files?.[0];
+        const imageFile = e.target.files[0];
+        // console.log(imageFile)
+
         // console.log('Before Compression: ', imageFile.size);
         const formImg = new FormData();
         formImg.append('image', imageFile);
         setFormformImagin(formImg);
+
+        // /* key 확인하기 */
+        // for (let key of formImg.keys()) {
+        //     console.log(key);
+        // }
+
+        // /* value 확인하기 */
+        // for (let value of formImg.values()) {
+        //     console.log(value);
+        // }
+
 
         const options = {
             maxSizeMB: 1,
@@ -124,26 +159,34 @@ function Home() {
     //     return <div>에러!!</div>
     // }
 
-    const AddData = {
-        title: title,
-        content: body,
-        frontEndStack: SelectedFront,
-        backEndStack: SelectedBack,
-        backendMember: backend,
-        frontendMember: frontend,
-    };
 
-    // Form안에 버튼을 눌러 정보를 서버로 보냄
+
     const onSonSubmituAddValue = async (e) => {
         e.preventDefault();
 
-        console.log(AddData);
-        try {
-            const response = await api.post('api/project', AddData);
-            console.log(response);
-        } catch (error) {
-            console.log(error);
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', body);
+        formData.append('frontEndStack', SelectedFront);
+        formData.append('backEndStack', SelectedBack);
+        formData.append('backEndMember', backend);
+        formData.append('frontEndMember', frontend);
+        // formData.append('image', formImagin);
+        for (const keyValue of formImagin) {
+            formData.append(keyValue[0], keyValue[1]);
         }
+        // /* value 확인하기 */
+        // for (let value of formData.values()) {
+        //     console.log(value);
+        // }
+        const GETTOKEN = Cookies.get('token');
+        console.log(GETTOKEN)
+        ProjectPost.mutate({ token: GETTOKEN, data: formData });
+        // mutaion.mutate({ token: getToken, data: formData })
+        // await api.post('api/project', formData, { headers: { Authorization: getToken }, });
+
+
     };
 
     return (
@@ -268,7 +311,6 @@ function Home() {
                                             type="number"
                                             value={backend}
                                             onChange={BackendNumberHandlerChange}
-                                            required
                                         />
                                     </div>
                                     <div>
@@ -279,7 +321,6 @@ function Home() {
                                             type="number"
                                             value={frontend}
                                             onChange={FrontedNumberHandlerChange}
-                                            required
                                         />
                                     </div>
                                 </ModalEachNumberArea>
