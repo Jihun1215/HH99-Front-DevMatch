@@ -19,7 +19,7 @@ function Mypages() {
                 </StInfoLayout>
 
                 <StInfoLayout>
-                    <StInfoBox>Stack</StInfoBox>{' '}
+                    <StInfoBox>Stack</StInfoBox> <input type="select" />
                 </StInfoLayout>
                 <StInfoLayout>
                     {' '}

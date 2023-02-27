@@ -53,6 +53,10 @@ function Details() {
         await axios.delete(`http://localhost:4000/comment/${id}`);
     };
 
+    const addLikeCount = async (newlike) => {
+        await axios.post(`http://localhost:4000/project/1`, newlike);
+    };
+
     //리액트 쿼리 부분
 
     //프로젝트 데이터
@@ -80,6 +84,12 @@ function Details() {
         },
     });
 
+    const mutation4 = useMutation(addLikeCount, {
+        onSuccess: () => {
+            queryclient.invalidateQueries('like');
+        },
+    });
+
     const [comment, onCommentHandler, setComment] = useInput('');
 
     const [editCmt, onEditCmt, setEditCmt] = useInput('');
@@ -91,7 +101,7 @@ function Details() {
     // 임시 좋아요 카운트 버튼 총 카운트 보내야함
     // 좋아요는 유저 한명당 1회만 가능한지?
     const likeCountButtonHandler = () => {
-        setLikeCount(likeCount + 1);
+        mutation4.mutate({ likeCount: +1 });
     };
 
     //댓글 추가 버튼
@@ -188,39 +198,42 @@ function Details() {
             </Sidebar>
 
             <StContaitner>
-                <StImageBox>이미지</StImageBox>
+                <StImageBox>{projectData.data?.image}</StImageBox>
                 <div>
                     <StRecruitList>
                         <h3>{projectData.data?.title}</h3>
                     </StRecruitList>
                     <StRecruitList>
                         <StMiniLayout>
-                            <h3>PART</h3>
+                            <h3>Backend</h3>
                         </StMiniLayout>
                         <StMiniLayout>
-                            <h3>FE : 0</h3>
+                            <h3>{projectData.data?.backEndStack}</h3>
                         </StMiniLayout>
                         <StMiniLayout>
-                            <h3>BE : 0</h3>
+                            <h3>{projectData.data?.backendMember}</h3>
                         </StMiniLayout>
                     </StRecruitList>
                     <StRecruitList>
                         <StMiniLayout>
-                            <h3>STACK</h3>
+                            <h3>Frontend</h3>
                         </StMiniLayout>
-                        <StStackLayout>
-                            <h4>JavaScript, Java, React, Spring</h4>
-                        </StStackLayout>
+                        <StMiniLayout>
+                            <h3>{projectData.data?.frontEndStack}</h3>
+                        </StMiniLayout>
+                        <StMiniLayout>
+                            <h3>{projectData.data?.frontendMember}</h3>
+                        </StMiniLayout>
                     </StRecruitList>
                 </div>
                 <StDetailLayout>
                     <h3>Detail</h3>
                 </StDetailLayout>
-                <StLikeNumber>{likeCount}</StLikeNumber>
+                <StLikeNumber>{projectData.data?.likeCount}</StLikeNumber>
                 <Btn me onClick={likeCountButtonHandler}>
                     LIKE❤️
                 </Btn>
-                <StDetailBox>{projectData.data?.detail}</StDetailBox>
+                <StDetailBox>{projectData.data?.content}</StDetailBox>
 
                 <StCommentLayout>
                     <StMiniLayout>
