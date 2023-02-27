@@ -12,6 +12,8 @@ import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 function Details() {
     //댓글 작성시 닉네임 받아야함
 
+    //api 부분
+
     //현재 접속자 정보
     const [currentUser, setCurrentUser] = useState(null);
 
@@ -21,8 +23,15 @@ function Details() {
         });
     }, []);
 
+    //프로젝트 조회
+
+    const getDetailProject = async () => {
+        const response = await axios.get('http://localhost:4000/project/1');
+        return response.data;
+    };
+
     //댓글 조회
-    const getDetailList = async () => {
+    const getDetailComment = async () => {
         const response = await axios.get('http://localhost:4000/comment');
         return response.data;
     };
@@ -44,8 +53,13 @@ function Details() {
         await axios.delete(`http://localhost:4000/comment/${id}`);
     };
 
+    //리액트 쿼리 부분
+
+    //프로젝트 데이터
+    const projectData = useQuery('project', getDetailProject);
+
     //댓글 데이터
-    const { isLoading, isError, data } = useQuery('comment', getDetailList);
+    const commentData = useQuery('comment', getDetailComment);
 
     const queryclient = useQueryClient();
     const mutation = useMutation(addComment, {
@@ -74,10 +88,13 @@ function Details() {
     const [likeCount, setLikeCount] = useState(0);
     const [showEdit, setShowEdit] = useState(false);
 
+    // 임시 좋아요 카운트 버튼 총 카운트 보내야함
+    // 좋아요는 유저 한명당 1회만 가능한지?
     const likeCountButtonHandler = () => {
         setLikeCount(likeCount + 1);
     };
 
+    //댓글 추가 버튼
     const onAddCommentBtnhandler = (e) => {
         if (comment === '') {
             alert('빈칸입니다.');
@@ -92,8 +109,10 @@ function Details() {
         }
     };
 
+    //댓글 수정버튼 클릭시 수정 인풋창 출력
+    //data는 댓글 리스트임
     const onShowInputHandler = (id) => {
-        data.find((item) => {
+        commentData.data.find((item) => {
             if (item.id === id) {
                 if (item.nickname === currentUser.nickname) {
                     setEditCmt(item.comment);
@@ -107,6 +126,7 @@ function Details() {
         });
     };
 
+    //댓글 내용 수정 버튼
     const editButtonHandler = (id) => {
         if (editCmt === '') {
             alert('빈칸입니다.');
@@ -119,14 +139,16 @@ function Details() {
         }
     };
 
+    //댓글 수정 취소 버튼
     const cancelButtonHandler = () => {
         setShowInput(!showInput);
         setShowCancel(!showCancel);
         setShowEdit(!showEdit);
     };
 
+    //댓글 삭제 버튼
     const deleteButtonHandler = (id) => {
-        data.find((item) => {
+        commentData.data.find((item) => {
             if (item.id === id) {
                 if (item.nickname === currentUser.nickname) {
                     mutation3.mutate(id);
@@ -169,7 +191,7 @@ function Details() {
                 <StImageBox>이미지</StImageBox>
                 <div>
                     <StRecruitList>
-                        <h3>중고거래 플랫폼 개발해요!</h3>
+                        <h3>{projectData.data?.title}</h3>
                     </StRecruitList>
                     <StRecruitList>
                         <StMiniLayout>
@@ -198,7 +220,7 @@ function Details() {
                 <Btn me onClick={likeCountButtonHandler}>
                     LIKE❤️
                 </Btn>
-                <StDetailBox>즐겁게 개발하실분들 댓글로 신청해주세요!</StDetailBox>
+                <StDetailBox>{projectData.data?.detail}</StDetailBox>
 
                 <StCommentLayout>
                     <StMiniLayout>
@@ -217,7 +239,7 @@ function Details() {
                         add
                     </Btn>
                 </StCommentLayout>
-                {data?.map((item) => {
+                {commentData.data?.map((item) => {
                     return (
                         <div key={item.id}>
                             <StCommentBox>
