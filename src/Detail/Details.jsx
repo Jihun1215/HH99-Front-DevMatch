@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Btn from '../Components/Button';
 import Input from '../Components/Input';
 import Sidebar from '../Components/Sidebar';
-import { ModalOutArea, ModalInArea } from '../Style/ModalStyle'
+import { ModalOutArea, ModalInArea } from '../Style/ModalStyle';
 import useInput from '../Hooks/useInput';
 import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 
-
 function Details() {
     //댓글 작성시 닉네임 받아야함
+
+    //현재 접속자 정보
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:4000/user/1`).then((response) => {
+            setCurrentUser(response.data);
+        });
+    }, []);
 
     //댓글 조회
     const getDetailList = async () => {
@@ -36,6 +44,7 @@ function Details() {
         await axios.delete(`http://localhost:4000/comment/${id}`);
     };
 
+    //댓글 데이터
     const { isLoading, isError, data } = useQuery('comment', getDetailList);
 
     const queryclient = useQueryClient();
@@ -76,6 +85,7 @@ function Details() {
         } else {
             mutation.mutate({
                 comment: comment,
+                nickname: currentUser.nickname,
             });
             setEditCmt(comment);
             setComment('');
@@ -85,19 +95,22 @@ function Details() {
     const onShowInputHandler = (id) => {
         data.find((item) => {
             if (item.id === id) {
-                setEditCmt(item.comment);
-                setShowInput((prevState) => (prevState === id ? true : id));
-                setShowCancel((prevState) => (prevState === id ? false : id));
-                setShowEdit((prevState) => (prevState === id ? false : id));
+                if (item.nickname === currentUser.nickname) {
+                    setEditCmt(item.comment);
+                    setShowInput((prevState) => (prevState === id ? true : id));
+                    setShowCancel((prevState) => (prevState === id ? false : id));
+                    setShowEdit((prevState) => (prevState === id ? false : id));
+                } else {
+                    alert('작성자만 수정 가능합니다');
+                }
             }
-            return;
         });
     };
 
     const editButtonHandler = (id) => {
         if (editCmt === '') {
             alert('빈칸입니다.');
-            return false;
+            return;
         } else {
             mutation2.mutate(id);
             setShowInput(!showInput);
@@ -120,38 +133,28 @@ function Details() {
     };
 
     const [modalOpen, setModalOpen] = useState('none');
-    const openModal = (e) => (e.target.name === 'modal' ? setModalOpen('block') : console.log('Error'));
-    const closeModal = (e) => (e.target.name === 'modal' ? setModalOpen('none') : console.log('Error'));
+    const openModal = (e) =>
+        e.target.name === 'modal' ? setModalOpen('block') : console.log('Error');
+    const closeModal = (e) =>
+        e.target.name === 'modal' ? setModalOpen('none') : console.log('Error');
 
     return (
         <>
             <Sidebar>
-                <Btn
-                    name={'modal'}
-                    onClick={openModal}
-                    sideBtn>
+                <Btn name={'modal'} onClick={openModal} sideBtn>
                     <AiFillEdit />
                 </Btn>
-                <Btn
-                    sideBtn>
+                <Btn sideBtn>
                     <AiFillDelete />
                 </Btn>
 
                 <ModalOutArea isOpen={modalOpen}>
                     <ModalInArea isOpen={modalOpen}>
-
-
-
-
-
-                        <Btn
-                            name={'modal'}
-                            onClick={closeModal}>close</Btn>
-
+                        <Btn name={'modal'} onClick={closeModal}>
+                            close
+                        </Btn>
                     </ModalInArea>
                 </ModalOutArea>
-
-
             </Sidebar>
 
             <StDetailContaitner>
@@ -207,7 +210,6 @@ function Details() {
                     </Btn>
                 </StCommentLayout>
                 {data?.map((item) => {
-                    console.log(item.comment);
                     return (
                         <div key={item.id}>
                             <StCommentBox>
