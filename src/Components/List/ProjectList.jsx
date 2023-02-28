@@ -11,17 +11,9 @@ function ProjectList(data) {
     const getToken = Cookies.get('token');
     // const [data, setData] = useState([...]); // 전체 데이터
 
-    // 가서 전체 데이터 비교하기 
-    const DetailProjectGoTo = () => {
-
-    }
-
     // 페이지네이션을 만들기 위한 로직 
-
-
     return (
         <ListArea>
-
             {
                 getToken === undefined ? (
                     // 토큰이 없을시 보여줄것들 
@@ -60,6 +52,9 @@ function ProjectList(data) {
                             })
                         }
 
+
+
+                        {/* {projectDate.isLoading == false && ( )} */}
 
                     </div>
                 )
@@ -124,8 +119,12 @@ export default ProjectList
 const ProjectListArea = styled.div`
     width: 56.25rem;
     height: 15.625rem;
-    border: 1px solid red;
+    border-radius: 1.5625rem;
     margin: 1.5625rem auto;
+    background-color: rgba(255,255,192,0.1);
+    backdrop-filter: contrast(80%);
+    
+    box-shadow: 2px 7px 15px 8px rgba(0,0,0,0.3);
     border-radius: 1.5625rem;
     display: flex;
     flex-wrap: wrap;
@@ -140,15 +139,19 @@ const ProjectListArea = styled.div`
 
 
 const ProjectListImgBox = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 25%;
     height: 90%;
-    border: 1px solid red;
+    border: 1px solid #000;
     > img { 
         display: flex;
         align-items: center;
         justify-content: center;
         width: 95%;
         height: 95%;
+       
     }
 `;
 
@@ -160,16 +163,19 @@ const ProjectListTextBox = styled.div`
     padding: .625rem;
     width: 65%;
     height: 90%;
-    border: 1px solid red;
+    border: 2px solid  #5c7cfa;
+    border-radius: 1.5625rem;
     gap: 10px 0;
 `;
 
 
 
 const ProjectListTextBoxTitle = styled.div`
-    width: 80%;
+    width: 90%;
     height: 20%;
-    border: 1px solid red;
+    border: 1px solid #000;
+    border-radius: 1.5625rem;
+    padding-left: 1.25rem;
     display: flex;
     align-items: center;
 `;
@@ -177,7 +183,8 @@ const ProjectListTextBoxTitle = styled.div`
 const ProjectListTextBoxBody = styled.div`
     width: 90%;
     height: 50%;
-    border: 1px solid red;
+    border: 1px solid #000;
+    border-radius: 1.5625rem;
     display: flex;
     padding: 15px;
 `;
@@ -186,7 +193,8 @@ const ProjectListTextBoxBody = styled.div`
 const ProjectListInto = styled.div`
     width: 90%;
     height: 20%;
-    border: 1px solid red;
+    border: 1px solid #000;
+    border-radius: 1.5625rem;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -196,7 +204,8 @@ const ProjectListArea2 = styled.div`
     position: relative;
     width: 56.25rem;
     height: 15.625rem;
-    border: 1px solid red;
+    border: 1px solid #000;
+    border-radius: 1.5625rem;
     margin: 1.5625rem auto;
     border-radius: 1.5625rem;
     display: flex;

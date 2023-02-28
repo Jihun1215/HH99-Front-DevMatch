@@ -85,7 +85,6 @@ function Home() {
         e.preventDefault();
 
         const imageFile = e.target.files[0];
-
         console.log('Before Compression: ', imageFile.size);
 
         const options = {
@@ -96,12 +95,16 @@ function Home() {
 
         try {
             const compressedFile = await imageCompression(imageFile, options);
+
             const formImg = new FormData();
             formImg.append('image', compressedFile);
             setFormformImagin(formImg);
+ 
 
             console.log('After Compression: ', compressedFile.size);
-            const fileReader = new FileReader();
+
+
+            const fileReader = new FileReader()
             // console.log(compressedFile);
             fileReader.readAsDataURL(compressedFile);
 
@@ -176,6 +179,7 @@ function Home() {
         setImageFile('')
         setModalOpen('none')
         alert('등록완료!')
+
         // /* value 확인하기 */
         // for (let value of formData.values()) {
         //     console.log(value);
