@@ -54,15 +54,6 @@ function Home() {
     })
 
 
-
-    // const PostProject = useMutation(PostProject, {
-    //     onSuccess: () => {
-    //         console.log('d')
-    //         // navigate("/");
-    //     },
-    // });
-
-
     const [backend, setBackend] = useState(1);
     const [frontend, setFrontend] = useState(1);
 
@@ -76,7 +67,6 @@ function Home() {
         setFrontend(front);
     };
 
-    // 이미지 로직
 
     // 이미지 state
     const [imageFile, setImageFile] = useState({
@@ -93,32 +83,24 @@ function Home() {
         e.preventDefault();
 
         const imageFile = e.target.files[0];
-        // console.log(imageFile)
 
-        // console.log('Before Compression: ', imageFile.size);
-        const formImg = new FormData();
-        formImg.append('image', imageFile);
-        setFormformImagin(formImg);
-
-        // /* key 확인하기 */
-        // for (let key of formImg.keys()) {
-        //     console.log(key);
-        // }
-
-        // /* value 확인하기 */
-        // for (let value of formImg.values()) {
-        //     console.log(value);
-        // }
-
+        console.log('Before Compression: ', imageFile.size);
 
         const options = {
             maxSizeMB: 1,
             maxWidthOrHeight: 1920,
             useWebWorker: true,
         };
+
         try {
             const compressedFile = await imageCompression(imageFile, options);
-            // console.log('After Compression: ', compressedFile.size);
+            const formImg = new FormData();
+            formImg.append('image', compressedFile);
+            setFormformImagin(formImg);
+
+
+
+            console.log('After Compression: ', compressedFile.size);
             const fileReader = new FileReader();
             // console.log(compressedFile);
             fileReader.readAsDataURL(compressedFile);
