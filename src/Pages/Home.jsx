@@ -12,7 +12,7 @@ import { ModalOutArea, ModalInArea } from '../Style/ModalStyle';
 import { useQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import { ListArea } from '../Style/MainpageStyle';
-import List from '../Components/List';
+import List from '../Components/List/ProjectList';
 import { PostProject, GetProject } from '../axios/api';
 import { useMutation } from "react-query";
 
@@ -343,32 +343,12 @@ function Home() {
                 </ModalOutArea>
             </Sidebar>
 
-            {/* 리스트보여줄것들  */}
+            {/* 리스트컴포넌트자리 */}
+            <List data={data} />
 
-            {/* 쿠키가 있으면 블러 처리 안하고 보여주고 있으면 블러 처리하고 리스트 보여주기 */}
-            {getToken === undefined ? (
-                // 쿠키 없을떄 보여줄 것들
-                <ListArea
-                    style={{
-                        textAlign: 'center',
-                    }}
-                >
-                    <h2>토큰없음 </h2>
-                    <List />
-                </ListArea>
-            )
-                :
-                (
-                    // 쿠키가 있을때 보여줄 것들
-                    <ListArea
-                        style={{
-                            textAlign: 'center',
-                        }}
-                    >
-                        <h2>토큰 있음</h2>
-                        <List />
-                    </ListArea>
-                )}
+
+
+
         </Layout>
     );
 }

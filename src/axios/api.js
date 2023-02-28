@@ -3,21 +3,19 @@ import axios from 'axios';
 
 
 // axios 요청이 들어가는 모든 모듈 
-
-
 export const api = axios.create({
     baseURL: process.env.REACT_APP_SERVER_URL,
 });
+
 
 // 전체프로젝트리스틀 가져오는 함수
 export const GetProject = async ({ token }) => {
     // console.log(token)
     try {
-        // api/ 로 하면 404 api/project로 하면 500 토큰을 빼면 403 하... 
-        const response = await api.get('api/project', {
-            headers: {
-                Authorization: token
-            },
+        // api/로 하면 404 api/project로 하면 500 토큰을 빼면 403 하... 
+        // http://3.36.124.131/api/project
+        const response = await api.get('/api/project', {
+            headers: { Authorization: token },
         });
         console.log(response)
         return response
