@@ -2,10 +2,7 @@ import React from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import MainLogo from '../Style/Img/MainLogo.png'
-import MainLogo2 from '../Style/Img/MainLogo2.png'
 import Cookies from 'js-cookie'
-
-
 
 
 function Header() {
@@ -14,6 +11,19 @@ function Header() {
     const GoToHome = () => { navigate('/') }
     const MoveToLoginup = () => { navigate('/login') }
     const getToken = Cookies.get('token')
+
+
+    const LOGOUT = () => {
+        const isTrue = window.confirm("로그아웃 하시려면 Yes를 눌러주세요")
+        if (isTrue === true) {
+            Cookies.remove('token');
+            sessionStorage.removeItem('userInfo')
+            alert('로그아웃')
+            MoveToLoginup()
+        }
+    }
+
+
     return (
         <HeaderSize >
             <HeaderNavbar>
@@ -28,7 +38,7 @@ function Header() {
 
                     {/* 토큰이 있으면 표시하기   */}
                     {
-                        getToken === undefined ? null : <li>LogOut</li>
+                        getToken === undefined ? null : <li onClick={LOGOUT}>LogOut</li>
                     }
                 </ul>
             </HeaderNavbar>
@@ -81,6 +91,7 @@ const HeaderNavbar = styled.div`
         text-decoration: none;
         color: black;
         position: relative;
+        cursor: pointer;
     }
     > a {
         text-decoration: none;

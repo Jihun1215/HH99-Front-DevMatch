@@ -27,6 +27,8 @@ function Home() {
     )
     console.log(data)
 
+   
+
 
 
     const [modalOpen, setModalOpen] = useState('none');
@@ -97,8 +99,6 @@ function Home() {
             const formImg = new FormData();
             formImg.append('image', compressedFile);
             setFormformImagin(formImg);
-
-
 
             console.log('After Compression: ', compressedFile.size);
             const fileReader = new FileReader();
