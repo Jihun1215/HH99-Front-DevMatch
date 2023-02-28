@@ -3,13 +3,19 @@ import styled from 'styled-components';
 import { StContaitner } from '../Detail/Details';
 import Input from '../Components/Input';
 import Btn from '../Components/Button';
-import { useState } from 'react';
+import useInput from '../Hooks/useInput';
+import axios from 'axios';
 
 function Mypages() {
-    const [selectedPart, setSelectedPart] = useState('');
+    //마이페이지에서 새롭게 추가할 항목들
+    const [selectedPart, selectPartHandler, setSelectedPart] = useInput('');
+    const [introduction, introductionEditButton, setIntroduction] = useInput('');
 
-    const selectPartHandler = (e) => {
-        setSelectedPart(e.target.value);
+    //세션 스토리지에서 받아올 항목들
+    const [nickName, nickNameEditButton, setNickName] = useInput('');
+
+    const editSelectedPart = async () => {
+        await axios.put('');
     };
 
     return (
@@ -22,7 +28,9 @@ function Mypages() {
                 <StInfoLayout>
                     <StInfoBox>NickName</StInfoBox>{' '}
                     <Input type="text" style={{ border: 'none', marginRight: '20px' }} me />
-                    <Btn me>변경</Btn>
+                    <Btn onClick={nickNameEditButton} me>
+                        변경
+                    </Btn>
                 </StInfoLayout>
 
                 <StInfoLayout>
@@ -54,7 +62,9 @@ function Mypages() {
                     {' '}
                     <StInfoBox>Introduce</StInfoBox>
                     <StTextArea type="text" />
-                    <Btn me>변경</Btn>
+                    <Btn me onClick={introductionEditButton}>
+                        변경
+                    </Btn>
                 </StInfoLayout>
             </StContaitner>
         </div>
