@@ -13,14 +13,21 @@ import { useQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import { ListArea } from '../Style/MainpageStyle';
 import List from '../Components/List';
-import { PostProject } from '../axios/api';
+import { PostProject, GetProject } from '../axios/api';
 import { useMutation } from "react-query";
-import { type } from '@testing-library/user-event/dist/type';
 
 
 
 function Home() {
+
     const getToken = Cookies.get('token');
+
+    const { isLoading, isError, data } = useQuery("project", () =>
+        GetProject({ token: getToken })
+    )
+    console.log(data)
+
+
 
     const [modalOpen, setModalOpen] = useState('none');
     const openModal = (e) =>
@@ -364,20 +371,22 @@ function Home() {
                         textAlign: 'center',
                     }}
                 >
-                    리스트블러처리
-                    <div>dd</div>
+                    <h2>토큰없음 </h2>
                     <List />
                 </ListArea>
-            ) : (
-                // 쿠키가 있을때 보여줄 것들
-                <ListArea
-                    style={{
-                        textAlign: 'center',
-                    }}
-                >
-                    리스트
-                </ListArea>
-            )}
+            )
+                :
+                (
+                    // 쿠키가 있을때 보여줄 것들
+                    <ListArea
+                        style={{
+                            textAlign: 'center',
+                        }}
+                    >
+                        <h2>토큰 있음</h2>
+                        <List />
+                    </ListArea>
+                )}
         </Layout>
     );
 }

@@ -54,8 +54,7 @@ function Login() {
         part,
         introduction
       }
-
-      console.log(id, username, password, nickname)
+      // console.log(id, username, password, nickname)
       sessionStorage.setItem("userInfo", JSON.stringify(userInto));
       console.log(localStorage.getItem("userInfo"))
 

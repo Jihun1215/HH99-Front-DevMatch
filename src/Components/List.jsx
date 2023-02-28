@@ -1,9 +1,14 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 
 // 프로젝트 리스트 보여줄것들 
 function List() {
+    // 첫번째인자 이름 
+
+
+
     return (
         <ProjectList>
 
@@ -54,6 +59,10 @@ const ProjectList = styled.div`
     align-items: center;
     justify-content: center;
     gap: 0 1.25rem;
+
+
+
+    
 `;
 const ProjectListImgBox = styled.div`
     width: 25%;
