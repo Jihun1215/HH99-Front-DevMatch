@@ -3,11 +3,9 @@ import styled from 'styled-components';
 import Btn from '../Components/Button';
 import Input from '../Components/Input';
 import Sidebar from '../Components/Sidebar';
-import { ModalOutArea, ModalInArea } from '../Style/ModalStyle';
 import useInput from '../Hooks/useInput';
 import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import Modal from './Modal';
 function Details() {
     //댓글 작성시 닉네임 받아야함
