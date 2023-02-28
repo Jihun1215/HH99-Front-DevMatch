@@ -7,8 +7,12 @@ import useInput from '../Hooks/useInput';
 import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Modal from './Modal';
+import Cookies from 'js-cookie';
+import { useParams } from 'react-router-dom';
+
 function Details() {
-    //댓글 작성시 닉네임 받아야함
+    const params = useParams();
+    const getToken = Cookies.get('token');
 
     //api 부분
 
@@ -16,43 +20,53 @@ function Details() {
     const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/user/2`).then((response) => {
+        axios.get(`api/user/${params.id}`).then((response) => {
             setCurrentUser(response.data);
         });
-    }, []);
+        getDetailProject();
+    }, [params]);
 
     //프로젝트 조회
 
     const getDetailProject = async () => {
-        const response = await axios.get('http://localhost:4000/project/1');
-        return response.data;
+        try {
+            const response = await axios.get(`api/${params.id}`, {
+                headers: {
+                    Authorization: getToken,
+                },
+            });
+            console.log('response', response);
+            return response;
+        } catch (error) {
+            console.log('GetProjectError: ', error);
+        }
     };
 
     //댓글 조회
     const getDetailComment = async () => {
-        const response = await axios.get('http://localhost:4000/comment');
+        const response = await axios.get(`api/comment`);
         return response.data;
     };
 
     //댓글 추가
     const addComment = async (newCommnet) => {
-        await axios.post('http://localhost:4000/comment', newCommnet);
+        await axios.post(`api/comment`, newCommnet);
     };
 
     // 댓글 수정
     const editComment = async (id) => {
-        await axios.put(`http://localhost:4000/comment/${id}`, {
+        await axios.put(`api/comment/${id}`, {
             comment: editCmt,
         });
     };
 
     // 댓글 삭제
     const deleteComment = async (id) => {
-        await axios.delete(`http://localhost:4000/comment/${id}`);
+        await axios.delete(`api/comment/${id}`);
     };
 
     const addLikeCount = async (newlike) => {
-        await axios.post(`http://localhost:4000/project/1`, newlike);
+        await axios.post(`api/project/like/${params.id}`, newlike);
     };
 
     //리액트 쿼리 부분
