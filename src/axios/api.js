@@ -17,12 +17,12 @@ export const GetProject = async ({ token }) => {
         const response = await api.get('/api/project', {
             headers: { Authorization: token },
         });
-        console.log(response)
-        return response
+        // console.log(response)
+        return response.data
 
     }
     catch (error) {
-        console.log("GetProjectError: ", error)
+        console.log("전체프로젝트 조회함수: ", error)
     }
 }
 

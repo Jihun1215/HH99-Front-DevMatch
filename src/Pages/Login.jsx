@@ -62,7 +62,7 @@ function Login() {
       // console.log(userinfo)
       const { token } = response.data;
       const Token = response.headers.authorization
- 
+
       // hearder에 저장
       axios.defaults.headers.common['Authorization'] = `${Token}`;
 
@@ -72,7 +72,8 @@ function Login() {
 
     }
     catch (error) {
-      alert(error.response.data.result)
+      console.log(error)
+      // alert(error.response.data.result)
     }
 
 

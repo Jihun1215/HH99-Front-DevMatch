@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useNavigate } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../Components/Layout';
 import styled from 'styled-components';
 import Btn from '../Components/Button';
@@ -12,7 +12,7 @@ import { ModalOutArea, ModalInArea } from '../Style/ModalStyle';
 import { useQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import { ListArea } from '../Style/MainpageStyle';
-import List from '../Components/List/ProjectList';
+import ProjectList from '../Components/List/ProjectList';
 import { PostProject, GetProject } from '../axios/api';
 import { useMutation } from "react-query";
 
@@ -25,7 +25,7 @@ function Home() {
     const { isLoading, isError, data } = useQuery("project", () =>
         GetProject({ token: getToken })
     )
-    console.log(data)
+    // console.log(data)
 
 
 
@@ -162,13 +162,25 @@ function Home() {
         formData.append('backEndMember', backend);
         formData.append('frontEndMember', frontend);
         // formData.append('image', formImagin);
+
         for (const keyValue of formImagin) {
             formData.append(keyValue[0], keyValue[1]);
         }
+
+        setTitle('');
+        setBody('');
+        setSelectedFront('');
+        setSelectedBack('');
+        setBackend('');
+        setFrontend('')
+        setImageFile('')
+        setModalOpen('none')
+        alert('등록완료!')
         // /* value 확인하기 */
         // for (let value of formData.values()) {
         //     console.log(value);
         // }
+
         const GETTOKEN = Cookies.get('token');
         console.log(GETTOKEN)
         ProjectPost.mutate({ token: GETTOKEN, data: formData });
@@ -344,7 +356,7 @@ function Home() {
             </Sidebar>
 
             {/* 리스트컴포넌트자리 */}
-            <List data={data} />
+            <ProjectList data={data} />
 
 
 
