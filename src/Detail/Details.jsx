@@ -8,7 +8,7 @@ import useInput from '../Hooks/useInput';
 import axios from 'axios';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
-
+import Modal from './Modal';
 function Details() {
     //댓글 작성시 닉네임 받아야함
 
@@ -172,29 +172,10 @@ function Details() {
         });
     };
 
-    const [modalOpen, setModalOpen] = useState('none');
-    const openModal = (e) =>
-        e.target.name === 'modal' ? setModalOpen('block') : console.log('Error');
-    const closeModal = (e) =>
-        e.target.name === 'modal' ? setModalOpen('none') : console.log('Error');
-
     return (
         <>
             <Sidebar>
-                <Btn name={'modal'} onClick={openModal} sideBtn>
-                    <AiFillEdit />
-                </Btn>
-                <Btn sideBtn>
-                    <AiFillDelete />
-                </Btn>
-
-                <ModalOutArea isOpen={modalOpen}>
-                    <ModalInArea isOpen={modalOpen}>
-                        <Btn name={'modal'} onClick={closeModal}>
-                            close
-                        </Btn>
-                    </ModalInArea>
-                </ModalOutArea>
+                <Modal />
             </Sidebar>
 
             <StContaitner>
