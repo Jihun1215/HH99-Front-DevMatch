@@ -27,7 +27,7 @@ function Home() {
     )
     console.log(data)
 
-   
+
 
 
 

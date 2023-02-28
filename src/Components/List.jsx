@@ -1,13 +1,9 @@
 import React from 'react'
-
 import styled from 'styled-components'
 
 
 // 프로젝트 리스트 보여줄것들 
 function List() {
-    // 첫번째인자 이름 
-
-
 
     return (
         <ProjectList>

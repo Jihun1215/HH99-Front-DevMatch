@@ -62,7 +62,7 @@ function Login() {
       // console.log(userinfo)
       const { token } = response.data;
       const Token = response.headers.authorization
-
+ 
       // hearder에 저장
       axios.defaults.headers.common['Authorization'] = `${Token}`;
 
