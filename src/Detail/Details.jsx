@@ -41,47 +41,79 @@ function Details() {
     };
 
     //댓글 조회
-    // const getDetailComment = async () => {
-    //     try {
-    //         const response = await api.get(`api/comment/${params.id}`, {
-    //             headers: {
-    //                 Authorization: getToken,
-    //             },
-    //         });
-    //         return response.data;
-    //     } catch (error) {
-    //         console.log('getCommentError:', error);
-    //     }
-    // };
-
-    //댓글 추가
-    const addComment = async (newCommnet) => {
+    const getDetailComment = async () => {
         try {
-            const response = await api.post(`api/comment/${params.id}`, newCommnet, {
+            const response = await api.get(`api/comment/${params.id}`, {
                 headers: {
                     Authorization: getToken,
                 },
             });
             return response.data;
         } catch (error) {
+            console.log('getCommentError:', error);
+        }
+    };
+
+    //댓글 추가
+    const addComment = async (newCommnet) => {
+        try {
+            await api.post(`api/comment/${params.id}`, newCommnet, {
+                headers: {
+                    Authorization: getToken,
+                },
+            });
+        } catch (error) {
             console.log('addCommentError:', error);
         }
     };
 
     // 댓글 수정
-    const editComment = async (id) => {
-        await api.put(`api/comment/${id}`, {
-            comment: editCmt,
-        });
+    const editComment = async (commentId) => {
+        try {
+            await api.put(
+                `api/comment/${commentId}`,
+                {
+                    content: editCmt,
+                },
+                {
+                    headers: {
+                        Authorization: getToken,
+                    },
+                }
+            );
+        } catch (error) {
+            console.log('editCommentError:', error);
+        }
     };
 
     // 댓글 삭제
-    const deleteComment = async (id) => {
-        await api.delete(`api/comment/${id}`);
+    const deleteComment = async (commentId) => {
+        try {
+            await api.delete(`api/comment/${commentId}`, {
+                headers: {
+                    Authorization: getToken,
+                },
+            });
+        } catch (error) {
+            console.log('deleteCommentError:', error);
+        }
     };
 
-    const addLikeCount = async (newlike) => {
-        await api.post(`api/project/like/${params.id}`, newlike);
+    // 좋아요 카운트
+    const addLikeCount = async () => {
+        try {
+            await api.post(
+                `api/project/like/${params.id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: getToken,
+                    },
+                }
+            );
+        } catch (error) {
+            console.log('addLikeCountError:', error);
+        }
     };
 
     //리액트 쿼리 부분
@@ -90,7 +122,7 @@ function Details() {
     const projectData = useQuery('project', getDetailProject);
     console.log('projectdata', projectData);
     //댓글 데이터
-    const commentData = useQuery('comment', addComment);
+    const commentData = useQuery('comment', getDetailComment);
     console.log('commentData', commentData);
 
     const queryclient = useQueryClient();
@@ -132,7 +164,7 @@ function Details() {
     // 임시 좋아요 카운트 버튼 총 카운트 보내야함
     // 좋아요는 유저 한명당 1회만 가능한지?
     const likeCountButtonHandler = () => {
-        mutation4.mutate({ likeCount: +1 });
+        addLikeCount();
     };
 
     //댓글 추가 버튼
@@ -150,7 +182,7 @@ function Details() {
     //댓글 수정버튼 클릭시 수정 인풋창 출력
     //data는 댓글 리스트임
     const onShowInputHandler = (id) => {
-        commentData.data.find((item) => {
+        commentData.data.result.find((item) => {
             if (item.id === id) {
                 if (item.username === currentUserName) {
                     setEditCmt(item.comment);
@@ -186,14 +218,23 @@ function Details() {
 
     //댓글 삭제 버튼
     const deleteButtonHandler = (id) => {
-        if (commentData.username === currentUserName) {
-            mutation3.mutate(id);
-            setShowInput(!showInput);
-            setShowCancel(!showCancel);
-            setShowEdit(!showEdit);
-        } else {
-            alert('작성자만 삭제 가능합니다');
-        }
+        commentData.data.result.find((item) => {
+            if (item.id === id) {
+                if (item.username === currentUserName) {
+                    if (window.confirm('댓글을 삭제 하시겠습니까?') === true) {
+                        mutation3.mutate(id);
+                        setShowInput(!showInput);
+                        setShowCancel(!showCancel);
+                        setShowEdit(!showEdit);
+                        alert('삭제 되었습니다.');
+                    } else {
+                        alert('취소 되었습니다.');
+                    }
+                } else {
+                    alert('작성자만 삭제 가능합니다');
+                }
+            }
+        });
     };
 
     return (
@@ -204,21 +245,23 @@ function Details() {
             {projectData.isLoading === false && (
                 <StContaitner>
                     <StImageBox>
-                        <img src={projectData.data.result?.imageUrl} />
+                        <img src={projectData.data?.result.projectResponseDto?.imageUrl} />
                     </StImageBox>
                     <div>
                         <StRecruitList>
-                            <h3>{projectData.data.result?.title}</h3>
+                            <h3>{projectData.data?.result.projectResponseDto?.title}</h3>
                         </StRecruitList>
                         <StRecruitList>
                             <StMiniLayout>
                                 <h3>Backend</h3>
                             </StMiniLayout>
                             <StMiniLayout>
-                                <h3>{projectData.data.result?.backEndStack}</h3>
+                                <h3>{projectData.data?.result.projectResponseDto?.backEndStack}</h3>
                             </StMiniLayout>
                             <StMiniLayout>
-                                <h3>{projectData.data.result?.backendMember}</h3>
+                                <h3>
+                                    {projectData.data?.result.projectResponseDto?.backendMember}
+                                </h3>
                             </StMiniLayout>
                         </StRecruitList>
                         <StRecruitList>
@@ -226,21 +269,29 @@ function Details() {
                                 <h3>Frontend</h3>
                             </StMiniLayout>
                             <StMiniLayout>
-                                <h3>{projectData.data.result?.frontEndStack}</h3>
+                                <h3>
+                                    {projectData.data?.result.projectResponseDto?.frontEndStack}
+                                </h3>
                             </StMiniLayout>
                             <StMiniLayout>
-                                <h3>{projectData.data.result?.frontendMember}</h3>
+                                <h3>
+                                    {projectData.data?.result.projectResponseDto?.frontendMember}
+                                </h3>
                             </StMiniLayout>
                         </StRecruitList>
                     </div>
                     <StDetailLayout>
                         <h3>Detail</h3>
                     </StDetailLayout>
-                    <StLikeNumber>{projectData.data.result?.likeCount}</StLikeNumber>
+                    <StLikeNumber>
+                        {projectData.data?.result.projectResponseDto?.likeCount}
+                    </StLikeNumber>
                     <Btn me onClick={likeCountButtonHandler}>
                         LIKE❤️
                     </Btn>
-                    <StDetailBox>{projectData.data.result?.content}</StDetailBox>
+                    <StDetailBox>
+                        {projectData.data?.result.projectResponseDto?.content}
+                    </StDetailBox>
 
                     <StCommentLayout>
                         <StMiniLayout>
@@ -259,7 +310,7 @@ function Details() {
                             add
                         </Btn>
                     </StCommentLayout>
-                    {commentData.data?.map((item) => {
+                    {commentData.data?.result.map((item) => {
                         return (
                             <div key={item.id}>
                                 <StCommentBox>
@@ -277,7 +328,7 @@ function Details() {
                                                 style={{ color: '#F38BA0', border: 'none' }}
                                             />
                                         ) : (
-                                            <h4>{item.comment} </h4>
+                                            <h4>{item.content} </h4>
                                         )}
                                     </StCommentListBox>
                                     <StMiniLayout style={{ gap: '5px' }}>
