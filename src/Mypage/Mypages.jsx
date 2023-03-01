@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { StContaitner } from '../Detail/Details';
 import Input from '../Components/Input';
@@ -12,23 +12,50 @@ function Mypages() {
     const [introduction, introductionEditButton, setIntroduction] = useInput('');
 
     //세션 스토리지에서 받아올 항목들
-    const [nickName, nickNameEditButton, setNickName] = useInput('');
+    // const [nickName, nickNameEditButton, setNickName] = useInput('');
+    const info = sessionStorage.getItem("userInfo")
+    const USERINFO = JSON.parse(info)
+    console.log(USERINFO)
 
+    const [nickName, setNickName] = useState(`${USERINFO.nickname}`)
+    // 
+    const nickNameEditHandler = (e) => {
+        setNickName(e.target.value)
+    }
+
+
+    // 닉네임수정 버튼
+    const EditNickNameChangeHandler = () => {
+        // 정규식 달기
+    }
+
+    // 파트 수정 버튼
     const editSelectedPart = async () => {
+        // selectedPart 이값을 보내야 됨 
         await axios.put('');
     };
+
+    const EditIntroductionChangeHandler = () =>{
+        
+    }
+
 
     return (
         <div>
             <StContaitner>
                 <StInfoLayout>
                     <StInfoBox>ID</StInfoBox>
-                    test1234
+                    {USERINFO.username}
                 </StInfoLayout>
                 <StInfoLayout>
                     <StInfoBox>NickName</StInfoBox>{' '}
-                    <Input type="text" style={{ border: 'none', marginRight: '20px' }} me />
-                    <Btn onClick={nickNameEditButton} me>
+                    <Input
+                        type="text"
+                        style={{ border: 'none', marginRight: '20px' }}
+                        value={nickName}
+                        onChange={nickNameEditHandler}
+                        me />
+                    <Btn onClick={EditNickNameChangeHandler} me>
                         변경
                     </Btn>
                 </StInfoLayout>

@@ -52,6 +52,7 @@ function Home() {
     const ProjectPost = useMutation(PostProject, {
         onSuccess: () => {
             console.log('성공')
+            
         }
     })
 
