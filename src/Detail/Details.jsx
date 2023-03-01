@@ -4,12 +4,11 @@ import Btn from '../Components/Button';
 import Input from '../Components/Input';
 import Sidebar from '../Components/Sidebar';
 import useInput from '../Hooks/useInput';
-import { isError, useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Modal from './Modal';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
 import { api } from '../axios/api';
-import { getDetailProject, getDetailComment, addComment } from '../axios/api';
 
 function Details() {
     const params = useParams();
@@ -90,9 +89,9 @@ function Details() {
     };
 
     // 좋아요 카운트
-    const addLikeCount = async () => {
+    const addLikeCount = async ({}) => {
         try {
-            await api.post(
+            const response = await api.post(
                 `api/project/like/${params.id}`,
                 {},
                 {
@@ -101,6 +100,9 @@ function Details() {
                     },
                 }
             );
+            if (!response.data.result.like) {
+                alert('좋아요가 취소되었습니다.');
+            }
         } catch (error) {
             console.log('addLikeCountError:', error);
         }
@@ -110,10 +112,8 @@ function Details() {
 
     //프로젝트 데이터
     const projectData = useQuery('detailProject', getDetailProject);
-    console.log('projectdata', projectData);
     //댓글 데이터
     const commentData = useQuery('comment', getDetailComment);
-    console.log('commentData', commentData);
 
     const queryclient = useQueryClient();
     const mutation = useMutation(addComment, {
@@ -136,7 +136,7 @@ function Details() {
 
     const mutation4 = useMutation(addLikeCount, {
         onSuccess: () => {
-            queryclient.invalidateQueries('like');
+            queryclient.invalidateQueries('detailProject');
         },
     });
 
@@ -145,7 +145,6 @@ function Details() {
     const [editCmt, onEditCmt, setEditCmt] = useInput('');
     const [showInput, setShowInput] = useState(false);
     const [showCancel, setShowCancel] = useState(false);
-    const [likeCount, setLikeCount] = useState(0);
     const [showEdit, setShowEdit] = useState(false);
 
     editCommentFormData.append('content', editCmt);
@@ -153,11 +152,9 @@ function Details() {
     formData.append('content', comment);
 
     // 임시 좋아요 카운트 버튼 총 카운트 보내야함
-    // 좋아요는 유저 한명당 1회만 가능한지?
     const likeCountButtonHandler = () => {
         addLikeCount();
-        console.log(projectData.data?.result?.like);
-        setLikeCount(projectData.data?.result?.projectResponseDto?.likeCount);
+        mutation4.mutate({});
     };
 
     //댓글 추가 버튼
@@ -262,7 +259,7 @@ function Details() {
                             </StMiniLayout>
                             <StMiniLayout>
                                 <h3>
-                                    {projectData.data?.result?.projectResponseDto?.backendMember}
+                                    {projectData.data?.result?.projectResponseDto?.backEndMember}
                                 </h3>
                             </StMiniLayout>
                         </StRecruitList>
@@ -277,7 +274,7 @@ function Details() {
                             </StMiniLayout>
                             <StMiniLayout>
                                 <h3>
-                                    {projectData.data?.result?.projectResponseDto?.frontendMember}
+                                    {projectData.data?.result?.projectResponseDto?.frontEndMember}
                                 </h3>
                             </StMiniLayout>
                         </StRecruitList>
@@ -446,7 +443,7 @@ const StDetailBox = styled.div`
     width: 47.5rem;
     min-height: 12.5rem;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
-    padding: 3px;
+    padding: 20px;
     margin-top: 5px;
     margin-bottom: 20px;
 `;
