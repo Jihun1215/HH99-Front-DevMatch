@@ -21,7 +21,7 @@ function Modal() {
     const sessionUserInfo = sessionStorage.getItem('userInfo');
     const userInfo = JSON.parse(sessionUserInfo);
     const currentUserName = userInfo.username;
-    const projectList = useQuery('GETPROJECT', () => GetProject({ token: getToken }));
+    // const projectList = useQuery('GETPROJECT', () => GetProject({ token: getToken }));
 
     //선택 프로젝트 조회
     const getDetailProject = async () => {
