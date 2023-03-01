@@ -71,16 +71,14 @@ const HeaderNavbar = styled.div`
     > div {
         width: 7.5rem;
         cursor: pointer;
-    }
+    };
     > ul {
         list-style: none;
         display: flex;
         gap: 1.875rem;
         position: relative;
     };
-   
-
-
+    
     > li {
         list-style: none;
         text-decoration: none;
@@ -116,10 +114,14 @@ const StyledLink = styled(Link)`
     text-align: center;
     text-decoration: none;
     transition:  all 0.25 ease-in-out;
+    &:hover{
+        color: #5c7cfa;
+    }
     &:focus {
     top: -5px;
     cursor: pointer;
     transition:all 1s ease;
+    
     }
     &:active {
     filter: brightness(50%);

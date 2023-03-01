@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Layout from '../Components/Layout';
 import styled from 'styled-components';
 import Btn from '../Components/Button';
@@ -9,9 +9,8 @@ import useInput from '../Hooks/useInput';
 import { MdTitle } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
 import { ModalOutArea, ModalInArea } from '../Style/ModalStyle';
-import { useQuery, QueryClinet, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import Cookies from 'js-cookie';
-import { ListArea } from '../Style/MainpageStyle';
 import ProjectList from '../Components/List/ProjectList';
 import { PostProject, GetProject } from '../axios/api';
 import { useMutation } from "react-query";
@@ -25,12 +24,6 @@ function Home() {
         GetProject({ token: getToken })
     )
 
-
-    // console.log(data)
-
-    // useEffect(() => {
-    //     window.location.reload()
-    // }, [data])
 
 
 
@@ -90,7 +83,7 @@ function Home() {
         e.preventDefault();
 
         const imageFile = e.target.files[0];
-        console.log('Before Compression: ', imageFile.size);
+        // console.log('Before Compression: ', imageFile.size);
 
         const options = {
             maxSizeMB: 1,
@@ -106,7 +99,7 @@ function Home() {
             setFormformImagin(formImg);
 
 
-            console.log('After Compression: ', compressedFile.size);
+            // console.log('After Compression: ', compressedFile.size);
 
 
             const fileReader = new FileReader()

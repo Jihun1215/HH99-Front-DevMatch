@@ -10,16 +10,11 @@ export const api = axios.create({
 
 // 전체프로젝트리스틀 가져오는 함수
 export const GetProject = async ({ token }) => {
-    // console.log(token)
     try {
-        // api/로 하면 404 api/project로 하면 500 토큰을 빼면 403 하... 
-        // http://3.36.124.131/api/project
         const response = await api.get('/api/project', {
             headers: { Authorization: token },
         });
-        // console.log(response)
         return response.data
-
     }
     catch (error) {
         console.log("전체프로젝트 조회함수: ", error)
@@ -30,23 +25,38 @@ export const GetProject = async ({ token }) => {
 export const PostProject = async ({ token, data }) => {
     // console.log(token, data)
     try {
-        const response = await api.post('/api/project', data, {
+        await api.post('/api/project', data, {
             headers: {
                 Authorization: token,
                 "Content-Type": "multipart/form-data",
             },
         }
         );
-        console.log(response.data)
     }
     catch (error) {
         console.log("PostProjectError: ", error)
     }
 };
 
-export const EditMyInfo = async ({ Data, token }) => {
+
+
+// 전체 유저를 조회하는 함수
+export const AllUserInfo = async () => {
     try {
-        const response = await api.put(`api/user/${Data.id}`, { nickname: Data.nickName, introduction: Data.introduction, part: Data.part },
+        const response = await api.get('api/user/info',
+        )
+        // console.log(response)
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+// 내정보 수정 함수
+export const EditMyInfo = async ({ Data2, token }) => {
+    try {
+        const response = await api.put(`api/user/${Data2.id}`, { nickname: Data2.nickName, introduction: Data2.introduction, part: Data2.part },
             {
                 headers: {
                     Authorization: token,

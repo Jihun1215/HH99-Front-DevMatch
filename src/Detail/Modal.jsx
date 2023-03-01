@@ -11,7 +11,6 @@ import imageCompression from 'browser-image-compression';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../axios/api';
-import { GetProject } from '../axios/api';
 
 function Modal() {
     const params = useParams();

@@ -44,15 +44,10 @@ function Login() {
       // console.log(response)
       console.log(response.data.result)
 
-      const { id, username, nickname, introduction, part } = response.data.result
+      const { id } = response.data.result
 
       const userInto = {
         id,
-        username,
-        nickname,
-        introduction,
-        part,
-        introduction
       }
       // console.log(id, username, password, nickname)
       sessionStorage.setItem("userInfo", JSON.stringify(userInto));

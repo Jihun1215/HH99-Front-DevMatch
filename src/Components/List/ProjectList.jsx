@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ListArea } from '../../Style/MainpageStyle'
 import Cookies from 'js-cookie'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 // 프로젝트 리스트 보여줄것들 
@@ -9,10 +10,16 @@ function ProjectList({ isLoading, data }) {
     const ListView = data
     // console.log(ListView)
     const getToken = Cookies.get('token');
-    // const [data, setData] = useState([...]); // 전체 데이터
-    {/* {projectDate.isLoading == false && (
 
-                         )} */}
+
+
+    //  상세페이지 만들기 위해
+    const navigate = useNavigate();
+    const onClickDeatilPage = (id) => {
+        navigate(`/project/${id}`)
+    }
+
+
     // 페이지네이션을 만들기 위한 로직 
     return (
         <ListArea>
@@ -52,7 +59,7 @@ function ProjectList({ isLoading, data }) {
                                     <ProjectListInto>
                                         <div>좋아요수: {item.likeCount}</div>
                                         <div>작성자 : {item.username}</div>
-                                        <GoToDeatil to={`/project/${item.id}`}>상세보기</GoToDeatil>
+                                        <GoToDeatil onClick={() => { onClickDeatilPage(item.id) }}>상세보기</GoToDeatil>
                                     </ProjectListInto>
 
                                 </ProjectListTextBox>
@@ -158,7 +165,7 @@ const ProjectListInto = styled.div`
             `;
 
 
-const GoToDeatil = styled(Link)`
+const GoToDeatil = styled.div`
             color: #000;
             font-weight: 800;
             text-decoration: none;

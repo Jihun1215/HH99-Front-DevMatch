@@ -26,8 +26,8 @@ const LayoutSize = styled.div`
     justify-content: center;
 `;
 const LayourArea = styled.div`
-    width: 81.25rem;
-    height: 52rem;
+     width: 100vw;
+     height: 100vh;
     background: #EDF2FF;
     border-radius: 1.25rem;
 `
