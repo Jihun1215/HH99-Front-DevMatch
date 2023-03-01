@@ -44,21 +44,30 @@ export const PostProject = async ({ token, data }) => {
     }
 };
 
-// 상세페이지 가는 로직 받아야할값 현재누른것에 대한 Id값 과 토큰값 
-// export const DetailProject = async ({ id, token }) => {
+export const EditMyInfo = async ({ Data, token }) => {
+    try {
+        const response = await api.put(`api/user/${Data.id}`, { nickname: Data.nickName, introduction: Data.introduction, part: Data.part },
+            {
+                headers: {
+                    Authorization: token,
+                },
+            }
+        );
+        return response.data
 
-//     try {
-//         const response = await api.get(`api/project/${id}`, {
-//             headers: {
-//                 Authorization: token,
-//                 "Content-Type": "multipart/form-data",
-//             },
-//         });
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
+        // 토큰이랑 바꿀값 데이터로 보내기
+        // const response = await api.put(`api/user/${USERINFO.id}`, { nickname: nickName, introduction: introduction, part: selectedPart },
+        //     {
+        //         headers: { Authorization: getToken },
+        //     }
+        // )
+        // return response.data
+    } catch (error) {
+        console.log(error)
+    }
+    // 닉네임이나, selectedPart, introduction 값이들어가야 한다 
+    // if (selectedPart == "")
+}
 
 
 

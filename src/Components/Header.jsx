@@ -67,7 +67,7 @@ const HeaderNavbar = styled.div`
     align-items: center;
     justify-content: space-between;
     font-size: 1.25rem;
-    
+    /* transition: all 1s ease; */
     > div {
         width: 7.5rem;
         cursor: pointer;
@@ -78,21 +78,17 @@ const HeaderNavbar = styled.div`
         gap: 1.875rem;
         position: relative;
     };
-    > Link {
-        border-radius: 20px;
-        list-style: none;
-        text-decoration: none;
-        color: red;
-        position: relative;
-    };
+   
+
+
     > li {
-        border-radius: 20px;
         list-style: none;
         text-decoration: none;
         color: black;
         position: relative;
         cursor: pointer;
     }
+   
     > a {
         text-decoration: none;
         color: #000;
@@ -120,11 +116,10 @@ const StyledLink = styled(Link)`
     text-align: center;
     text-decoration: none;
     transition:  all 0.25 ease-in-out;
-    &:hover {
+    &:focus {
     top: -5px;
-    border-bottom: 1px solid #000;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition:all 1s ease;
     }
     &:active {
     filter: brightness(50%);

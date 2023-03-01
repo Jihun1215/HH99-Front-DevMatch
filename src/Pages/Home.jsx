@@ -33,9 +33,9 @@ function Home() {
 
     const [modalOpen, setModalOpen] = useState('none');
     const openModal = (e) =>
-        e.target.name === 'modal' ? setModalOpen('block') : console.log('Error');
+        e.target.name === 'modal' ? setModalOpen('block') : setModalOpen('block');
     const closeModal = (e) =>
-        e.target.name === 'modal' ? setModalOpen('none') : console.log('Error');
+        e.target.name === 'modal' ? setModalOpen('none') : setModalOpen('block');
 
     // UseInput 훅 초기화를 위해 set를 같이 가져가옴
     const [title, onChangeTitleHandler, setTitle] = useInput();
@@ -52,7 +52,7 @@ function Home() {
     const ProjectPost = useMutation(PostProject, {
         onSuccess: () => {
             console.log('성공')
-            
+
         }
     })
 
@@ -100,7 +100,7 @@ function Home() {
             const formImg = new FormData();
             formImg.append('image', compressedFile);
             setFormformImagin(formImg);
- 
+
 
             console.log('After Compression: ', compressedFile.size);
 
@@ -142,6 +142,7 @@ function Home() {
         setSelectedFront(e.target.value);
     };
 
+
     // React-Query로 데이터 받아오기
     // const { isLoading, isError, data } = useQuery("list", GetList)
 
@@ -151,7 +152,6 @@ function Home() {
     // if (isError) {
     //     return <div>에러!!</div>
     // }
-
 
 
     const onSonSubmituAddValue = async (e) => {
@@ -189,9 +189,6 @@ function Home() {
         const GETTOKEN = Cookies.get('token');
         console.log(GETTOKEN)
         ProjectPost.mutate({ token: GETTOKEN, data: formData });
-        // mutaion.mutate({ token: getToken, data: formData })
-        // await api.post('api/project', formData, { headers: { Authorization: getToken }, });
-
 
     };
 
@@ -361,7 +358,7 @@ function Home() {
             </Sidebar>
 
             {/* 리스트컴포넌트자리 */}
-            <ProjectList data={data} />
+            <ProjectList data={data} isLoading={isLoading} />
 
 
 

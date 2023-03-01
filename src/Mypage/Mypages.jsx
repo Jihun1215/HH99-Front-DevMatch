@@ -1,21 +1,47 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { StContaitner } from '../Detail/Details';
 import Input from '../Components/Input';
 import Btn from '../Components/Button';
-import useInput from '../Hooks/useInput';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie';
+import { useQuery, useMutation } from "react-query";
+import { EditMyInfo } from '../axios/api';
 
 function Mypages() {
+    const navigate = useNavigate();
+    const MoveToHome = () => { navigate('/') };
+
+    const EditInfo = useMutation(EditMyInfo, {
+        onSuccess: () => {
+            console.log('성공')
+        }
+    });
+
+    const getToken = Cookies.get('token');
     //마이페이지에서 새롭게 추가할 항목들
-    const [selectedPart, selectPartHandler, setSelectedPart] = useInput('');
-    const [introduction, introductionEditButton, setIntroduction] = useInput('');
+
+
+    const [selectedPart, setSelectedPart] = useState('');
+    const [introduction, setIntroduction] = useState('');
+
+    const selectPartHandler = (e) => {
+        setSelectedPart(e.target.value);
+    }
+
+    const introductionEditButton = (e) => {
+        setIntroduction(e.target.value);
+    }
+
+    // const [selectedPart, selectPartHandler, setSelectedPart] = useInput('');
+    // const [introduction, introductionEditButton, setIntroduction] = useInput('');
 
     //세션 스토리지에서 받아올 항목들
     // const [nickName, nickNameEditButton, setNickName] = useInput('');
+
     const info = sessionStorage.getItem("userInfo")
     const USERINFO = JSON.parse(info)
     console.log(USERINFO)
+    console.log("세션스토리지", USERINFO)
 
     const [nickName, setNickName] = useState(`${USERINFO.nickname}`)
     // 
@@ -24,40 +50,56 @@ function Mypages() {
     }
 
 
-    // 닉네임수정 버튼
-    const EditNickNameChangeHandler = () => {
-        // 정규식 달기
+
+    const data = {
+        id: USERINFO.id,
+        nickName: nickName,
+        introduction: introduction,
+        part: selectedPart,
     }
 
-    // 파트 수정 버튼
-    const editSelectedPart = async () => {
-        // selectedPart 이값을 보내야 됨 
-        await axios.put('');
-    };
 
-    const EditIntroductionChangeHandler = () =>{
-        
+    const sessiondata = {
+        id: USERINFO.id,
+        username: USERINFO.username,
+        nickName: nickName,
+        introduction: introduction,
+        part: selectedPart,
+    }
+
+    console.log("수정후저장할값", data)
+    // 토큰이랑 수정값 보내기 
+    const EditMyInfoChangeHandler = async (e) => {
+        e.preventDefault();
+        // 수정될 값을 리액트쿼리로 처리 
+        EditInfo.mutate({ getToken, data })
+        // 기존에 세션스토리지 삭제
+        sessionStorage.removeItem("userInfo")
+        // 새로운 세션스토리지 
+        sessionStorage.setItem("userInfo", JSON.stringify(sessiondata))
+        navigate('/');
     }
 
 
     return (
         <div>
-            <StContaitner>
+            <MyPageArea onSubmit={EditMyInfoChangeHandler}>
                 <StInfoLayout>
                     <StInfoBox>ID</StInfoBox>
                     {USERINFO.username}
                 </StInfoLayout>
                 <StInfoLayout>
-                    <StInfoBox>NickName</StInfoBox>{' '}
+                    <StInfoBox>NickName</StInfoBox>
                     <Input
                         type="text"
                         style={{ border: 'none', marginRight: '20px' }}
                         value={nickName}
                         onChange={nickNameEditHandler}
                         me />
-                    <Btn onClick={EditNickNameChangeHandler} me>
+                    {/* <Btn onClick={EditNickNameChangeHandler} me>
                         변경
-                    </Btn>
+                    </Btn> */}
+                    <div>2~6자 영문 한글로 작성</div>
                 </StInfoLayout>
 
                 <StInfoLayout>
@@ -82,38 +124,55 @@ function Mypages() {
                             value="Frontend"
                             required
                         />
-                        <Btn me>변경</Btn>
+                        {/* <Btn me>변경</Btn> */}
                     </StSelectBox>
                 </StInfoLayout>
                 <StInfoLayout style={{ minHeight: '150px' }}>
-                    {' '}
+                    {''}
                     <StInfoBox>Introduce</StInfoBox>
-                    <StTextArea type="text" />
-                    <Btn me onClick={introductionEditButton}>
+                    <StTextArea type="text"
+                        onChange={introductionEditButton} required />
+                    {/* <Btn me onClick={introductionEditButton}>
                         변경
-                    </Btn>
+                    </Btn> */}
                 </StInfoLayout>
-            </StContaitner>
+
+
+                <EditButtonArea>
+                    <Btn me
+                        type="submit">내정보 수정</Btn>
+                </EditButtonArea>
+
+
+            </MyPageArea>
         </div>
     );
 }
 
 export default Mypages;
 
+const MyPageArea = styled.form`
+    width: 50rem;
+    height: 35rem;
+    border: 2px solid #000;
+    margin: 50px auto;
+`;
+
 // 마이페이지 레이아웃
 const StInfoLayout = styled.div`
+
     width: 36.875rem;
     height: 3.75rem;
     display: flex;
     align-items: center;
-    margin: auto;
+    margin: 25px auto;
     border-radius: 5px;
     margin-bottom: 20px;
-    /* border: 1px solid black; */
+    /* border: 1px solid black;  */
 `;
 
 // 정보 박스 레이아웃
-const StInfoBox = styled.form`
+const StInfoBox = styled.div`
     width: 6.875rem;
     height: 3.125rem;
     border-radius: 5px;
@@ -126,7 +185,7 @@ const StInfoBox = styled.form`
 
 // 파트 선택
 const StSelectBox = styled.div`
-    width: 460px;
+    width: 18.75rem;
     height: 60px;
     display: flex;
     align-items: center;
@@ -139,10 +198,15 @@ const StSelectBox = styled.div`
 // 소개글
 const StTextArea = styled.textarea`
     width: 340px;
-    height: 150px;
+    height: 7.8125rem;
     border-radius: 10px;
     padding: 15px;
     margin-right: 20px;
     border: none;
     outline: none;
 `;
+
+const EditButtonArea = styled.div`
+    width: 12.5rem;
+    margin: 0 auto;
+`
