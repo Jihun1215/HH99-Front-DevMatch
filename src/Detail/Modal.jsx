@@ -11,12 +11,17 @@ import imageCompression from 'browser-image-compression';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../axios/api';
+import { GetProject } from '../axios/api';
 
 function Modal() {
     const params = useParams();
     const getToken = Cookies.get('token');
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const sessionUserInfo = sessionStorage.getItem('userInfo');
+    const userInfo = JSON.parse(sessionUserInfo);
+    const currentUserName = userInfo.username;
+    const projectList = useQuery('project', () => GetProject({ token: getToken }));
 
     //선택 프로젝트 조회
     const getDetailProject = async () => {
@@ -28,10 +33,13 @@ function Modal() {
             });
             return response.data;
         } catch (error) {
-            console.log('GetDetailProjectError: ', error);
+            if (error.response.status === 500) {
+                alert('이미 삭제된 프로젝트입니다');
+                navigate('/');
+            }
         }
     };
-
+    // const projectData = useQuery('projectList', getProject);
     const { data } = useQuery('detailProject', getDetailProject);
 
     //선택 프로젝트 수정
@@ -60,16 +68,21 @@ function Modal() {
         }
     };
 
-    const detailData = data.result.projectResponseDto;
+    const detailData = data?.result?.projectResponseDto;
     const [modalOpen, setModalOpen] = useState('none');
-    const openModal = (e) =>
-        e.target.name === 'modal' ? setModalOpen('block') : console.log('Error');
+    const openModal = (e) => {
+        if (currentUserName === detailData.username) {
+            e.target.name === 'modal' ? setModalOpen('block') : console.log('Error');
+        } else {
+            alert('작성자만 수정 가능합니다');
+        }
+    };
     const closeModal = (e) =>
         e.target.name === 'modal' ? setModalOpen('none') : console.log('Error');
 
     // UseInput 훅 초기화를 위해 set를 같이 가져가옴
-    const [title, onChangeTitleHandler, setTitle] = useInput(detailData.title);
-    const [body, onChangeBodyHandler, setBody] = useInput(detailData.content);
+    const [title, onChangeTitleHandler, setTitle] = useInput(detailData?.title);
+    const [body, onChangeBodyHandler, setBody] = useInput(detailData?.content);
     const [formImagin, setFormformImagin] = useState(new FormData());
 
     // 프론트 백엔드인원수를 위한 로직
@@ -87,11 +100,12 @@ function Modal() {
     const deletePost = useMutation(deleteDetailProject, {
         onSuccess: () => {
             queryClient.invalidateQueries('project');
+            alert('삭제성공');
         },
     });
 
-    const [backend, setBackend] = useState(detailData.backEndMember);
-    const [frontend, setFrontend] = useState(detailData.frontEndMember);
+    const [backend, setBackend] = useState(detailData?.backEndMember);
+    const [frontend, setFrontend] = useState(detailData?.frontEndMember);
 
     const BackendNumberHandlerChange = (e) => {
         const back = Math.max(min, Math.min(max, Number(e.target.value)));
@@ -107,7 +121,7 @@ function Modal() {
 
     // 이미지 state
     const [imageFile, setImageFile] = useState({
-        imageFile: detailData.imageUrl,
+        imageFile: detailData?.imageUrl,
         viewUrl: '',
     });
     // console.log(imageFile)
@@ -164,8 +178,8 @@ function Modal() {
     const selectBackList = ['Node.js', 'Spring', 'Java'];
     const selectFrontList = ['React.js', 'Js', 'Vue'];
 
-    const [SelectedBack, setSelectedBack] = useState(detailData.backEndStack);
-    const [SelectedFront, setSelectedFront] = useState(detailData.frontEndStack);
+    const [SelectedBack, setSelectedBack] = useState(detailData?.backEndStack);
+    const [SelectedFront, setSelectedFront] = useState(detailData?.frontEndStack);
 
     const selectBackHandler = (e) => {
         setSelectedBack(e.target.value);
@@ -186,6 +200,7 @@ function Modal() {
 
     const onSonSubmituAddValue = async (e) => {
         e.preventDefault();
+
         if (window.confirm('게시물을 수정하시겠습니까?') === true) {
             const formData = new FormData();
             formData.append('title', title);
@@ -213,11 +228,15 @@ function Modal() {
     };
 
     const projectDeleteButton = () => {
-        if (window.confirm('게시물을 삭제 하시겠습니까?') === true) {
-            deletePost.mutate();
-            navigate('/');
+        if (currentUserName === detailData.username) {
+            if (window.confirm('게시물을 삭제 하시겠습니까?') === true) {
+                deletePost.mutate();
+                navigate('/');
+            } else {
+                alert('삭제가 취소되었습니다.');
+            }
         } else {
-            alert('삭제가 취소되었습니다.');
+            alert('작성자만 삭제가 가능합니다');
         }
     };
 
@@ -235,8 +254,8 @@ function Modal() {
                         {/* 이미지 */}
                         <ModalInImgBox>
                             <ModalInImgArear>
-                                {imageFile.viewUrl && <IMGSIZE src={imageFile.viewUrl} />}
-                                {imageFile.imageFile && <IMGSIZE src={detailData.imageUrl} />}
+                                {imageFile.viewUrl && <IMGSIZE src={imageFile?.viewUrl} />}
+                                {imageFile.imageFile && <IMGSIZE src={detailData?.imageUrl} />}
 
                                 <ModalImgInput
                                     type="file"

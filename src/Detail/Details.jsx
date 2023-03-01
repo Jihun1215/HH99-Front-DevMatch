@@ -289,7 +289,7 @@ function Details() {
                         LIKE❤️
                     </Btn>
                     <StDetailBox>
-                        {projectData.data?.result.projectResponseDto?.content}
+                        {projectData.data?.result?.projectResponseDto?.content}
                     </StDetailBox>
 
                     <StCommentLayout>
