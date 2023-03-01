@@ -21,7 +21,7 @@ function Modal() {
     const sessionUserInfo = sessionStorage.getItem('userInfo');
     const userInfo = JSON.parse(sessionUserInfo);
     const currentUserName = userInfo.username;
-    const projectList = useQuery('project', () => GetProject({ token: getToken }));
+    const projectList = useQuery('GETPROJECT', () => GetProject({ token: getToken }));
 
     //선택 프로젝트 조회
     const getDetailProject = async () => {
@@ -99,7 +99,7 @@ function Modal() {
 
     const deletePost = useMutation(deleteDetailProject, {
         onSuccess: () => {
-            queryClient.invalidateQueries('project');
+            queryClient.invalidateQueries('GETPROJECT');
             alert('삭제성공');
         },
     });
