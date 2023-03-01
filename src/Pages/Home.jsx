@@ -247,7 +247,7 @@ function Home() {
                                     <ModalinInputBoxArea>
                                         <Input
                                             type="text"
-                                            value={title}
+                                            value={title || ''}
                                             onChange={onChangeTitleHandler}
                                             required
                                             placeholder="프로젝트 제목을 적어주세요!"

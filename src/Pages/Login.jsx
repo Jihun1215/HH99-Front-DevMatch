@@ -44,12 +44,15 @@ function Login() {
       // console.log(response)
       console.log(response.data.result)
 
-      const { id, username } = response.data.result
+      const { id, username, nickname, introduction, part } = response.data.result
 
       const userInto = {
         id,
-        username
-
+        username,
+        nickname,
+        introduction,
+        part,
+        introduction
       }
       // console.log(id, username, password, nickname)
       sessionStorage.setItem("userInfo", JSON.stringify(userInto));
@@ -100,7 +103,7 @@ function Login() {
             <LoginModalInputBox>
               <Input
                 type="text"
-                value={thisId}
+                value={thisId || ''}
                 onChange={onChangeThisIdHandler}
                 required />
               <label>ID: </label>
@@ -111,7 +114,7 @@ function Login() {
             <LoginModalInputBox>
               <Input
                 type="password"
-                value={thisPw}
+                value={thisPw || ''}
                 onChange={onChangeThisPwHandler}
                 required />
               <label>PassWord: </label>
