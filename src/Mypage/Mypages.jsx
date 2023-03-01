@@ -38,17 +38,7 @@ function Mypages() {
 
 
     // 닉네임 로직
-    const [nickName, setNickName] = useState(foundData?.nickname)
-
-    const nickNameEditHandler = (e) => {
-        setNickName(e.target.value)
-    }
-
-
-
-
-
-
+    const [nickName, onChangeNickNameHandler, setNickName] = useInput(foundData?.nickname);
 
     //마이페이지에서 새롭게 추가할 항목들
 
@@ -104,7 +94,7 @@ function Mypages() {
                                 type="text"
                                 style={{ border: 'none', marginRight: '20px' }}
                                 value={nickName}
-                                onChange={nickNameEditHandler}
+                                onChange={onChangeNickNameHandler}
                                 me />
                             {/* <Btn onClick={EditNickNameChangeHandler} me>
                             변경
