@@ -54,14 +54,6 @@ export const EditMyInfo = async ({ Data, token }) => {
             }
         );
         return response.data
-
-        // 토큰이랑 바꿀값 데이터로 보내기
-        // const response = await api.put(`api/user/${USERINFO.id}`, { nickname: nickName, introduction: introduction, part: selectedPart },
-        //     {
-        //         headers: { Authorization: getToken },
-        //     }
-        // )
-        // return response.data
     } catch (error) {
         console.log(error)
     }

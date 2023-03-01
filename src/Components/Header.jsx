@@ -33,8 +33,8 @@ function Header() {
                 </HeaderMainLogo>
                 <ul>
                     <StyledLink to='/'>Home</StyledLink>
-                    <StyledLink to='mypage' >Mypage</StyledLink>
-                    <StyledLink to='login'>LogIn</StyledLink>
+                    <StyledLink to='/mypage' >Mypage</StyledLink>
+                    <StyledLink to='/login'>LogIn</StyledLink>
 
                     {/* 토큰이 있으면 표시하기   */}
                     {

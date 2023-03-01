@@ -9,7 +9,7 @@ import useInput from '../Hooks/useInput';
 import { MdTitle } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
 import { ModalOutArea, ModalInArea } from '../Style/ModalStyle';
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import { ListArea } from '../Style/MainpageStyle';
 import ProjectList from '../Components/List/ProjectList';
@@ -27,7 +27,9 @@ function Home() {
     )
     // console.log(data)
 
+    useEffect(() => {
 
+    }, [data])
 
 
 
@@ -52,7 +54,6 @@ function Home() {
     const ProjectPost = useMutation(PostProject, {
         onSuccess: () => {
             console.log('성공')
-
         }
     })
 

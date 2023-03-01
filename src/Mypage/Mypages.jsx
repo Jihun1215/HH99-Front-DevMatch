@@ -9,17 +9,16 @@ import { EditMyInfo } from '../axios/api';
 
 function Mypages() {
     const navigate = useNavigate();
-    const MoveToHome = () => { navigate('/') };
+
 
     const EditInfo = useMutation(EditMyInfo, {
         onSuccess: () => {
-            console.log('성공')
+            console.log('성공일걸용? ')
         }
     });
 
     const getToken = Cookies.get('token');
     //마이페이지에서 새롭게 추가할 항목들
-
 
     const [selectedPart, setSelectedPart] = useState('');
     const [introduction, setIntroduction] = useState('');
@@ -32,15 +31,9 @@ function Mypages() {
         setIntroduction(e.target.value);
     }
 
-    // const [selectedPart, selectPartHandler, setSelectedPart] = useInput('');
-    // const [introduction, introductionEditButton, setIntroduction] = useInput('');
-
-    //세션 스토리지에서 받아올 항목들
-    // const [nickName, nickNameEditButton, setNickName] = useInput('');
-
     const info = sessionStorage.getItem("userInfo")
     const USERINFO = JSON.parse(info)
-    console.log(USERINFO)
+
     console.log("세션스토리지", USERINFO)
 
     const [nickName, setNickName] = useState(`${USERINFO.nickname}`)
@@ -67,7 +60,7 @@ function Mypages() {
         part: selectedPart,
     }
 
-    console.log("수정후저장할값", data)
+    console.log("수정후저장할값", sessiondata)
     // 토큰이랑 수정값 보내기 
     const EditMyInfoChangeHandler = async (e) => {
         e.preventDefault();
@@ -84,6 +77,7 @@ function Mypages() {
     return (
         <div>
             <MyPageArea onSubmit={EditMyInfoChangeHandler}>
+
                 <StInfoLayout>
                     <StInfoBox>ID</StInfoBox>
                     {USERINFO.username}
