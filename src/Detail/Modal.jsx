@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueries, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import useInput from '../Hooks/useInput';
 import { ModalInArea, ModalOutArea } from '../Style/ModalStyle';
@@ -8,10 +8,59 @@ import Cookies from 'js-cookie';
 import Btn from '../Components/Button';
 import { MdTitle } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
-import { PostProject } from '../axios/api';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
+import { useNavigate, useParams } from 'react-router-dom';
+import { api } from '../axios/api';
 
 function Modal() {
+    const params = useParams();
+    const getToken = Cookies.get('token');
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    //선택 프로젝트 조회
+    const getDetailProject = async () => {
+        try {
+            const response = await api.get(`api/project/${params?.id}`, {
+                headers: {
+                    Authorization: getToken,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.log('GetDetailProjectError: ', error);
+        }
+    };
+
+    const { data } = useQuery('detailProject', getDetailProject);
+
+    //선택 프로젝트 수정
+    const editDetailProject = async (formData) => {
+        try {
+            await api.put(`api/project/${params?.id}`, formData, {
+                headers: {
+                    Authorization: getToken,
+                },
+            });
+        } catch (error) {
+            console.log('editDetailProjectError: ', error);
+        }
+    };
+
+    //선택 프로젝트 삭제
+    const deleteDetailProject = async () => {
+        try {
+            await api.delete(`api/project/${params?.id}`, {
+                headers: {
+                    Authorization: getToken,
+                },
+            });
+        } catch (error) {
+            console.log('deleteProjectError: ', error);
+        }
+    };
+
+    const detailData = data.result.projectResponseDto;
     const [modalOpen, setModalOpen] = useState('none');
     const openModal = (e) =>
         e.target.name === 'modal' ? setModalOpen('block') : console.log('Error');
@@ -19,8 +68,8 @@ function Modal() {
         e.target.name === 'modal' ? setModalOpen('none') : console.log('Error');
 
     // UseInput 훅 초기화를 위해 set를 같이 가져가옴
-    const [title, onChangeTitleHandler, setTitle] = useInput();
-    const [body, onChangeBodyHandler, setBody] = useInput();
+    const [title, onChangeTitleHandler, setTitle] = useInput(detailData.title);
+    const [body, onChangeBodyHandler, setBody] = useInput(detailData.content);
     const [formImagin, setFormformImagin] = useState(new FormData());
 
     // 프론트 백엔드인원수를 위한 로직
@@ -29,21 +78,20 @@ function Modal() {
 
     // const navigate = useNavigate();
 
-    const ProjectPost = useMutation(PostProject, {
+    const editPost = useMutation(editDetailProject, {
         onSuccess: () => {
-            console.log('성공');
+            queryClient.invalidateQueries('detailProject');
         },
     });
 
-    // const PostProject = useMutation(PostProject, {
-    //     onSuccess: () => {
-    //         console.log('d')
-    //         // navigate("/");
-    //     },
-    // });
+    const deletePost = useMutation(deleteDetailProject, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('project');
+        },
+    });
 
-    const [backend, setBackend] = useState(1);
-    const [frontend, setFrontend] = useState(1);
+    const [backend, setBackend] = useState(detailData.backEndMember);
+    const [frontend, setFrontend] = useState(detailData.frontEndMember);
 
     const BackendNumberHandlerChange = (e) => {
         const back = Math.max(min, Math.min(max, Number(e.target.value)));
@@ -59,7 +107,7 @@ function Modal() {
 
     // 이미지 state
     const [imageFile, setImageFile] = useState({
-        imageFile: '',
+        imageFile: detailData.imageUrl,
         viewUrl: '',
     });
     // console.log(imageFile)
@@ -72,31 +120,23 @@ function Modal() {
         e.preventDefault();
 
         const imageFile = e.target.files[0];
-        // console.log(imageFile)
-
-        // console.log('Before Compression: ', imageFile.size);
-        const formImg = new FormData();
-        formImg.append('image', imageFile);
-        setFormformImagin(formImg);
-
-        // /* key 확인하기 */
-        // for (let key of formImg.keys()) {
-        //     console.log(key);
-        // }
-
-        // /* value 확인하기 */
-        // for (let value of formImg.values()) {
-        //     console.log(value);
-        // }
+        console.log('Before Compression: ', imageFile.size);
 
         const options = {
             maxSizeMB: 1,
             maxWidthOrHeight: 1920,
             useWebWorker: true,
         };
+
         try {
             const compressedFile = await imageCompression(imageFile, options);
-            // console.log('After Compression: ', compressedFile.size);
+
+            const formImg = new FormData();
+            formImg.append('image', compressedFile);
+            setFormformImagin(formImg);
+
+            console.log('After Compression: ', compressedFile.size);
+
             const fileReader = new FileReader();
             // console.log(compressedFile);
             fileReader.readAsDataURL(compressedFile);
@@ -124,8 +164,8 @@ function Modal() {
     const selectBackList = ['Node.js', 'Spring', 'Java'];
     const selectFrontList = ['React.js', 'Js', 'Vue'];
 
-    const [SelectedBack, setSelectedBack] = useState('Spring');
-    const [SelectedFront, setSelectedFront] = useState('React');
+    const [SelectedBack, setSelectedBack] = useState(detailData.backEndStack);
+    const [SelectedFront, setSelectedFront] = useState(detailData.frontEndStack);
 
     const selectBackHandler = (e) => {
         setSelectedBack(e.target.value);
@@ -146,34 +186,47 @@ function Modal() {
 
     const onSonSubmituAddValue = async (e) => {
         e.preventDefault();
-
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', body);
-        formData.append('frontEndStack', SelectedFront);
-        formData.append('backEndStack', SelectedBack);
-        formData.append('backEndMember', backend);
-        formData.append('frontEndMember', frontend);
-        // formData.append('image', formImagin);
-        for (const keyValue of formImagin) {
-            formData.append(keyValue[0], keyValue[1]);
+        if (window.confirm('게시물을 수정하시겠습니까?') === true) {
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('content', body);
+            formData.append('frontEndStack', SelectedFront);
+            formData.append('backEndStack', SelectedBack);
+            formData.append('backEndMember', backend);
+            formData.append('frontEndMember', frontend);
+            // formData.append('image', formImagin);
+            for (const keyValue of formImagin) {
+                formData.append(keyValue[0], keyValue[1]);
+            }
+            // /* value 확인하기 */
+            // for (let value of formData.values()) {
+            //     console.log(value);
+            // }
+            const GETTOKEN = Cookies.get('token');
+            console.log(GETTOKEN);
+            editPost.mutate(formData);
+            alert('수정이 완료됐습니다.');
+            setModalOpen('none');
+        } else {
+            alert('수정이 취소되었습니다.');
         }
-        // /* value 확인하기 */
-        // for (let value of formData.values()) {
-        //     console.log(value);
-        // }
-        const GETTOKEN = Cookies.get('token');
-        console.log(GETTOKEN);
-        ProjectPost.mutate({ token: GETTOKEN, data: formData });
-        // mutaion.mutate({ token: getToken, data: formData })
-        // await api.post('api/project', formData, { headers: { Authorization: getToken }, });
     };
+
+    const projectDeleteButton = () => {
+        if (window.confirm('게시물을 삭제 하시겠습니까?') === true) {
+            deletePost.mutate();
+            navigate('/');
+        } else {
+            alert('삭제가 취소되었습니다.');
+        }
+    };
+
     return (
         <>
             <Btn name={'modal'} onClick={openModal} sideBtn>
                 <AiFillEdit />
             </Btn>
-            <Btn sideBtn>
+            <Btn onClick={projectDeleteButton} sideBtn>
                 <AiFillDelete />
             </Btn>
             <ModalOutArea isOpen={modalOpen}>
@@ -182,11 +235,9 @@ function Modal() {
                         {/* 이미지 */}
                         <ModalInImgBox>
                             <ModalInImgArear>
-                                {imageFile.imageFile !== '' ? (
-                                    <IMGSIZE src={imageFile.viewUrl} />
-                                ) : (
-                                    <NoImgSIZE>Loading...</NoImgSIZE>
-                                )}
+                                {imageFile.viewUrl && <IMGSIZE src={imageFile.viewUrl} />}
+                                {imageFile.imageFile && <IMGSIZE src={detailData.imageUrl} />}
+
                                 <ModalImgInput
                                     type="file"
                                     accept="image/*"
@@ -198,6 +249,7 @@ function Modal() {
                             <ModalInButGround>
                                 <SCustomButtonWrapper>
                                     <Btn
+                                        type="button"
                                         style={{ background: 'rgb(50, 111, 233)' }}
                                         lg
                                         onClick={() => imageRef.click()}
@@ -205,6 +257,7 @@ function Modal() {
                                         사진 업로드
                                     </Btn>
                                     <Btn
+                                        type="button"
                                         style={{ background: '#ee8683' }}
                                         lg
                                         onClick={onClickDeleteHandler}
