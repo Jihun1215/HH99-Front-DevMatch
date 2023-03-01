@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 // 프로젝트 리스트 보여줄것들 
 function ProjectList({ isLoading, data }) {
     const ListView = data
-    console.log(ListView)
+    // console.log(ListView)
     const getToken = Cookies.get('token');
     // const [data, setData] = useState([...]); // 전체 데이터
     {/* {projectDate.isLoading == false && (

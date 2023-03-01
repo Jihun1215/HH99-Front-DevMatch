@@ -9,7 +9,7 @@ import useInput from '../Hooks/useInput';
 import { MdTitle } from 'react-icons/md';
 import imageCompression from 'browser-image-compression';
 import { ModalOutArea, ModalInArea } from '../Style/ModalStyle';
-import { QueryClient, useQuery } from 'react-query';
+import { useQuery, QueryClinet, useQueryClient } from 'react-query';
 import Cookies from 'js-cookie';
 import { ListArea } from '../Style/MainpageStyle';
 import ProjectList from '../Components/List/ProjectList';
@@ -19,17 +19,18 @@ import { useMutation } from "react-query";
 
 
 function Home() {
-
     const getToken = Cookies.get('token');
 
-    const { isLoading, isError, data } = useQuery("project", () =>
+    const { isLoading, isError, data } = useQuery("GETPROJECT", () =>
         GetProject({ token: getToken })
     )
+
+
     // console.log(data)
 
-    useEffect(() => {
-
-    }, [data])
+    // useEffect(() => {
+    //     window.location.reload()
+    // }, [data])
 
 
 
@@ -50,9 +51,11 @@ function Home() {
 
     // const navigate = useNavigate();
 
-
+    // 프로젝트생성 POST Query 등록하자마자 메인화면에 보이기 구현
+    const queryClinet = useQueryClient();
     const ProjectPost = useMutation(PostProject, {
         onSuccess: () => {
+            queryClinet.invalidateQueries("GETPROJECT");
             console.log('성공')
         }
     })
@@ -147,12 +150,12 @@ function Home() {
     // React-Query로 데이터 받아오기
     // const { isLoading, isError, data } = useQuery("list", GetList)
 
-    // if (isLoading) {
-    //     return <h1>로딩중입니다..!</h1>
-    // }
-    // if (isError) {
-    //     return <div>에러!!</div>
-    // }
+    if (isLoading) {
+        return <h1>로딩중입니다..!</h1>
+    }
+    if (isError) {
+        return <div>에러!!</div>
+    }
 
 
     const onSonSubmituAddValue = async (e) => {
