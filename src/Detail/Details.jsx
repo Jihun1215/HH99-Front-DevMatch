@@ -4,11 +4,12 @@ import Btn from '../Components/Button';
 import Input from '../Components/Input';
 import Sidebar from '../Components/Sidebar';
 import useInput from '../Hooks/useInput';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { isError, useMutation, useQuery, useQueryClient } from 'react-query';
 import Modal from './Modal';
 import Cookies from 'js-cookie';
 import { useParams } from 'react-router-dom';
 import { api } from '../axios/api';
+import { getDetailProject, getDetailComment, addComment } from '../axios/api';
 
 function Details() {
     const params = useParams();
@@ -19,17 +20,10 @@ function Details() {
     const formData = new FormData();
 
     //api 부분
-
-    //현재 접속자 정보
-    useEffect(() => {
-        getDetailProject();
-    }, [params]);
-
-    //프로젝트 조회
-
+    //상세 프로젝트 조회
     const getDetailProject = async () => {
         try {
-            const response = await api.get(`api/project/${params.id}`, {
+            const response = await api.get(`api/project/${params?.id}`, {
                 headers: {
                     Authorization: getToken,
                 },
@@ -39,11 +33,10 @@ function Details() {
             console.log('GetDetailProjectError: ', error);
         }
     };
-
     //댓글 조회
     const getDetailComment = async () => {
         try {
-            const response = await api.get(`api/comment/${params.id}`, {
+            const response = await api.get(`api/comment/${params?.id}`, {
                 headers: {
                     Authorization: getToken,
                 },
@@ -53,11 +46,11 @@ function Details() {
             console.log('getCommentError:', error);
         }
     };
-
     //댓글 추가
-    const addComment = async (newCommnet) => {
+
+    const addComment = async (formData) => {
         try {
-            await api.post(`api/comment/${params.id}`, newCommnet, {
+            return await api.post(`api/comment/${params.id}`, formData, {
                 headers: {
                     Authorization: getToken,
                 },
@@ -68,19 +61,16 @@ function Details() {
     };
 
     // 댓글 수정
+
+    const editCommentFormData = new FormData();
+
     const editComment = async (commentId) => {
         try {
-            await api.put(
-                `api/comment/${commentId}`,
-                {
-                    content: editCmt,
+            await api.put(`api/comment/${commentId}`, editCommentFormData, {
+                headers: {
+                    Authorization: getToken,
                 },
-                {
-                    headers: {
-                        Authorization: getToken,
-                    },
-                }
-            );
+            });
         } catch (error) {
             console.log('editCommentError:', error);
         }
@@ -119,7 +109,7 @@ function Details() {
     //리액트 쿼리 부분
 
     //프로젝트 데이터
-    const projectData = useQuery('project', getDetailProject);
+    const projectData = useQuery('detailProject', getDetailProject);
     console.log('projectdata', projectData);
     //댓글 데이터
     const commentData = useQuery('comment', getDetailComment);
@@ -158,6 +148,7 @@ function Details() {
     const [likeCount, setLikeCount] = useState(0);
     const [showEdit, setShowEdit] = useState(false);
 
+    editCommentFormData.append('content', editCmt);
     //댓글 formdata로 집어넣기
     formData.append('content', comment);
 
@@ -165,6 +156,8 @@ function Details() {
     // 좋아요는 유저 한명당 1회만 가능한지?
     const likeCountButtonHandler = () => {
         addLikeCount();
+        console.log(projectData.data?.result?.like);
+        setLikeCount(projectData.data?.result?.projectResponseDto?.likeCount);
     };
 
     //댓글 추가 버튼
@@ -237,6 +230,13 @@ function Details() {
         });
     };
 
+    if (projectData.isLoading) {
+        return <div>로딩중입니다</div>;
+    }
+    if (projectData.isError) {
+        return <div>에러가 발생했습니다</div>;
+    }
+
     return (
         <>
             <Sidebar>
@@ -245,22 +245,24 @@ function Details() {
             {projectData.isLoading === false && (
                 <StContaitner>
                     <StImageBox>
-                        <img src={projectData.data?.result.projectResponseDto?.imageUrl} />
+                        <img src={projectData.data?.result?.projectResponseDto?.imageUrl} />
                     </StImageBox>
                     <div>
                         <StRecruitList>
-                            <h3>{projectData.data?.result.projectResponseDto?.title}</h3>
+                            <h3>{projectData.data?.result?.projectResponseDto?.title}</h3>
                         </StRecruitList>
                         <StRecruitList>
                             <StMiniLayout>
                                 <h3>Backend</h3>
                             </StMiniLayout>
                             <StMiniLayout>
-                                <h3>{projectData.data?.result.projectResponseDto?.backEndStack}</h3>
+                                <h3>
+                                    {projectData.data?.result?.projectResponseDto?.backEndStack}
+                                </h3>
                             </StMiniLayout>
                             <StMiniLayout>
                                 <h3>
-                                    {projectData.data?.result.projectResponseDto?.backendMember}
+                                    {projectData.data?.result?.projectResponseDto?.backendMember}
                                 </h3>
                             </StMiniLayout>
                         </StRecruitList>
@@ -270,12 +272,12 @@ function Details() {
                             </StMiniLayout>
                             <StMiniLayout>
                                 <h3>
-                                    {projectData.data?.result.projectResponseDto?.frontEndStack}
+                                    {projectData.data?.result?.projectResponseDto?.frontEndStack}
                                 </h3>
                             </StMiniLayout>
                             <StMiniLayout>
                                 <h3>
-                                    {projectData.data?.result.projectResponseDto?.frontendMember}
+                                    {projectData.data?.result?.projectResponseDto?.frontendMember}
                                 </h3>
                             </StMiniLayout>
                         </StRecruitList>
@@ -284,7 +286,7 @@ function Details() {
                         <h3>Detail</h3>
                     </StDetailLayout>
                     <StLikeNumber>
-                        {projectData.data?.result.projectResponseDto?.likeCount}
+                        {projectData.data?.result?.projectResponseDto?.likeCount}
                     </StLikeNumber>
                     <Btn me onClick={likeCountButtonHandler}>
                         LIKE❤️
