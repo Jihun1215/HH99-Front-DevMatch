@@ -28,6 +28,5 @@ const LayoutSize = styled.div`
 const LayourArea = styled.div`
      width: 100vw;
      height: 100vh;
-    background: #EDF2FF;
     border-radius: 1.25rem;
 `

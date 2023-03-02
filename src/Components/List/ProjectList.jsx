@@ -8,10 +8,9 @@ import { Link } from 'react-router-dom';
 // 프로젝트 리스트 보여줄것들 
 function ProjectList({ isLoading, data }) {
     const ListView = data
-    // console.log(ListView)
     const getToken = Cookies.get('token');
 
-
+    // console.log(ListView)
 
     //  상세페이지 만들기 위해
     const navigate = useNavigate();
@@ -51,13 +50,14 @@ function ProjectList({ isLoading, data }) {
 
                                     <ProjectListTextBoxBody>
                                         <h3>Project Body : {item.content} </h3>
-                                        <p>모집인원정보
-                                            Back:  {item.backEndMember}
-                                            Front:  {item.frontEndMember} </p>
+                                        <h5>모집인원정보
+                                            <p style={{ padding: "5px", fontWeight: "800", }}>백엔드:  <span>{item.backEndMember}</span></p>
+                                            <p style={{ padding: "5px", fontWeight: "800" }}>프론트엔드: <span>{item.frontEndMember}</span> </p>
+                                        </h5>
                                     </ProjectListTextBoxBody>
 
                                     <ProjectListInto>
-                                        <div>좋아요수: {item.likeCount}</div>
+                                        <div>LIKE❤️: {item.likeCount}</div>
                                         <div>작성자 : {item.username}</div>
                                         <GoToDeatil onClick={() => { onClickDeatilPage(item.id) }}>상세보기</GoToDeatil>
                                     </ProjectListInto>
@@ -85,10 +85,9 @@ const ProjectListArea = styled.div`
             width: 56.25rem;
             height: 15.625rem;
             border-radius: 1.5625rem;
-            margin: 1.5625rem auto;
+            margin: 4.5rem auto;
             background-color: rgba(255,255,192,0.1);
             backdrop-filter: contrast(80%);
-
             box-shadow: 2px 7px 15px 8px rgba(0,0,0,0.3);
             border-radius: 1.5625rem;
             display: flex;
@@ -96,6 +95,7 @@ const ProjectListArea = styled.div`
             align-items: center;
             justify-content: center;
             gap: 0 1.25rem;
+            background: #bac8ff;
             `;
 
 
@@ -109,15 +109,14 @@ const ProjectListImgBox = styled.div`
             justify-content: center;
             width: 25%;
             height: 90%;
-            border: 1px solid #000;
-    > img {
-                display: flex;
+            background: #edf2ff;
+            > img {
+            display: flex;
             align-items: center;
             justify-content: center;
-            width: 95%;
-            height: 95%;
-       
-    }
+            width: 99%;
+            height: 99%;
+             };
             `;
 
 const ProjectListTextBox = styled.div`
@@ -128,7 +127,6 @@ const ProjectListTextBox = styled.div`
             padding: .625rem;
             width: 65%;
             height: 90%;
-            border: 2px solid  #5c7cfa;
             border-radius: 1.5625rem;
             gap: 10px 0;
             `;
@@ -136,7 +134,7 @@ const ProjectListTextBox = styled.div`
 const ProjectListTextBoxTitle = styled.div`
             width: 90%;
             height: 20%;
-            border: 1px solid #000;
+            background: #edf2ff;
             border-radius: 1.5625rem;
             padding-left: 1.25rem;
             display: flex;
@@ -145,18 +143,32 @@ const ProjectListTextBoxTitle = styled.div`
 
 const ProjectListTextBoxBody = styled.div`
             width: 90%;
-            height: 50%;
-            border: 1px solid #000;
+            height: 60%;
+            background: #edf2ff;
             border-radius: 1.5625rem;
-            display: flex;
-            padding: 15px;
+            text-align: left;
+            flex-direction: column;
+            padding: 10px;
+            > h3 {
+             width: 95%;
+             height: 80%;
+             margin: 0 auto;
+            };
+            > h5{
+             width: 90%;
+             height: 20%;
+             margin: 0 auto;
+             display: flex;
+             align-items: center;
+             
+            }
             `;
 
 
 const ProjectListInto = styled.div`
             width: 90%;
             height: 20%;
-            border: 1px solid #000;
+            background: #edf2ff;
             border-radius: 1.5625rem;
             display: flex;
             align-items: center;

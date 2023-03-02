@@ -196,8 +196,7 @@ function Home() {
                 <Btn name={'modal'} onClick={openModal} sideBtn>
                     <MdPlaylistAdd onClick={openModal} />
                 </Btn>
-                <Btn sideBtn>dd</Btn>
-
+                <Btn sideBtn>.</Btn>
                 {/* Modal  */}
                 <ModalOutArea isOpen={modalOpen}>
                     <ModalInArea isOpen={modalOpen}>

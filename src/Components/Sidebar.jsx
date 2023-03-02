@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components';
-import Btn from './Button';
-import { FaPlus } from "react-icons/fa";
 
 function Sidebar({ children }) {
     return (
