@@ -11,7 +11,6 @@ import imageCompression from 'browser-image-compression';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../axios/api';
-import { GetProject } from '../axios/api';
 
 function Modal() {
     const params = useParams();
@@ -21,7 +20,6 @@ function Modal() {
     const sessionUserInfo = sessionStorage.getItem('userInfo');
     const userInfo = JSON.parse(sessionUserInfo);
     const currentUserName = userInfo.username;
-    // const projectList = useQuery('GETPROJECT', () => GetProject({ token: getToken }));
 
     //선택 프로젝트 조회
     const getDetailProject = async () => {
