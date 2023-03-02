@@ -114,6 +114,8 @@ function Details() {
     const projectData = useQuery('detailProject', getDetailProject);
     //댓글 데이터
     const commentData = useQuery('comment', getDetailComment);
+    //작성자
+    const writeUser = projectData?.data?.result?.projectResponseDto?.username;
 
     const queryclient = useQueryClient();
     const mutation = useMutation(addComment, {
@@ -236,9 +238,12 @@ function Details() {
 
     return (
         <>
-            <Sidebar>
-                <Modal />
-            </Sidebar>
+            {currentUserName === writeUser && (
+                <Sidebar>
+                    <Modal />
+                </Sidebar>
+            )}
+
             {projectData.isLoading === false && (
                 <StContaitner>
                     <StImageBox>
@@ -314,7 +319,7 @@ function Details() {
                             <div key={item.id}>
                                 <StCommentBox>
                                     <StMiniLayout>
-                                        <h3>{item.username}</h3>
+                                        <h3>{item.nickname}</h3>
                                     </StMiniLayout>
                                     <StCommentListBox>
                                         {showInput === item.id ? (

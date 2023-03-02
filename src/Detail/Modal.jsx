@@ -31,10 +31,7 @@ function Modal() {
             });
             return response.data;
         } catch (error) {
-            if (error.response.status === 500) {
-                alert('이미 삭제된 프로젝트입니다');
-                navigate('/');
-            }
+            console.log('getDetailProjectError: ', error);
         }
     };
     // const projectData = useQuery('projectList', getProject);
@@ -99,6 +96,7 @@ function Modal() {
         onSuccess: () => {
             queryClient.invalidateQueries('GETPROJECT');
             alert('삭제성공');
+            navigate('/');
         },
     });
 
@@ -132,35 +130,40 @@ function Modal() {
         e.preventDefault();
 
         const imageFile = e.target.files[0];
-        console.log('Before Compression: ', imageFile.size);
 
-        const options = {
-            maxSizeMB: 1,
-            maxWidthOrHeight: 1920,
-            useWebWorker: true,
-        };
+        if (!imageFile) {
+            return;
+        } else {
+            console.log('Before Compression: ', imageFile.size);
 
-        try {
-            const compressedFile = await imageCompression(imageFile, options);
-
-            const formImg = new FormData();
-            formImg.append('image', compressedFile);
-            setFormformImagin(formImg);
-
-            console.log('After Compression: ', compressedFile.size);
-
-            const fileReader = new FileReader();
-            // console.log(compressedFile);
-            fileReader.readAsDataURL(compressedFile);
-
-            fileReader.onload = () => {
-                setImageFile({
-                    viewUrl: String(fileReader.result),
-                });
-                setLoaded(true);
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1920,
+                useWebWorker: true,
             };
-        } catch (error) {
-            console.log(error);
+
+            try {
+                const compressedFile = await imageCompression(imageFile, options);
+
+                const formImg = new FormData();
+                formImg.append('image', compressedFile);
+                setFormformImagin(formImg);
+
+                console.log('After Compression: ', compressedFile.size);
+
+                const fileReader = new FileReader();
+                // console.log(compressedFile);
+                fileReader.readAsDataURL(compressedFile);
+
+                fileReader.onload = () => {
+                    setImageFile({
+                        viewUrl: String(fileReader.result),
+                    });
+                    setLoaded(true);
+                };
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 
@@ -229,7 +232,6 @@ function Modal() {
         if (currentUserName === detailData.username) {
             if (window.confirm('게시물을 삭제 하시겠습니까?') === true) {
                 deletePost.mutate();
-                navigate('/');
             } else {
                 alert('삭제가 취소되었습니다.');
             }
