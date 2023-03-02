@@ -1,12 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+import Header from './Header'
+import Footer from './Footer'
 
 function Layout({ children }) {
     return (
         <LayoutSize>
 
             <LayourArea>
+                <Header />
                 {children}
+                <Footer />
             </LayourArea>
 
         </LayoutSize>
@@ -22,8 +26,7 @@ const LayoutSize = styled.div`
     justify-content: center;
 `;
 const LayourArea = styled.div`
-    width: 81.25rem;
-    height: 52rem;
-    background: #EDF2FF;
+     width: 100vw;
+     height: 100vh;
     border-radius: 1.25rem;
 `

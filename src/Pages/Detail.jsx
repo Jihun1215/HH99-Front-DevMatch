@@ -1,18 +1,16 @@
-import React from 'react'
-import styled from 'styled-components'
-import Layout from '../Components/Layout'
-import Header from '../Components/Header'
-import Footer from '../Components/Footer'
+import React from 'react';
+import Layout from '../Components/Layout';
+import Details from '../Detail/Details';
 
 function Detail() {
     return (
         <Layout>
-            <Header />
+           
 
-            Detail
-            <Footer />
+            <Details />
+
         </Layout>
-    )
+    );
 }
 
-export default Detail
+export default Detail;

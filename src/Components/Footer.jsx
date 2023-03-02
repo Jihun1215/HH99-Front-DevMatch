@@ -1,19 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-
-
-
-
-
-
-
-
 export default function Footer() {
     return (
         <FooterArea>
-            <p>© HH99 Project  by: Harry 2023 | All rights reserved.</p>
+            <p>© HH99 Mini Project | DevMatch | font by 한국저작권위원회   | All rights reserved</p>
         </FooterArea>
-    )
+    );
 }
 const FooterArea = styled.footer`
     position: fixed;
@@ -32,10 +24,9 @@ const FooterArea = styled.footer`
     opacity: 0.5;
     /* z-index: 2; */
     > p {
-        font-size: .9375rem;
+        font-size: 0.9375rem;
         color: #fff;
         margin: 0 auto;
         background: #222831;
-    };
-  
+    }
 `;

@@ -1,18 +1,15 @@
-import React from 'react'
-import styled from 'styled-components'
-import Layout from '../Components/Layout'
-import Header from '../Components/Header'
-import Footer from '../Components/Footer'
+import React from 'react';
+import styled from 'styled-components';
+import Layout from '../Components/Layout';
+import Mypages from '../Mypage/Mypages';
 
 function Mypage() {
     return (
         <Layout>
-            <Header />
-            Mypage
-
-            <Footer />
+            {/* <Header /> */}
+            <Mypages />
         </Layout>
-    )
+    );
 }
 
-export default Mypage
+export default Mypage;
