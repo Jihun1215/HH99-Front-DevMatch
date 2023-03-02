@@ -49,7 +49,7 @@
 ## 스택 
 
 
-### 프론트엔드기술 🛠️
+### 프론트엔드 스택 🛠️
 
 ![](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white)  ![](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white) ![](https://camo.githubusercontent.com/7528aeb46d42b9f649b4e10f9356b5efee80ed7bcc19e32b6fba9d476a3c0a23/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f726561637471756572792d4646343135343f7374796c653d666f722d7468652d6261646765266c6f676f3d72656163747175657279266c6f676f436f6c6f723d7768697465) ![](https://camo.githubusercontent.com/fd0243cd3a19485c4f3e82eba48aa53c2b13c41bd87164fc77fa3498ec09d2bd/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f616d617a6f6e73332d3536394133313f7374796c653d666f722d7468652d6261646765266c6f676f3d616d617a6f6e7333266c6f676f436f6c6f723d7768697465)
 
@@ -63,6 +63,17 @@
 - react-icons
 - browser-image-compression
 
+
+### 백엔드 스택 🛠️
+<div>
+<img src="https://img.shields.io/badge/Java-cd0000?style=for-the-badge&logo=&logoColor=white">
+<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+<img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=spring boot&logoColor=white">
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=Amazon EC2&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=Amazon RDS&logoColor=white">
+</div>
 
 ## 기능 
 
