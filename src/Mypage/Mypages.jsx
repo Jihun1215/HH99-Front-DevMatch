@@ -41,7 +41,7 @@ function Mypages() {
     const userID = USERINFO.id;
 
     const foundData = data?.find((item) => item.id === Number(USERINFO.id));
-    // console.log('현재유저데이터 :', foundData);
+    console.log('현재유저데이터 :', foundData);
 
     const queryClinet = useQueryClient();
     const EditInfo = useMutation(EditMyInfo, {
@@ -98,6 +98,7 @@ function Mypages() {
                             type="text"
                             style={{ border: 'none', marginRight: '20px' }}
                             value={nickName || ''}
+                            placeholder={foundData?.nickname}
                             onChange={onChangeNickNameHandler}
                             me
                         />
@@ -139,6 +140,7 @@ function Mypages() {
                             type="text"
                             value={introduction}
                             onChange={introductionEditButton}
+                            placeholder={foundData?.introduction}
                             required
                         />
                         {/* <Btn me onClick={introductionEditButton}>
