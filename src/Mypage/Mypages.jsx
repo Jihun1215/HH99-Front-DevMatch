@@ -2,40 +2,54 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Input from '../Components/Input';
 import Btn from '../Components/Button';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { EditMyInfo, AllUserInfo } from '../axios/api';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { AllUserInfo } from '../axios/api';
 import useInput from '../Hooks/useInput';
-
+import { api } from '../axios/api';
 
 function Mypages() {
     const getToken = Cookies.get('token');
     const params = useParams();
 
+    const EditMyInfo = async () => {
+        try {
+            const response = await api.put(`api/user/${userID}`, data2, {
+                headers: {
+                    Authorization: getToken,
+                },
+            });
+            console.log('response', response);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const editUserInfo = useQuery('edituser', EditMyInfo);
+
+    console.log('editMyInfo', editUserInfo);
 
     // 전체유저 데이터를 가져오는 로직
-    const { isLoading, isError, data } = useQuery("GETUSERINFO", AllUserInfo)
-    console.log("유저전체데이터 : ", data)
+    const { isLoading, isError, data } = useQuery('GETUSERINFO', AllUserInfo);
+    console.log('유저전체데이터 : ', data);
     const navigate = useNavigate();
 
+    const info = sessionStorage.getItem('userInfo');
+    const USERINFO = JSON.parse(info);
+    console.log('세션유저번호', USERINFO);
+    const userID = USERINFO.id;
 
-    const info = sessionStorage.getItem("userInfo")
-    const USERINFO = JSON.parse(info)
-    console.log("세션유저번호", USERINFO)
-
-
-    const foundData = data?.find((item) => item.id === Number(USERINFO.id))
-    console.log("현재유저데이터 :", foundData)
+    const foundData = data?.find((item) => item.id === Number(USERINFO.id));
+    console.log('현재유저데이터 :', foundData);
 
     const queryClinet = useQueryClient();
     const EditInfo = useMutation(EditMyInfo, {
         onSuccess: (data) => {
-            queryClinet.invalidateQueries("GETUSERINFO");
-            console.log(data)
-        }
+            queryClinet.invalidateQueries('edituser');
+            console.log(data);
+        },
     });
-
 
     // 닉네임 로직
     const [nickName, onChangeNickNameHandler, setNickName] = useInput(foundData?.nickname);
@@ -47,109 +61,99 @@ function Mypages() {
 
     const selectPartHandler = (e) => {
         setSelectedPart(e.target.value);
-    }
+    };
 
     const introductionEditButton = (e) => {
         setIntroduction(e.target.value);
-    }
-
-
-
+    };
 
     const data2 = {
-        id: USERINFO.id,
-        nickName: nickName,
+        nickname: nickName,
         introduction: introduction,
         part: selectedPart,
-    }
+    };
 
-    console.log(data2);
+    console.log('data2', data2);
 
-
-    // 토큰이랑 수정값 보내기 
+    // 토큰이랑 수정값 보내기
     const EditMyInfoChangeHandler = async (e) => {
         e.preventDefault();
-        // 수정될 값을 리액트쿼리로 처리 
-        EditInfo.mutate({ getToken, data2 })
+        // 수정될 값을 리액트쿼리로 처리
+        EditInfo.mutate({ token: getToken, data2, userID });
         // 기존에 세션스토리지 삭제
 
         navigate('/');
-    }
-
+    };
 
     return (
         <div>
-
-            {
-                isLoading === false && (
-                    <MyPageArea onSubmit={EditMyInfoChangeHandler}>
-
-                        <StInfoLayout>
-                            <StInfoBox>ID</StInfoBox>
-                            {foundData.username}
-                        </StInfoLayout>
-                        <StInfoLayout>
-                            <StInfoBox>NickName</StInfoBox>
-                            <Input
-                                type="text"
-                                style={{ border: 'none', marginRight: '20px' }}
-                                value={nickName}
-                                onChange={onChangeNickNameHandler}
-                                me />
-                            {/* <Btn onClick={EditNickNameChangeHandler} me>
+            {isLoading === false && (
+                <MyPageArea onSubmit={EditMyInfoChangeHandler}>
+                    <StInfoLayout>
+                        <StInfoBox>ID</StInfoBox>
+                        {foundData?.username}
+                    </StInfoLayout>
+                    <StInfoLayout>
+                        <StInfoBox>NickName</StInfoBox>
+                        <Input
+                            type="text"
+                            style={{ border: 'none', marginRight: '20px' }}
+                            value={nickName}
+                            onChange={onChangeNickNameHandler}
+                            me
+                        />
+                        {/* <Btn onClick={EditNickNameChangeHandler} me>
                             변경
                         </Btn> */}
-                            <div>2~6자 영문 한글로 작성</div>
-                        </StInfoLayout>
+                        <div>2~6자 영문 한글로 작성</div>
+                    </StInfoLayout>
 
-                        <StInfoLayout>
-                            <StInfoBox>Part</StInfoBox>
+                    <StInfoLayout>
+                        <StInfoBox>Part</StInfoBox>
 
-                            <StSelectBox>
-                                <h4>Backend</h4>
-                                <input
-                                    style={{ width: '20px', height: '20px' }}
-                                    type="radio"
-                                    name="select"
-                                    onChange={selectPartHandler}
-                                    value="Backend"
-                                    required
-                                />
-                                <h4>Frontend</h4>
-                                <input
-                                    style={{ width: '20px', height: '20px' }}
-                                    type="radio"
-                                    name="select"
-                                    onChange={selectPartHandler}
-                                    value="Frontend"
-                                    required
-                                />
-                                <div>현재파트{foundData?.part}</div>
-                                {/* <Btn me>변경</Btn> */}
-                            </StSelectBox>
-                        </StInfoLayout>
-                        <StInfoLayout style={{ minHeight: '150px' }}>
-
-                            <StInfoBox>Introduce</StInfoBox>
-                            <StTextArea type="text"
-                                value={introduction}
-                                onChange={introductionEditButton} required />
-                            {/* <Btn me onClick={introductionEditButton}>
+                        <StSelectBox>
+                            <h4>Backend</h4>
+                            <input
+                                style={{ width: '20px', height: '20px' }}
+                                type="radio"
+                                name="select"
+                                onChange={selectPartHandler}
+                                value="Backend"
+                                required
+                            />
+                            <h4>Frontend</h4>
+                            <input
+                                style={{ width: '20px', height: '20px' }}
+                                type="radio"
+                                name="select"
+                                onChange={selectPartHandler}
+                                value="Frontend"
+                                required
+                            />
+                            <div>현재파트{foundData?.part}</div>
+                            {/* <Btn me>변경</Btn> */}
+                        </StSelectBox>
+                    </StInfoLayout>
+                    <StInfoLayout style={{ minHeight: '150px' }}>
+                        <StInfoBox>Introduce</StInfoBox>
+                        <StTextArea
+                            type="text"
+                            value={introduction}
+                            onChange={introductionEditButton}
+                            required
+                        />
+                        {/* <Btn me onClick={introductionEditButton}>
                             변경
                         </Btn> */}
-                        </StInfoLayout>
+                    </StInfoLayout>
 
-
-                        <EditButtonArea>
-                            <Btn me
-                                type="submit">내정보 수정</Btn>
-                        </EditButtonArea>
-
-
-                    </MyPageArea>
-                )
-            }
-
+                    <EditButtonArea>
+                        <Btn me type="submit">
+                            내정보 수정
+                        </Btn>
+                    </EditButtonArea>
+                </MyPageArea>
+            )}
         </div>
     );
 }
@@ -165,7 +169,6 @@ const MyPageArea = styled.form`
 
 // 마이페이지 레이아웃
 const StInfoLayout = styled.div`
-
     width: 36.875rem;
     height: 3.75rem;
     display: flex;
@@ -214,4 +217,4 @@ const StTextArea = styled.textarea`
 const EditButtonArea = styled.div`
     width: 12.5rem;
     margin: 0 auto;
-`
+`;
