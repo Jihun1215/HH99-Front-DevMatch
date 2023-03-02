@@ -28,7 +28,7 @@ function Mypages() {
     };
     const editUserInfo = useQuery('edituser', EditMyInfo);
 
-    console.log('editMyInfo', editUserInfo);
+    // console.log('editMyInfo', editUserInfo);
 
     // 전체유저 데이터를 가져오는 로직
     const { isLoading, isError, data } = useQuery('GETUSERINFO', AllUserInfo);
@@ -41,7 +41,7 @@ function Mypages() {
     const userID = USERINFO.id;
 
     const foundData = data?.find((item) => item.id === Number(USERINFO.id));
-    console.log('현재유저데이터 :', foundData);
+    // console.log('현재유저데이터 :', foundData);
 
     const queryClinet = useQueryClient();
     const EditInfo = useMutation(EditMyInfo, {
