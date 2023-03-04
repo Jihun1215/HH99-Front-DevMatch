@@ -1,7 +1,6 @@
 import styled, { css } from "styled-components";
 
 export default function Btn(props) {
-  //{...props}는 props 가져와 css작업 {props.children} 안에 글자 표시
   return <DefailtButton {...props}>{props.children}</DefailtButton>;
 }
 
