@@ -20,7 +20,6 @@ function Mypages() {
                     Authorization: getToken,
                 },
             });
-            // console.log('response', response);
             return response.data;
         } catch (error) {
             // console.log(error);
@@ -28,20 +27,15 @@ function Mypages() {
     };
     const editUserInfo = useQuery('edituser', EditMyInfo);
 
-    // console.log('editMyInfo', editUserInfo);
 
-    // 전체유저 데이터를 가져오는 로직
     const { isLoading, isError, data } = useQuery('GETUSERINFO', AllUserInfo);
-    // console.log('유저전체데이터 : ', data);
     const navigate = useNavigate();
 
     const info = sessionStorage.getItem('userInfo');
     const USERINFO = JSON.parse(info);
-    // console.log('세션유저번호', USERINFO);
     const userID = USERINFO.id;
 
     const foundData = data?.find((item) => item.id === Number(USERINFO.id));
-    // console.log('현재유저데이터 :', foundData);
 
     const queryClinet = useQueryClient();
     const EditInfo = useMutation(EditMyInfo, {
@@ -50,10 +44,7 @@ function Mypages() {
         },
     });
 
-    // 닉네임 로직
     const [nickName, onChangeNickNameHandler, setNickName] = useInput(foundData?.nickname);
-
-    //마이페이지에서 새롭게 추가할 항목들
 
     const [selectedPart, setSelectedPart] = useState(foundData?.part);
     const [introduction, setIntroduction] = useState(foundData?.introduction);
@@ -71,15 +62,10 @@ function Mypages() {
         introduction: introduction,
         part: selectedPart,
     };
-
-    // console.log('data2', data2);
-
-    // 토큰이랑 수정값 보내기
+    
     const EditMyInfoChangeHandler = async (e) => {
         e.preventDefault();
-        // 수정될 값을 리액트쿼리로 처리
         EditInfo.mutate({ token: getToken, data2, userID });
-        // 기존에 세션스토리지 삭제
         alert('수정성공!')
 
     };
@@ -102,9 +88,7 @@ function Mypages() {
                             onChange={onChangeNickNameHandler}
                             me
                         />
-                        {/* <Btn onClick={EditNickNameChangeHandler} me>
-                            변경
-                        </Btn> */}
+                     
                         <div>2~6자 영문 한글로 작성</div>
                     </StInfoLayout>
 
@@ -131,7 +115,7 @@ function Mypages() {
                                 required
                             />
                             <div>현재파트{foundData?.part}</div>
-                            {/* <Btn me>변경</Btn> */}
+                   
                         </StSelectBox>
                     </StInfoLayout>
                     <StInfoLayout style={{ minHeight: '150px' }}>
@@ -143,9 +127,7 @@ function Mypages() {
                             placeholder={foundData?.introduction}
                             required
                         />
-                        {/* <Btn me onClick={introductionEditButton}>
-                            변경
-                        </Btn> */}
+                       
                     </StInfoLayout>
 
                     <EditButtonArea>
@@ -168,7 +150,6 @@ const MyPageArea = styled.form`
     margin: 50px auto;
 `;
 
-// 마이페이지 레이아웃
 const StInfoLayout = styled.div`
     width: 36.875rem;
     height: 3.75rem;
@@ -180,7 +161,6 @@ const StInfoLayout = styled.div`
     /* border: 1px solid black;  */
 `;
 
-// 정보 박스 레이아웃
 const StInfoBox = styled.div`
     width: 6.875rem;
     height: 3.125rem;
@@ -191,8 +171,6 @@ const StInfoBox = styled.div`
     display: flex;
     margin-right: 20px;
 `;
-
-// 파트 선택
 const StSelectBox = styled.div`
     width: 18.75rem;
     height: 60px;
@@ -204,7 +182,6 @@ const StSelectBox = styled.div`
     /* border: 1px solid black; */
 `;
 
-// 소개글
 const StTextArea = styled.textarea`
     width: 340px;
     height: 7.8125rem;
